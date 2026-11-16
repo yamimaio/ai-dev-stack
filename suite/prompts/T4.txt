@@ -1,0 +1,8 @@
+Append this block to `pilot-fixtures/edit-target.md`, exactly as written, without the fence lines:
+
+```
+Block start "quotes" here
+Home is $HOME, not expanded
+A `backtick` and a	tab
+Block end
+```

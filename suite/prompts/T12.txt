@@ -1,0 +1,1 @@
+Use a subagent to list the files in `pilot-fixtures/`.

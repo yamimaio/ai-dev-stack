@@ -1,0 +1,14 @@
+#!/bin/sh
+# Refuses any push whose target is the remote branch `main`.
+# Plain POSIX sh, no dependencies. Git passes one line per ref on stdin:
+#   <local ref> <local sha> <remote ref> <remote sha>
+# (git-scm.com/docs/githooks, "pre-push")
+protected="refs/heads/main"
+status=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "$protected" ]; then
+    echo "pre-push-block-main: refusing to push to main ($local_ref). Push a branch and open a PR." >&2
+    status=1
+  fi
+done
+exit $status
