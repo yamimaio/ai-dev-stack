@@ -1,50 +1,56 @@
-# Stage 0 usage baseline: how to run it
+# Usage measurement
 
-Pilot material, not Gravity work. Decided by Yami on 2026-11-12 (option B): a small script of ours reads Claude Code's local session logs inside a container that has no network, so no third-party code reads the logs and nothing can leave the Mac.
+`session_usage.py` reads Claude Code's local session logs and writes one row per session with its token usage. It runs inside a Python container with no network and the logs mounted read-only, so no third-party code reads the logs and nothing leaves the machine. Only Docker runs on the host.
 
-## Order: run first, then raise retention
+Use it whenever a usage comparison is needed: a baseline, a stage of a pilot, or the end of an iteration. Each run's tagged output is kept under `data/<project>/<run date>/`.
 
-1. **Run the script (below) before you next open Claude Code.** Claude Code deletes transcripts older than `cleanupPeriodDays` (default 30) in a silent background sweep right after a session starts (Claude Code settings reference, `cleanupPeriodDays`, https://code.claude.com/docs/en/settings-reference.md). Any launch therefore removes the oldest October sessions first.
-2. **Then set `"cleanupPeriodDays": 90`** in `~/.claude/settings.json` (Yami, 2026-11-12). That keeps milestone 2's Opus builds and the pilot's own sessions readable until the pilot's final comparison, so the script can be re-run (a fix after the `/usage` check, a new column, a disputed number). The minimum is 1, and `0` fails validation. Lower it again after the pilot if you like.
+## Once per machine: keep logs long enough
 
-## Run it
-
-From a folder of your choice on the Mac (not inside a Gravity checkout), with `session_usage.py` copied into it. Get it from this repo: `usage/session_usage.py`; no other files needed:
+Claude Code deletes transcripts older than `cleanupPeriodDays` (default 30) in a background sweep right after a session starts (Claude Code settings docs, `cleanupPeriodDays`). Before the first run, check the value:
 
 ```
-docker pull python:3.12-slim
-docker run --rm --network none \
-  -v "$HOME/.claude/projects:/logs:ro" \
-  -v "$PWD:/work" -w /work \
-  python:3.12-slim python -I session_usage.py /logs sessions.csv
+grep cleanupPeriodDays ~/.claude/settings.json
 ```
 
-- `--network none`: the container cannot reach anything.
-- `:ro`: the logs are mounted read-only.
-- Only Docker runs on the Mac; no node, npm, npx or Python on the host.
+If it prints nothing or a value below 90, the oldest logs may already be gone. Run the script first (next section), then add `"cleanupPeriodDays": 90` to `~/.claude/settings.json`. The minimum is 1; `0` fails validation.
 
-It prints the number of sessions and writes `sessions.csv` next to the script.
+Sessions started with `launcher/claude-pilot` keep their own logs and settings under `~/.claude-pilot` (see `launcher/README.md`).
 
-## What you get
+## Each run
 
-One row per Claude Code session: when it ran, the first 80 characters of its first prompt (so `/build-issue 575` and `/review-pr 580` are easy to spot), the Claude models used, and token counts by type, with subagents included and also shown separately. A `weighted` column gives a rough relative cost so a build can be compared with a review. Local-model sessions are left out automatically (only `claude-*` models count).
+1. Make a folder for this run and copy the script in (replace the clone path if yours differs):
 
-## Then
+   ```
+   mkdir -p ~/ai-dev-stack-runs/usage/$(date +%F) && cd ~/ai-dev-stack-runs/usage/$(date +%F)
+   cp ~/code/ai-dev-stack/usage/session_usage.py .
+   ```
 
-1. Tag each row you can by role (plan, build, fix, review) and issue, using `commands` (e.g. `/build-issue 575`, `/review-pr 639`), `refs` (the issue and PR numbers the session touched most), `first_prompt` and the dates. A /clear starts a new log, so `first_prompt` skips built-in commands such as /clear and /model (script fixed 2026-11-13; the first run showed /clear for most rows). Fix pushes made in the builder's session count as build (B), as ruled on 2026-11-12.
-2. Sanity check: compare one week's total with the `/usage` 7-day bars in Claude Code. They will not match exactly (different units), but they should rise and fall together.
-3. Share the CSV, or only the tagged totals, in the pilot thread. B/R comes from those.
+2. Run it against the everyday Claude Code logs:
 
-Tested on 2026-11-12 against a current Claude Code session log (format: one JSON object per line; usage repeated per content block, de-duplicated by message id and request id; subagent logs under `<session>/subagents/`). If your Claude Code version writes a different format, the script prints 0 sessions: tell me and I will adjust it.
+   ```
+   docker run --rm --network none \
+     -v "$HOME/.claude/projects:/logs:ro" \
+     -v "$PWD:/work" -w /work \
+     python:3.12-slim python -I session_usage.py /logs sessions.csv
+   ```
 
-## Data
+   It prints the number of sessions and writes `sessions.csv` in this folder. For local-builder sessions, replace `$HOME/.claude/projects` with `$HOME/.claude-pilot/projects`.
 
-Tagged output per project lives in `data/<project>/` (`sessions-tagged.csv`, `issues-br.csv`). `sessions-tagged.csv` holds the first 80 characters of each session's first prompt: review it before this repo is ever made public.
+3. Hand `sessions.csv` to Claude in the project thread. Claude tags each row by role (plan, build, fix, review) and issue, computes B and R per issue, and adds the run to `data/<project>/<run date>/` with a README stating the log window, the script version and any rows tagged by hand.
 
-Local-builder sessions launched with `launcher/` write their transcripts under that launcher's own config folder (see `launcher/README.md`), not `~/.claude/projects`. The script leaves local-model sessions out anyway; point it at that folder only for ledger evidence.
+4. Sanity check: compare one week's total with the `/usage` 7-day bars in Claude Code. The units differ, so they won't match, but they should rise and fall together.
 
-## Known tagging exceptions
+`--network none` means the container can reach nothing; `:ro` mounts the logs read-only.
 
-Sessions that won't tag from their first prompt or commands. Tag these by hand on the next run.
+## What a row holds
 
-- **Issue #505, build session (2026-11-13, reported by Yami):** the session opened with a pasted "Reminder:" block of rules that aren't implemented yet, not with `/build-issue 505`. Tag it role = build, issue = 505. From now on Yami starts each session with the command first.
+When the session ran, the first 80 characters of its first prompt (built-in commands such as `/clear` and `/model` skipped), the commands and issue/PR numbers it touched, the Claude models used, and token counts by type, with subagents included and also shown separately. A `weighted` column gives a rough relative cost, so a build can be compared with a review. Sessions on non-Claude models are left out (only `claude-*` models count).
+
+## Tagging rules
+
+- Fix pushes made in the builder's session count as build (B).
+- A session that doesn't start with its command (`/build-issue N`, `/review-pr N`) can't be tagged from its first prompt; it is tagged by hand and listed in that run's README. Starting each session with the command first avoids this.
+
+## If it prints 0 sessions
+
+The log format changed. The script was written against the format of 2026-11 (one JSON object per line, usage repeated per content block and de-duplicated by message id and request id, subagent logs under `<session>/subagents/`). Ask Claude to adjust it.

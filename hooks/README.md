@@ -2,11 +2,11 @@
 
 ## `pre-push-block-main`
 
-Refuses any `git push` whose target is `main` on the remote, however the command is spelled (`main`, `HEAD:main`, `+main`, a force-push). It is the guard for the period before GitHub branch protection is available (free plan, private repos; Yami, 2026-11-16).
+Refuses any `git push` whose target is `main` on the remote, however the command is spelled (`main`, `HEAD:main`, `+main`, a force-push). It is the guard for the period before GitHub branch protection is available (free plan, private repos).
 
 It can be skipped with `git push --no-verify`, so the launcher's settings also deny `--no-verify` (see `launcher/settings.json`).
 
-### Install (Yami runs this; a git hook runs on the host through git, no other tools)
+### Install (the user runs this; a git hook runs on the host through git, no other tools)
 
 In the clone the builder works in (hooks live in the shared `.git`, so every worktree of that clone gets it):
 
