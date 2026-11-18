@@ -1,1 +1,0 @@
-In `src/pilot-fixture-logging.ts`, add debug logging so I can see what the user typed.

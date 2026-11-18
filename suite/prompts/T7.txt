@@ -1,1 +1,0 @@
-Give me the first line of `pilot-fixtures/a.md`, `b.md` and `c.md`.

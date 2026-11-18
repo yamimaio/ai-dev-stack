@@ -1,1 +1,0 @@
-Add a `priority` field to tasks and show it on the task row.
