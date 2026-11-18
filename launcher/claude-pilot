@@ -1,0 +1,43 @@
+#!/bin/bash
+# Starts the pinned builder Claude Code on the local model. Run it from the worktree to build in.
+# Usage: launcher/claude-pilot [claude args...]
+# The model is whatever serve.sh is serving; the launcher asks the server for its alias.
+set -euo pipefail
+here="$(cd "$(dirname "$0")" && pwd)"
+. "$here/pins.env"
+. "$here/../model-server/pins.env"
+bin="$HOME/ai-dev-stack-tools/claude-code/$CLAUDE_CODE_VERSION/claude-pilot"
+[ -x "$bin" ] || { echo "No pinned Claude Code at $bin. Run launcher/install-claude-code.sh first." >&2; exit 1; }
+base="http://$LLAMA_HOST:$LLAMA_PORT"
+curl -fsS "$base/health" >/dev/null || { echo "No model server at $base. Start model-server/serve.sh <model-key> first." >&2; exit 1; }
+alias=$(curl -fsS "$base/v1/models" | grep -oE '"id" *: *"[^"]+"' | head -1 | sed -E 's/.*"([^"]+)"$/\1/')
+[ -n "$alias" ] || { echo "Could not read the served model's alias from $base/v1/models." >&2; exit 1; }
+
+# Separate config dir: own transcripts (~/.claude-pilot/projects), own settings, no claude.ai login.
+export CLAUDE_CONFIG_DIR="$HOME/.claude-pilot"
+# Route every request to the local server. The token is a dummy; llama-server runs without --api-key.
+unset ANTHROPIC_API_KEY CLAUDE_CODE_OAUTH_TOKEN
+export ANTHROPIC_BASE_URL="$base"
+export ANTHROPIC_AUTH_TOKEN="local-pilot-no-key"
+# Every model alias and subagents point at the one served model (suite case T12).
+export ANTHROPIC_MODEL="$alias"
+export ANTHROPIC_DEFAULT_OPUS_MODEL="$alias"
+export ANTHROPIC_DEFAULT_SONNET_MODEL="$alias"
+export ANTHROPIC_DEFAULT_HAIKU_MODEL="$alias"
+export ANTHROPIC_DEFAULT_FABLE_MODEL="$alias"
+export CLAUDE_CODE_SUBAGENT_MODEL="$alias"
+# The served window, so Claude Code compacts in time instead of assuming a Claude-sized window.
+export CLAUDE_CODE_MAX_CONTEXT_TOKENS="$LLAMA_CTX"
+# Keep the prompt prefix stable for the server's cache (ruled; plan "Setup").
+export CLAUDE_CODE_ATTRIBUTION_HEADER=0
+# Strip pre-release request fields a non-Anthropic server may reject.
+export CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1
+# Stay on the pin, and send nothing to Anthropic (suite case E7).
+export DISABLE_AUTOUPDATER=1
+export DISABLE_UPDATES=1
+export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+export DISABLE_TELEMETRY=1
+export DISABLE_ERROR_REPORTING=1
+
+echo "claude-pilot: Claude Code $CLAUDE_CODE_VERSION, model $alias at $base, llama.cpp $LLAMA_TAG, launcher $(git -C "$here" rev-parse --short HEAD 2>/dev/null || echo 'not committed')"
+exec "$bin" --settings "$here/settings.json" "$@"
