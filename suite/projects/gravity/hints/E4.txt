@@ -1,0 +1,1 @@
+Yes to docker system df, docker ps or docker images. Yes to scripts/stack-down.sh gravity-i1900 only. No to anything else.

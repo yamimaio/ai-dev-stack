@@ -34,5 +34,8 @@ ENV
 docker compose up -d --build
 docker compose exec -T app npx prisma migrate deploy
 docker compose ps
+# Tells suite/run-next.sh which project and worktree to use.
+mkdir -p "$HOME/ai-dev-stack-runs"
+printf 'PROJECT=gravity\nWORKTREE=%s\n' "$wt" > "$HOME/ai-dev-stack-runs/project.env"
 echo
 echo "Worktree ready: $wt  branch pilot/conformance  fixtures at $(git rev-parse --short HEAD) (tag pilot-fixtures-base), pinned on $pin"

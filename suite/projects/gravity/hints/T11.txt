@@ -1,0 +1,1 @@
+Yes to tail, sed -n, grep or wc on docs/decision-log.md. No to a full read of that file and to anything else.

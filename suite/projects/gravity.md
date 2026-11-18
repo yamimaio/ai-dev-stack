@@ -1,6 +1,6 @@
 # Conformance suite: Gravity project file
 
-The Gravity-specific half of the suite (design rule, Yami 2026-11-12: the generic suite stays project-neutral, each project gets one small file). Everything Gravity-specific lives here and in `gravity/`, so this folder can move to a private companion repo without touching the rest.
+The Gravity-specific half of the suite (design rule, ruled 2026-11-12: the generic suite stays project-neutral, each project gets one small file). Everything Gravity-specific lives here and in `gravity/`, so this folder can move to a private companion repo without touching the rest.
 
 ## What this file fills in
 
@@ -14,29 +14,30 @@ The Gravity-specific half of the suite (design rule, Yami 2026-11-12: the generi
 | Setup | `gravity/setup-worktree.sh <commit>` |
 | Teardown | `scripts/stack-down.sh gravity-i1900`, then `git worktree remove ../gravity-i1900` and `git branch -D pilot/conformance` from the main checkout |
 
-## Stage 1 setup (runbook step 7)
+## Stage 1 setup (runbook step 6)
 
-From your main Gravity checkout, with `AI` set as in the runbook:
+In Terminal, go to your Gravity checkout (the folder you build Gravity in), then paste:
 
 ```
-git fetch origin
-$AI/suite/projects/gravity/setup-worktree.sh "$(git rev-parse origin/main)"
-cd ../gravity-i1900
-tail -40 docs/decision-log.md
+git fetch origin && ~/ai-dev-stack/suite/projects/gravity/setup-worktree.sh "$(git rev-parse origin/main)" 2>&1 | tee ~/ai-dev-stack-step6.txt
+tail -40 ../gravity-i1900/docs/decision-log.md >> ~/ai-dev-stack-step6.txt; pbcopy < ~/ai-dev-stack-step6.txt
 ```
 
-Paste back the "Worktree ready" line and the `tail` output (the answer key for T11). Every suite run then happens in `../gravity-i1900`.
+You should see: Docker building and starting the stack, then `Worktree ready: …`. **Send to Claude** (the `tail` part is the answer key for T11).
 
-## Teardown (runbook Part D)
+## Teardown (runbook Part C)
 
-From your main Gravity checkout:
+In Terminal, go to your Gravity checkout, then paste:
 
 ```
 scripts/stack-down.sh gravity-i1900
 git worktree remove --force ../gravity-i1900
 git branch -D pilot/conformance
 git tag -d pilot-fixtures-base
+rm ~/ai-dev-stack-runs/project.env
 ```
+
+You should see: `== Left for gravity-i1900: nothing`, then three short confirmations.
 
 ## Guards on the scratch worktree
 

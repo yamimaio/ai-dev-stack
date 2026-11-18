@@ -1,11 +1,13 @@
 # Launcher
 
+Why a separate Claude Code for the builder: your everyday `claude` keeps auto-updating, and the conformance suite clears one exact version (re-run rule). A separate binary stays on that version, gets its own name (`claude-pilot`, so the network check can single it out) and its own config dir (its transcripts and settings stay apart from yours). You start it with `claude-pilot` instead of `claude`, only for local-model builder sessions.
+
 Starts a pinned, separate Claude Code on the local model server. Project-neutral: it knows nothing about any project; a project's own `.claude/settings.json` still loads and its deny rules add to these.
 
 | File | What it does |
 |---|---|
-| `pins.env` | The Claude Code version and its download's SHA-256. A change here is a setup change (quick re-run). |
-| `install-claude-code.sh` | Puts the pinned binary at `~/ai-dev-stack-tools/claude-code/<version>/claude-pilot`. curl, shasum, tar; no npm. |
+| `pins.env` | The builder's Claude Code version. A change here is a setup change (quick re-run). |
+| `install-claude-code.sh` | Puts the pinned binary at `~/ai-dev-stack-tools/claude-code/<version>/claude-pilot`, checked against the npm registry's sha512 for that version. curl, openssl, tar; no npm. |
 | `claude-pilot` | The launcher. Run from the worktree to build in. |
 | `settings.json` | Passed with `--settings`: the generic deny rules and the 90-day log retention. |
 
@@ -13,7 +15,7 @@ Starts a pinned, separate Claude Code on the local model server. Project-neutral
 
 Sources: Claude Code docs at code.claude.com, read 2026-11-16 (the docs track the newest release, 2.1.325; every item below has no version note above 2.1.311 unless stated). Pages: "Environment variables" (env-vars), "Settings" (settings), "Configure permissions" (permissions), "Model configuration" (model-config), "LLM gateway protocol" (llm-gateway-protocol), "Advanced setup" (setup).
 
-- `CLAUDE_CONFIG_DIR=~/.claude-pilot`: its own settings, history and login state, so the builder never uses your claude.ai login and never touches `~/.claude` (env-vars, `CLAUDE_CONFIG_DIR`). **Builder transcripts land in `~/.claude-pilot/projects`, not `~/.claude/projects`.** The ledger, the cache check and E7 read them from there, and the usage script must be pointed there for local-arm sessions.
+- `CLAUDE_CONFIG_DIR=~/.claude-pilot`: its own settings and history, so the builder never touches `~/.claude`. It has no claude.ai login at all and needs none: with a token set and a non-Anthropic base URL, requests carry that token instead of a subscription login (llm-gateway), so the builder uses none of the subscription. Planning and review stay in your everyday `claude`, on your account as before (env-vars, `CLAUDE_CONFIG_DIR`). **Builder transcripts land in `~/.claude-pilot/projects`, not `~/.claude/projects`.** The ledger, the cache check and E7 read them from there, and the usage script must be pointed there for local-arm sessions.
 - `cleanupPeriodDays: 90` in `settings.json`, because the 90-day setting you made on 2026-11-13 lives in `~/.claude/settings.json`, which this config dir does not read.
 - `ANTHROPIC_BASE_URL` to the local server, `ANTHROPIC_AUTH_TOKEN` a dummy, `ANTHROPIC_API_KEY` unset: requests carry that token instead of a subscription login (llm-gateway).
 - `ANTHROPIC_MODEL`, `ANTHROPIC_DEFAULT_{OPUS,SONNET,HAIKU,FABLE}_MODEL`, `CLAUDE_CODE_SUBAGENT_MODEL` all set to the served alias: background calls go to the Haiku alias and subagents can pick a model, so every name must resolve to the one served model (env-vars; case T12).
@@ -41,8 +43,8 @@ Not covered by text rules, by design: `git -C . push`, `git -c … push`, `eval`
 
 ```
 cd <worktree>
-<ai-dev-stack>/launcher/claude-pilot                      # interactive
-<ai-dev-stack>/launcher/claude-pilot "$(cat prompt.txt)"  # interactive, first prompt from a file
+~/ai-dev-stack/launcher/claude-pilot                      # interactive
+~/ai-dev-stack/launcher/claude-pilot "$(cat prompt.txt)"  # interactive, first prompt from a file
 ```
 
 It prints one line with the Claude Code version, served model, llama.cpp tag and launcher commit: that line goes in the setup record.

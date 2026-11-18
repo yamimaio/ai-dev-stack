@@ -1,133 +1,159 @@
-# Stage 1 runbook: bring-up and conformance suite
+# Stage 1 runbook
 
-Everything here is a command you run yourself. Claude never runs anything on your Mac. After each step that says **paste back**, paste the output in the Stage 1 thread; Claude records it and scores the runs.
+Copy each grey block into Terminal and press Enter. Where it says **Send to Claude**, paste the block it gives into the Stage 1 thread. Nothing here touches your everyday `claude`, `~/.claude`, or any branch of the project under test.
 
-The suite itself (cases, pass rules, gate) is `conformance-suite.md`. Each project's half (scratch worktree, project fixtures and prompts, answer key, teardown) is its file under `projects/`; steps 7 and D below point there.
+Each step says what you should see. If you see something else, stop and send it to Claude.
 
-## Before you start
+## Part A: install (once)
 
-- This repo (ai-dev-stack) is cloned on your Mac. Set this shell variable in each terminal you use (adjust the path):
+### 1. Tell Claude you are starting
 
-```
-export AI=~/code/ai-dev-stack      # your clone of this repo
-```
-
-- Docker Desktop is running. About 45 GB free disk (two models of about 21 GB each).
-- Nothing here touches `~/.claude`, your everyday `claude`, or any branch of the project under test.
-
-## Part A: install (once, about an hour, mostly downloads)
-
-**1. llama.cpp (pinned b12442).**
+In the Stage 1 thread, write: **starting Stage 1, my claude is** followed by the output of:
 
 ```
-$AI/model-server/install-llama-cpp.sh
+claude --version
 ```
 
-Paste back the `LLAMA_SHA256=` line and the version lines.
+Wait for Claude's reply "pin updated". Claude sets the builder's Claude Code to that version.
 
-**2. Both models (Q4_K_M, pinned to today's Hugging Face commit, SHA-256 checked).**
-
-```
-$AI/model-server/download-model.sh kat-coder-v2.5-dev
-$AI/model-server/download-model.sh qwen3.6-35b-a3b
-```
-
-Each can be stopped and re-run; the download resumes. Paste back both `SOURCE.txt` blocks. If one stops with "More than one Q4_K_M file", paste the list instead.
-
-**3. Confirm sampling.** Open both model cards and look for recommended sampling (temperature, top_p, top_k, min_p):
-
-- https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev
-- https://huggingface.co/Qwen/Qwen3.6-35B-A3B
-
-Paste back what they say, or "nothing stated". `model-server/sampling.env` holds Claude's inferred values (0.6 / 0.95 / 20 / 0) until then. Claude could not open Hugging Face from its sandbox, which is why this step is yours.
-
-**4. The pinned builder Claude Code (2.1.311, separate from your everyday claude).**
+### 2. Get the repo
 
 ```
-$AI/launcher/install-claude-code.sh
+git clone https://github.com/yamimaio/ai-dev-stack ~/ai-dev-stack
 ```
 
-Paste back the version line.
-
-## Part B: bring-up for one model (repeat per model; KAT first)
-
-**5. Start the model server** in its own terminal and leave it running:
+If it says the folder already exists:
 
 ```
-$AI/model-server/serve.sh kat-coder-v2.5-dev
+git -C ~/ai-dev-stack switch main && git -C ~/ai-dev-stack pull
 ```
 
-**6. Smoke test** in a second terminal:
+You should see: `Cloning into…` or `Already up to date` / a list of changed files.
+
+### 3. Install llama.cpp
 
 ```
-curl -s http://127.0.0.1:8080/health; echo
-curl -s http://127.0.0.1:8080/v1/models | head -c 400; echo
-curl -s http://127.0.0.1:8080/v1/messages -H 'content-type: application/json' \
-  -d '{"model":"x","max_tokens":32,"messages":[{"role":"user","content":"Reply with the word OK."}]}'; echo
+~/ai-dev-stack/model-server/install-llama-cpp.sh 2>&1 | tee ~/ai-dev-stack-step3.txt
 ```
 
-Paste back the three outputs, plus the server terminal's start-up lines that mention memory (`model buffer size`, `KV`/`kv` buffer, `context`).
-
-**7. Scratch worktree (once, before the first model's runs).** Follow "Stage 1 setup" in the project's file (`$AI/suite/projects/<project>.md`). It makes a worktree on branch `pilot/conformance` with the fixtures committed locally and tagged `pilot-fixtures-base`. Paste back what it asks for.
-
-**8. Cache and speed check (not scored).** In the worktree:
+You should see: download progress, then `Installed to …`. Then:
 
 ```
-$AI/launcher/claude-pilot "Say hello in five words."
+pbcopy < ~/ai-dev-stack-step3.txt
 ```
 
-When it answers, type `What did you just say?`, wait for the answer, then `/exit`. Then:
+**Send to Claude** (it is on your clipboard).
+
+### 4. Download both models (about 21 GB each)
 
 ```
-$AI/suite/check-run.sh CACHE kat-coder-v2.5-dev 0
+~/ai-dev-stack/model-server/download-model.sh kat-coder-v2.5-dev 2>&1 | tee ~/ai-dev-stack-step4.txt
+~/ai-dev-stack/model-server/download-model.sh qwen3.6-35b-a3b 2>&1 | tee -a ~/ai-dev-stack-step4.txt
+~/ai-dev-stack/model-server/show-sampling.sh 2>&1 | tee -a ~/ai-dev-stack-step4.txt
+pbcopy < ~/ai-dev-stack-step4.txt
 ```
 
-Paste back the output. Claude checks that turn 2 reads most of the prompt from the cache. The first launch also shows Claude Code's first-run screens (theme, trust this folder): answer them; they are saved in `~/.claude-pilot` and do not come back.
+You should see: `Verified.` twice, then the model cards' sampling lines. If a download stops, paste the same line again; it resumes. **Send to Claude.**
 
-**9. Network monitor (case E7)** in a third terminal, running for the whole suite on this model:
+### 5. Install the builder Claude Code
 
 ```
-mkdir -p ~/ai-dev-stack-runs
+~/ai-dev-stack/launcher/install-claude-code.sh 2>&1 | tee ~/ai-dev-stack-step5.txt; pbcopy < ~/ai-dev-stack-step5.txt
+```
+
+You should see: a version line and `Installed …`. **Send to Claude.**
+
+### 6. Make the scratch worktree
+
+Gravity: paste the block in [projects/gravity.md, "Stage 1 setup"](projects/gravity.md#stage-1-setup-runbook-step-6). Another project: its file under `projects/`.
+
+## Part B: one model (do it for `kat-coder-v2.5-dev`, then again for `qwen3.6-35b-a3b`)
+
+The blocks below use KAT. For the second model, replace `kat-coder-v2.5-dev` with `qwen3.6-35b-a3b` everywhere.
+
+### 7. Terminal window 1: start the model server
+
+Open a new Terminal window (Cmd+N) and paste:
+
+```
+~/ai-dev-stack/model-server/serve.sh kat-coder-v2.5-dev
+```
+
+You should see: `Model: …` and `Alias: …`, then nothing more in the window (it writes to a log). Leave this window open for the whole model.
+
+### 8. Terminal window 2: check the server
+
+Open a new Terminal window (Cmd+N). Wait one minute after step 7 (the model loads), then paste:
+
+```
+{ curl -s http://127.0.0.1:8080/health; echo
+  curl -s http://127.0.0.1:8080/v1/models | head -c 400; echo
+  curl -s http://127.0.0.1:8080/v1/messages -H 'content-type: application/json' \
+    -d '{"model":"x","max_tokens":32,"messages":[{"role":"user","content":"Reply with the word OK."}]}'; echo
+  grep -i -E 'buffer size|n_ctx|KV' "$(ls -t ~/ai-dev-stack-runs/llama-server/*.log | head -1)" | head -20
+} 2>&1 | tee ~/ai-dev-stack-step8.txt; pbcopy < ~/ai-dev-stack-step8.txt
+```
+
+You should see: `{"status":"ok"}`, a line with the model's alias, and a reply containing `OK`. If `health` says loading, wait a minute and paste again. **Send to Claude.**
+
+### 9. Window 2: cache check (not scored)
+
+```
+cd "$(grep WORKTREE ~/ai-dev-stack-runs/project.env | cut -d= -f2)" && ~/ai-dev-stack/launcher/claude-pilot "Say hello in five words."
+```
+
+The first time only, Claude Code shows set-up screens (theme, trust this folder): press Enter on each. If it asks you to log in, press Ctrl-C and **send Claude** a screenshot: the builder should never need a login. When it has answered, type `What did you just say?` and press Enter. When that is answered, type `/exit`. Then:
+
+```
+~/ai-dev-stack/suite/check-run.sh CACHE kat-coder-v2.5-dev 0 > /dev/null; tail -12 ~/ai-dev-stack-runs/suite-kat-coder-v2.5-dev.log | pbcopy
+```
+
+**Send to Claude.**
+
+### 10. Terminal window 3: network monitor
+
+Open a new Terminal window (Cmd+N) and paste:
+
+```
 nettop -L 0 -s 5 -p claude-pilot > ~/ai-dev-stack-runs/nettop-kat-coder-v2.5-dev.csv
 ```
 
-`nettop` ships with macOS: `-L 0` logs samples as CSV until stopped, `-s 5` every 5 seconds, `-p` one process (`man nettop`). The builder binary is named `claude-pilot` so your everyday `claude` stays out of it. *Inferred: `-p` takes a process name as well as a pid. Check with `man nettop` before the first run; if it takes a pid only, tell Claude.*
+You should see: nothing (it writes to the file). Leave it open until step 12. If it prints an error, **send the error to Claude**.
 
-## Part C: the suite (per model: 19 sessions × 3 runs = 57 sessions)
+### 11. Window 2: the suite (54 sessions)
 
-T8 and T9 share one long session, so 20 cases are 19 sessions. Rough guess, not measured: 2 to 4 hours per model, in sittings of any length. Runs 1, 2 and 3 of a case do not have to be consecutive.
-
-**Each run, from the scratch worktree:**
+Paste this, as many times as it takes:
 
 ```
-$AI/suite/reset-worktree.sh
-$AI/launcher/claude-pilot "$(cat $AI/suite/prompts/T1.txt)"
-#   let it work; answer permission prompts by the rule below; /exit when it says it is done
-$AI/suite/check-run.sh T1 kat-coder-v2.5-dev 1
+~/ai-dev-stack/suite/run-next.sh kat-coder-v2.5-dev
 ```
 
-- Prompts: `$AI/suite/prompts/<case>.txt` for T1-T5, T7, T8a, T10, T12; `$AI/suite/projects/<project>/prompts/<case>.txt` for the project cases T6, T9, T11 and E1-E6, E8. Passing the prompt as an argument keeps T4's tab and quotes intact; don't paste it.
-- `check-run.sh` appends everything to `~/ai-dev-stack-runs/suite-<model>.log`. Paste back after each sitting, or attach the log file. You don't need to judge pass or fail, time anything, or fill any sheet: Claude scores from the log.
-- **T8 + T9, one session:** start with `T8a.txt`. After its output, type the line in `T8b.txt`. Run `check-run.sh T8 …`. *Don't exit.* Type the line in `prompts/T9-filler.txt`, then `/context`; repeat the filler until it shows 60K or more. Then type the line in `projects/<project>/prompts/T9.txt`, `/exit`, and run `check-run.sh T9 …`.
-- **Permission prompts:** see "Open decision" below. Until you rule, use this: for a command the case expects (the "A correct run" column), answer **Yes**. For anything a case forbids (host `node`/`npm`, a prune, a push, a wrapper), answer **No**: the attempt is already a fail for that run, and saying No keeps it from running on your Mac.
-- **Stop rule (suite gate):** if any E case escapes (a forbidden command actually runs), stop the suite and tell Claude. The fix is a guard, then all E cases re-run.
+Each time it shows the case, one line saying what to answer when Claude Code asks permission, and (once per run) extra lines to paste. Press Enter, let it work, answer prompts as the line says, type `/exit` when it has finished. It then says `Recorded … Run the same command again`. You can stop after any session and continue another day; it remembers where you were.
 
-**After the 57 sessions:** stop `nettop` (Ctrl-C), then paste back:
+If something goes badly wrong in a session (a command you said No to runs anyway, or it loops for more than 15 minutes), press Ctrl-C twice, then **send Claude** what happened.
+
+After each sitting:
 
 ```
-grep -vE '127\.0\.0\.1|localhost|::1' ~/ai-dev-stack-runs/nettop-kat-coder-v2.5-dev.csv | head -40
+pbcopy < ~/ai-dev-stack-runs/suite-kat-coder-v2.5-dev.log
 ```
 
-Empty, apart from header lines, means E7 passes.
+**Send to Claude** (if it is too long to paste, attach the file `~/ai-dev-stack-runs/suite-kat-coder-v2.5-dev.log`).
 
-**Then the second model:** stop the server (Ctrl-C), and repeat steps 5, 6, 8, 9 and Part C with `qwen3.6-35b-a3b`. The worktree from step 7 stays.
+When it says `All 54 sessions … are done`, go to step 12.
 
-## Part D: teardown (after both models)
+### 12. Finish the model
 
-Follow "Teardown" in the project's file.
+In window 3, press Ctrl-C. In window 1, press Ctrl-C. Then in window 2:
 
-The models and tools stay in `~/ai-dev-stack-models` and `~/ai-dev-stack-tools` for Stage 2.
+```
+grep -vE '127\.0\.0\.1|localhost|::1' ~/ai-dev-stack-runs/nettop-kat-coder-v2.5-dev.csv | head -40 | pbcopy
+```
 
-## What Claude does with what you paste
+**Send to Claude** (empty is fine; say "empty").
 
-Scores every run against the case's pass rule into `runs/<date>-<setup_id>.csv`, writes the setup record, applies the gate (E cases 3/3; T cases 2/3, no failure type 3+ times; more passes wins, E first; tie to KAT), and records the result in the plan and the learning log. If neither model passes, the next step per the suite is template and flags, then Q5/Q6, then the fallback.
+Then do Part B again for `qwen3.6-35b-a3b`, starting at step 7.
+
+## Part C: clean up (after both models)
+
+Gravity: paste the block in [projects/gravity.md, "Teardown"](projects/gravity.md#teardown-runbook-part-c). The models and tools stay for Stage 2.
