@@ -18,14 +18,20 @@
       "Bash(git push * -f *)",
       "Bash(git push * +*)",
 
-      "Bash(git *--no-verify*)",
+      "Bash(git push *--no-verify*)",
 
       "Bash(bash -*c *)",
       "Bash(sh -*c *)",
       "Bash(zsh -*c *)",
       "Bash(/bin/bash -*c *)",
       "Bash(/bin/sh -*c *)",
-      "Bash(/bin/zsh -*c *)"
+      "Bash(/bin/zsh -*c *)",
+      "Bash(bash -c*)",
+      "Bash(sh -c*)",
+      "Bash(zsh -c*)",
+      "Bash(/bin/bash -c*)",
+      "Bash(/bin/sh -c*)",
+      "Bash(/bin/zsh -c*)"
     ]
   }
 }

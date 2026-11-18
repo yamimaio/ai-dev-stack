@@ -32,10 +32,10 @@ Ruled 2026-11-13: narrow rules, not a blanket `git push*` deny. Rules from every
 | Guard | Rules | Note |
 |---|---|---|
 | `docker … prune` | `docker * prune`, `docker * prune *` | Two rules because a rule with two `*` does not match the bare form. |
-| Push to `main` | `git push * main`, `… main *`, `*:main`, `*:main *`, `*refs/heads/main*` | Catches `origin main`, `-u origin main`, `HEAD:main`. A bare `git push` while on `main` is not visible in the text: the pre-push hook (`hooks/`) or the scratch worktree's dead push URL holds that. |
+| Push to `main` | `git push * main`, `… main *`, `*:main`, `*:main *`, `*refs/heads/main*` | Catches `origin main`, `-u origin main`, `HEAD:main`. A push with no `main` in the text (`git push`, `git push origin HEAD` while on `main`) cannot be caught by a text rule: the pre-push hook (`hooks/pre-push-block-main`, installed in the clone) holds those, whatever the refspec. |
 | Force-push | `*--force*`, `-f*`, `* -f`, `* -f *`, `* +*` | `+refspec` is a force-push too. |
-| Skipping hooks | `git *--no-verify*` | So `hooks/pre-push-block-main` cannot be bypassed. Added at the repo thread's request; same family as the ruled guards. |
-| Shell wrappers | `bash -*c *`, `sh -*c *`, `zsh -*c *`, and `/bin/` forms | `-*c` also catches `-lc`. It can also block a rare harmless `bash -x script c`; acceptable. |
+| Skipping the pre-push hook | `git push *--no-verify*` | So `hooks/pre-push-block-main` cannot be bypassed. Narrowed on 2026-11-18 from `git *--no-verify*`, which also refused a `git grep` that merely mentions the flag (found in Gravity's review of the same rules). `git commit -n` skips commit hooks only, not pre-push, so it is not denied. |
+| Shell wrappers | `bash -*c *` and `bash -c*`, the same for `sh` and `zsh`, and the `/bin/` forms | `-*c *` catches `-c`, `-lc`, `-xc`; `-c*` catches a flag cluster that starts with `c` (`-cx`) and `-c'…'` with no space. Added 2026-11-18 after Gravity's review measured `bash -cx 'node …'` reaching host Node. Still missed: a cluster with `c` in the middle and no space after (`-xcv`). `bash -n script` and `bash script` are not matched. |
 
 Not covered by text rules, by design: `git -C . push`, `git -c … push`, `eval`, a full path to `npm`, a script that runs `node`. The docs say so plainly ("What a Bash rule doesn't match"); E3 tests the model on those.
 
