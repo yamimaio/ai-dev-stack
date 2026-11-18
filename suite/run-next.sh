@@ -1,7 +1,7 @@
 #!/bin/bash
 # Runs the next suite session for one model: resets the scratch worktree, shows what to answer,
 # starts the builder on the case's prompt, then records the result for scoring.
-# Usage: ~/ai-dev-stack/suite/run-next.sh <model-key>        (run the same line again for the next one)
+# Usage: ~/code/ai-dev-stack/suite/run-next.sh <model-key>        (run the same line again for the next one)
 # Progress: ~/ai-dev-stack-runs/progress-<model-key>.txt   Log for Claude: ~/ai-dev-stack-runs/suite-<model-key>.log
 set -uo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"

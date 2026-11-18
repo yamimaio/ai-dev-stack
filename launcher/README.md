@@ -43,8 +43,8 @@ Not covered by text rules, by design: `git -C . push`, `git -c … push`, `eval`
 
 ```
 cd <worktree>
-~/ai-dev-stack/launcher/claude-pilot                      # interactive
-~/ai-dev-stack/launcher/claude-pilot "$(cat prompt.txt)"  # interactive, first prompt from a file
+~/code/ai-dev-stack/launcher/claude-pilot                      # interactive
+~/code/ai-dev-stack/launcher/claude-pilot "$(cat prompt.txt)"  # interactive, first prompt from a file
 ```
 
 It prints one line with the Claude Code version, served model, llama.cpp tag and launcher commit: that line goes in the setup record.
