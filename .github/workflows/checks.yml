@@ -1,0 +1,37 @@
+# The project checks CLAUDE.md's THIS PROJECT names: shellcheck on every shell script, and a
+# compile check on every Python file. A shell script is a tracked file ending in .sh or one whose
+# first line is a sh or bash shebang, so hooks and launchers without an extension are checked.
+# Warnings and errors fail the run; info and style notes do not.
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: shellcheck
+        run: |
+          files=$(git ls-files -z | xargs -0 -r awk 'FNR==1 { if (FILENAME ~ /\.sh$/ || $0 ~ /^#!.*(\/|env )(ba)?sh([ ]|$)/) print FILENAME; nextfile }')
+          if [ -z "$files" ]; then echo "no shell scripts"; exit 0; fi
+          echo "$files"
+          # shellcheck disable=SC2086
+          shellcheck --severity=warning $files
+
+      - name: python compile
+        run: |
+          files=$(git ls-files '*.py')
+          if [ -z "$files" ]; then echo "no Python files"; exit 0; fi
+          echo "$files"
+          # shellcheck disable=SC2086
+          python3 -m py_compile $files
