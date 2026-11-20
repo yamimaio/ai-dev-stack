@@ -21,12 +21,14 @@ the issue: the issue body starts at the "**Priority:" line below it.
    e.g. "Launcher: claude-pilot starts with the everyday config dir when HOME has a space",
    not "Launcher: quote CLAUDE_CONFIG_DIR".
 
-3. **GEN-27 issue-labels.** Exactly one priority label, plus any topic labels that apply.
+3. **GEN-27 issue-labels.** Exactly one priority label, plus the urgency label and any
+   topic labels that apply.
    Priority:
-     must-now      blocks the current iteration's next step
-     next          needed before the current iteration ends
-     later         a later iteration, or when there is time
-     low-priority  hardening and small fixes, filed from review
+     high      needed before the current iteration ends
+     medium    a later iteration, or when there is time
+     low       hardening and small fixes, filed from review
+   Urgency (optional, with any priority):
+     must-now  blocks the current iteration's next step
    Topic (optional, only these four):
      accessibility  a barrier affecting people with disabilities
      documentation  the fix changes only docs
