@@ -1,9 +1,9 @@
 ---
-description: Plan one ai-dev-stack GitHub issue at its level and post the plan, without building it
+description: Plan one GitHub issue at its level and post the plan, without building it
 argument-hint: <issue number>
 ---
 
-Plan issue #$ARGUMENTS in yamimaio/ai-dev-stack. This session plans and ends (BLD-54).
+Plan issue #$ARGUMENTS in this repository, the one this session runs in. This session plans and ends (BLD-54).
 
 1. Read CLAUDE.md and follow it. Then read, from their ids, the rules a plan works under whose home is elsewhere because a build session works under them too (GEN-24): the pre-code doc check (BLD-7), the three levels and how small an issue is filed (GEN-31), the items an issue is filed by (GEN-32), the form of a question for the owner (GEN-17), fetching evidence a session needs (SES-24), an expected-output block's surface (BLD-52) and a procedure walk (BLD-53) — `git grep -nE '\*\*(BLD-(7|52|53)|GEN-(17|31|32)|SES-24) ' -- CLAUDE.md .claude .github`. Run checks and scripts only where CLAUDE.md's THIS PROJECT says; subagents change no git state (SES-10).
 2. Read the issue in full from GitHub, including its comments (`gh issue view $ARGUMENTS --comments`, or the GitHub connector). If you cannot read it, stop and ask the owner to paste the issue. If it looks cut off, or contradicts the repo, stop and ask.

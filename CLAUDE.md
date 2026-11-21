@@ -4,17 +4,16 @@ The infrastructure for building software with AI: launcher, model-server command
 
 Every session starts from this file, the GitHub issue it was given, and the docs that issue cites. Nothing depends on chat history.
 
-The rules below come from Gravity's workflow (where they came from, and how later lessons reach them, is at the end of this file). Each keeps its Gravity id, so the same id means the same rule in both repos; ids are not consecutive here, because only the core and the modules this project switches on came across.
-
 ## THIS PROJECT
 
 The values the rules below leave to each project.
 
 - **Big files (GEN-1):** none today. Any file over 60 KB counts as one.
 - **Where the owner's rulings are recorded:** the current iteration's plan doc, linked from the Iterations table in `README.md`. A ruling on how this repo builds, reviews or records changes the rule's own text in this file or a command, and the PR body quotes the owner's words. There is no decision log or ADR folder here.
-- **Where checks run (the README's host rule):** on the Mac host only the model server, Docker, git and Claude Code itself run. A session runs linters, tests and scripts under test in a Docker container, never on the host, unless the script's own README says it runs on the host; then the session runs it only against a scratch directory and a scratch config, never the owner's real `~/.claude*`, `~/code` or model files.
+- **Where checks run (the README's host rule):** on the Mac host only the model server, Docker, git and Claude Code itself run. A session runs linters, tests and scripts under test in a Docker container, never on the host, unless the script's own README says it runs on the host; then the session runs it only against a scratch directory and a scratch config, never the owner's real Claude config, repos or model files.
 - **The project checks (BLD-19):** `shellcheck` on every shell script the PR adds or changes (`docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:stable --severity=warning <files>`), `python3 -m py_compile` on every Python file it adds or changes (`docker run --rm -v "$PWD:/mnt" -w /mnt python:3 python3 -m py_compile <files>`), and CI (`.github/workflows/checks.yml`), which runs both on every PR.
-- **Worktree paths:** a builder works in `../ai-dev-stack-i<N>` (it builds issue N), a reviewer in `../ai-dev-stack-pr<N>` (it reviews PR N).
+- **Worktree paths:** a builder works in `../ai-dev-stack-i<N>` (it builds issue N), a reviewer in `../ai-dev-stack-pr<N>` (it reviews PR N). The commands call these `<wt>` and `<dir>`.
+- **Issue areas (GEN-26):** `Launcher`, `Suite`, `Usage`, `Hooks`, `CI`, `Docs`. For example "Launcher: claude-pilot starts with the everyday config dir when HOME has a space", not "Launcher: quote CLAUDE_CONFIG_DIR".
 - **Modules switched on:** operator runbooks (GEN-33, GEN-34, BLD-45, BLD-47, BLD-52, BLD-53, REV-21, REV-23) and security review (REV-11's `/security-review`). Off: the decision log, the rule-id check script, container-only execution with Docker stacks, UI review, privacy.
 
 ## READ DISCIPLINE — enforced
@@ -57,7 +56,7 @@ When unsure, ask: would undoing it later touch code outside this PR, or would th
 
 ## RULE IDS
 
-- **GEN-24 process-rule-ids.** Every process rule has a stable id, and the line that states the rule carries it: `**<GROUP>-<n> <slug>.** <the rule>`, in one of four subject groups — `BLD` building an issue into a PR, `REV` reviewing one, `SES` the session and its environment, `GEN` repo-wide conduct and records. The group is the rule's subject, not the file its text sits in, so moving the text never changes the id; ids are never reused and never renumbered, and a new rule takes the next id after the highest one Gravity or this repo has used in its group. Everywhere else the rule is cited by its id alone, `(BLD-7)`, with no file, section or step. To read a rule from its id, `git grep -nE '\*\*(BLD|REV|SES|GEN)-[0-9]+ '`.
+- **GEN-24 process-rule-ids.** Every process rule has a stable id, and the line that states the rule carries it: `**<GROUP>-<n> <slug>.** <the rule>`, in one of four subject groups — `BLD` building an issue into a PR, `REV` reviewing one, `SES` the session and its environment, `GEN` repo-wide conduct and records. The group is the rule's subject, not the file its text sits in, so moving the text never changes the id; ids are never reused and never renumbered, and a new rule takes the next id after the highest one used in its group, here or in any repo these rules are shared with. Everywhere else the rule is cited by its id alone, `(BLD-7)`, with no file, section or step. To read a rule from its id, `git grep -nE '\*\*(BLD|REV|SES|GEN)-[0-9]+ '`.
 
 ## RULES
 
@@ -120,7 +119,3 @@ A review session follows this whatever the command arguments. The goal is a clea
   - checks how established libraries or systems handle the same problem, cited at their source and version as (GEN-20) asks, and says whether the chosen option matches them;
   - runs the option against the earlier reproductions, through the sequence or model-based test above or a throwaway commit, and quotes the result, before the owner rules on it.
 - **GEN-23 smallest-scope-for-goal.** Prefer the smallest scope that meets the established goals — the issue's, and the iteration's.
-
-## WHERE THESE RULES CAME FROM
-
-Taken from Gravity's `CLAUDE.md`, `.claude/commands/` and issue template at `main` `0d5712e` (merged 2026-11-19, after Gravity #677 and #671), with Gravity's product, decision-log, Docker-stack and UI parts left out and its names and paths replaced. Until Gravity's milestone 2 finishes, each Gravity process PR is checked when it merges and its generic part is ported here; after that, the Gravity diff since the last ported commit is checked at the end of each iteration. Each port names the Gravity commit it came from in its PR body.

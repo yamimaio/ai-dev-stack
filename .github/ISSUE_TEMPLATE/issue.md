@@ -17,9 +17,7 @@ the issue: the issue body starts at the "**Priority:" line below it.
    label list to work out the format.
 
 2. **GEN-26 issue-title.** Short, area first, describing the problem, not the fix.
-     Launcher: …   Suite: …   Usage: …   Hooks: …   CI: …   Docs: …
-   e.g. "Launcher: claude-pilot starts with the everyday config dir when HOME has a space",
-   not "Launcher: quote CLAUDE_CONFIG_DIR".
+   The areas, with an example, are in CLAUDE.md's THIS PROJECT.
 
 3. **GEN-27 issue-labels.** Exactly one priority label, plus the urgency label and any
    topic labels that apply.
