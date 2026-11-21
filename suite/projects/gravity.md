@@ -19,7 +19,7 @@ The Gravity-specific half of the suite (design rule, ruled 2026-11-12: the gener
 In Terminal, go to your Gravity checkout (the folder you build Gravity in), then paste:
 
 ```
-git fetch origin && ~/code/ai-dev-stack/suite/projects/gravity/setup-worktree.sh "$(git rev-parse origin/main)" 2>&1 | tee ~/ai-dev-stack-step6.txt
+git fetch origin && ~/Repos/ai-dev-stack/suite/projects/gravity/setup-worktree.sh "$(git rev-parse origin/main)" 2>&1 | tee ~/ai-dev-stack-step6.txt
 tail -40 ../gravity-i1900/docs/decision-log.md >> ~/ai-dev-stack-step6.txt; pbcopy < ~/ai-dev-stack-step6.txt
 ```
 

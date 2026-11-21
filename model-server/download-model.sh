@@ -5,6 +5,7 @@
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 key="${1:?usage: download-model.sh <model-key>  (see model-server/models/)}"
+# shellcheck source=/dev/null  # the model file is picked at run time
 . "$here/models/$key.env"
 dest="$HOME/ai-dev-stack-models/$key"
 mkdir -p "$dest"

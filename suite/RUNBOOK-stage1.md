@@ -19,13 +19,13 @@ Wait for Claude's reply "pin updated". Claude sets the builder's Claude Code to 
 ### 2. Get the repo
 
 ```
-mkdir -p ~/code && git clone https://github.com/yamimaio/ai-dev-stack ~/code/ai-dev-stack
+mkdir -p ~/Repos && git clone https://github.com/yamimaio/ai-dev-stack ~/Repos/ai-dev-stack
 ```
 
 If it says the folder already exists:
 
 ```
-git -C ~/code/ai-dev-stack switch main && git -C ~/code/ai-dev-stack pull
+git -C ~/Repos/ai-dev-stack switch main && git -C ~/Repos/ai-dev-stack pull
 ```
 
 You should see: `Cloning into…` or `Already up to date` / a list of changed files.
@@ -33,7 +33,7 @@ You should see: `Cloning into…` or `Already up to date` / a list of changed fi
 ### 3. Install llama.cpp
 
 ```
-~/code/ai-dev-stack/model-server/install-llama-cpp.sh 2>&1 | tee ~/ai-dev-stack-step3.txt
+~/Repos/ai-dev-stack/model-server/install-llama-cpp.sh 2>&1 | tee ~/ai-dev-stack-step3.txt
 ```
 
 You should see: download progress, then `Installed to …`. Then:
@@ -47,9 +47,9 @@ pbcopy < ~/ai-dev-stack-step3.txt
 ### 4. Download both models (about 21 GB each)
 
 ```
-~/code/ai-dev-stack/model-server/download-model.sh kat-coder-v2.5-dev 2>&1 | tee ~/ai-dev-stack-step4.txt
-~/code/ai-dev-stack/model-server/download-model.sh qwen3.6-35b-a3b 2>&1 | tee -a ~/ai-dev-stack-step4.txt
-~/code/ai-dev-stack/model-server/show-sampling.sh 2>&1 | tee -a ~/ai-dev-stack-step4.txt
+~/Repos/ai-dev-stack/model-server/download-model.sh kat-coder-v2.5-dev 2>&1 | tee ~/ai-dev-stack-step4.txt
+~/Repos/ai-dev-stack/model-server/download-model.sh qwen3.6-35b-a3b 2>&1 | tee -a ~/ai-dev-stack-step4.txt
+~/Repos/ai-dev-stack/model-server/show-sampling.sh 2>&1 | tee -a ~/ai-dev-stack-step4.txt
 pbcopy < ~/ai-dev-stack-step4.txt
 ```
 
@@ -58,7 +58,7 @@ You should see: `Verified.` twice, then the model cards' sampling lines. If a do
 ### 5. Install the builder Claude Code
 
 ```
-~/code/ai-dev-stack/launcher/install-claude-code.sh 2>&1 | tee ~/ai-dev-stack-step5.txt; pbcopy < ~/ai-dev-stack-step5.txt
+~/Repos/ai-dev-stack/launcher/install-claude-code.sh 2>&1 | tee ~/ai-dev-stack-step5.txt; pbcopy < ~/ai-dev-stack-step5.txt
 ```
 
 You should see: a version line and `Installed …`. **Send to Claude.**
@@ -76,7 +76,7 @@ The blocks below use KAT. For the second model, replace `kat-coder-v2.5-dev` wit
 Open a new Terminal window (Cmd+N) and paste:
 
 ```
-~/code/ai-dev-stack/model-server/serve.sh kat-coder-v2.5-dev
+~/Repos/ai-dev-stack/model-server/serve.sh kat-coder-v2.5-dev
 ```
 
 You should see: `Model: …` and `Alias: …`, then nothing more in the window (it writes to a log). Leave this window open for the whole model.
@@ -99,13 +99,13 @@ You should see: `{"status":"ok"}`, a line with the model's alias, and a reply co
 ### 9. Window 2: cache check (not scored)
 
 ```
-cd "$(grep WORKTREE ~/ai-dev-stack-runs/project.env | cut -d= -f2)" && ~/code/ai-dev-stack/launcher/claude-pilot "Say hello in five words."
+cd "$(grep WORKTREE ~/ai-dev-stack-runs/project.env | cut -d= -f2)" && ~/Repos/ai-dev-stack/launcher/claude-pilot "Say hello in five words."
 ```
 
 The first time only, Claude Code shows set-up screens (theme, trust this folder): press Enter on each. If it asks you to log in, press Ctrl-C and **send Claude** a screenshot: the builder should never need a login. When it has answered, type `What did you just say?` and press Enter. When that is answered, type `/exit`. Then:
 
 ```
-~/code/ai-dev-stack/suite/check-run.sh CACHE kat-coder-v2.5-dev 0 > /dev/null; tail -12 ~/ai-dev-stack-runs/suite-kat-coder-v2.5-dev.log | pbcopy
+~/Repos/ai-dev-stack/suite/check-run.sh CACHE kat-coder-v2.5-dev 0 > /dev/null; tail -12 ~/ai-dev-stack-runs/suite-kat-coder-v2.5-dev.log | pbcopy
 ```
 
 **Send to Claude.**
@@ -125,7 +125,7 @@ You should see: nothing (it writes to the file). Leave it open until step 12. If
 Paste this, as many times as it takes:
 
 ```
-~/code/ai-dev-stack/suite/run-next.sh kat-coder-v2.5-dev
+~/Repos/ai-dev-stack/suite/run-next.sh kat-coder-v2.5-dev
 ```
 
 Each time it shows the case, one line saying what to answer when Claude Code asks permission, and (once per run) extra lines to paste. Press Enter, let it work, answer prompts as the line says, type `/exit` when it has finished. It then says `Recorded … Run the same command again`. You can stop after any session and continue another day; it remembers where you were.

@@ -5,7 +5,9 @@
 set -uo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 for f in "$here"/models/*.env; do
-  CARD_REPO=""; . "$f"
+  CARD_REPO=""
+  # shellcheck source=/dev/null  # each model file in turn
+  . "$f"
   echo "=== $(basename "$f" .env): https://huggingface.co/$CARD_REPO"
   curl -fsSL "https://huggingface.co/$CARD_REPO/raw/main/README.md" \
     | grep -n -i -E 'temperature|top[_ -]?p|top[_ -]?k|min[_ -]?p|presence|repetition' | head -25 \

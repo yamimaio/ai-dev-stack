@@ -6,6 +6,7 @@ here="$(cd "$(dirname "$0")" && pwd)"
 key="${1:?usage: serve.sh <model-key>  (see model-server/models/)}"
 . "$here/pins.env"
 . "$here/sampling.env"
+# shellcheck source=/dev/null  # the model file is picked at run time
 . "$here/models/$key.env"
 bin="$HOME/ai-dev-stack-tools/llama.cpp/$LLAMA_TAG/llama-server"
 dir="$HOME/ai-dev-stack-models/$key"
