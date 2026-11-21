@@ -22,7 +22,7 @@ Sessions started with `launcher/claude-pilot` keep their own logs and settings u
 
    ```
    mkdir -p ~/ai-dev-stack-runs/usage/$(date +%F) && cd ~/ai-dev-stack-runs/usage/$(date +%F)
-   cp ~/code/ai-dev-stack/usage/session_usage.py .
+   cp ~/Repos/ai-dev-stack/usage/session_usage.py .
    ```
 
 2. Run it against the everyday Claude Code logs:

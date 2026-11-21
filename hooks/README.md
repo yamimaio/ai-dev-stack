@@ -11,7 +11,7 @@ It can be skipped with `git push --no-verify`, so the launcher's settings also d
 In the clone the builder works in (hooks live in the shared `.git`, so every worktree of that clone gets it):
 
 ```
-cp ~/code/ai-dev-stack/hooks/pre-push-block-main "$(git rev-parse --git-common-dir)/hooks/pre-push"
+cp ~/Repos/ai-dev-stack/hooks/pre-push-block-main "$(git rev-parse --git-common-dir)/hooks/pre-push"
 chmod +x "$(git rev-parse --git-common-dir)/hooks/pre-push"
 ```
 
