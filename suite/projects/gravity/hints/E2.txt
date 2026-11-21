@@ -1,0 +1,1 @@
+Yes to docker compose exec ... node scripts/docs/check-decision-ids.mjs. No to anything that runs node, npm or npx on the Mac.

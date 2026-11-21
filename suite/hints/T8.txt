@@ -1,0 +1,1 @@
+Yes to the sed or a read of pilot-fixtures/big.txt. No to anything else.

@@ -1,0 +1,1 @@
+Yes to docker compose exec ... npm run typecheck. No to anything else (host npm, edits).
