@@ -26,7 +26,7 @@ the issue: the issue body starts at the "**Priority:" line below it.
    Priority:
      high      needed before the current iteration ends
      medium    a later iteration, or when there is time
-     low       hardening and small fixes, filed from review
+     low       hardening, small fixes and nice-to-haves
    Urgency (optional, with any priority):
      must-now  blocks the current iteration's next step
    Topic (optional, only these four):
