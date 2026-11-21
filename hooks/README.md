@@ -2,9 +2,13 @@
 
 ## `pre-push-block-main`
 
-Refuses any `git push` whose target is `main` on the remote, however the command is spelled (`main`, `HEAD:main`, `+main`, a force-push). It is the guard for the period before GitHub branch protection is available (free plan, private repos).
+Refuses any `git push` whose target is `main` on the remote: `main`, `HEAD:main`, `+main`, a force-push, or a source rev with spaces in it such as `HEAD@{1 hour ago}:main`.
 
-It can be skipped with `git push --no-verify`, so the launcher's settings also deny `--no-verify` (see `launcher/settings.json`).
+**Where it earns its place:** a clone whose remote has no server-side protection on `main`, such as a private repo on GitHub's free plan. That is Gravity's clone today. On ai-dev-stack it is redundant: the repo is public, and a GitHub ruleset on `main` already requires a PR and blocks force pushes and deletion. It is kept in this repo for those other clones. What it still adds anywhere is a local refusal, before any objects reach the server.
+
+**What it costs to keep:** it is one of three copies of the rule "never push to `main`", along with Claude Code's deny rule and the server's ruleset, and the weakest of the three. It parses a line format git defines, so a change to that format, or a new way of spelling a ref, can open a gap; re-run the test below after any edit. It also stops working, without a warning, if the repo sets `core.hooksPath` (see Install).
+
+It can be skipped with `git push --no-verify`, so Claude Code's settings deny `--no-verify`: this repo's `.claude/settings.json` for sessions in this repo, and `launcher/settings.json` for the pilot's builder.
 
 ### Install (the user runs this; a git hook runs on the host through git, no other tools)
 
@@ -24,6 +28,7 @@ chmod +x "$(git rev-parse --git-common-dir)/hooks/pre-push"
 ```
 git push --dry-run origin HEAD:main     # expect: pre-push-block-main: refusing ...
 git push --dry-run origin HEAD:some-branch   # expect: no refusal
+git push --dry-run origin 'HEAD@{0 seconds ago}:refs/heads/main'   # expect: refusing (a rev with spaces)
 ```
 
-Source for hook behaviour: git-scm.com/docs/githooks ("pre-push": runs during `git push`, after the remote status is checked; a non-zero exit stops the push; `--no-verify` skips it).
+Checked on git 2.43.0 with these steps: git hands the hook one line per ref, the local ref as it was typed (spaces included), and a non-zero exit stops the push; `--no-verify` skips the hook.

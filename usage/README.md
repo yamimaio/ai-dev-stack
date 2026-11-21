@@ -1,18 +1,20 @@
 # Usage measurement
 
-`session_usage.py` reads Claude Code's local session logs and writes one row per session with its token usage. It runs inside a Python container with no network and the logs mounted read-only, so no third-party code reads the logs and nothing leaves the machine. Only Docker runs on the host.
+`session_usage.py` reads Claude Code's local session logs and writes one row per session with its token usage. It runs inside a Python container with no network and the logs mounted read-only, so no third-party code reads the logs and nothing is sent anywhere while it runs. Only Docker runs on the host.
+
+The CSV it writes is not private: each row holds the first 80 characters of the session's first prompt, and the CSV goes wherever you put it. This repo is public. Tagging drops the `cwd` column, but read a run's `first_prompt` excerpts before committing it under `data/`.
 
 Use it whenever a usage comparison is needed: a baseline, a stage of a pilot, or the end of an iteration. Each run's tagged output is kept under `data/<project>/<run date>/`.
 
 ## Once per machine: keep logs long enough
 
-Claude Code deletes transcripts older than `cleanupPeriodDays` (default 30) in a background sweep right after a session starts (Claude Code settings docs, `cleanupPeriodDays`). Before the first run, check the value:
+Claude Code deletes transcripts older than `cleanupPeriodDays`, which defaults to 30 days. Before the first run, check the value:
 
 ```
 grep cleanupPeriodDays ~/.claude/settings.json
 ```
 
-If it prints nothing or a value below 90, the oldest logs may already be gone. Run the script first (next section), then add `"cleanupPeriodDays": 90` to `~/.claude/settings.json`. The minimum is 1; `0` fails validation.
+If it prints nothing or a value below 90, the oldest logs may already be gone. Run the script first (next section), then add `"cleanupPeriodDays": 90` to `~/.claude/settings.json`. The minimum is 1; `0` fails validation. (Checked in the Claude Code 2.1.330 binary's settings strings: "Number of days to retain chat transcripts before automatic cleanup (default: 30). Minimum 1." and "cleanupPeriodDays must be at least 1".)
 
 Sessions started with `launcher/claude-pilot` keep their own logs and settings under `~/.claude-pilot` (see `launcher/README.md`).
 
@@ -50,6 +52,10 @@ When the session ran, the first 80 characters of its first prompt (built-in comm
 
 - Fix pushes made in the builder's session count as build (B).
 - A session that doesn't start with its command (`/build-issue N`, `/review-pr N`) can't be tagged from its first prompt; it is tagged by hand and listed in that run's README. Starting each session with the command first avoids this.
+
+## If it stops with "no session logs"
+
+The folder mounted at `/logs` holds no `<project>/<session>.jsonl` files: usually a typo in the `-v` path, or `~/.claude-pilot/projects` before any pilot session has run. It exits with an error and writes no CSV. Check the path in step 2.
 
 ## If it prints 0 sessions
 

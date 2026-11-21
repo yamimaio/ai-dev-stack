@@ -21,12 +21,15 @@ Columns:
 - session_id, project (the log folder name), cwd, first_ts, last_ts
 - first_prompt: the first 80 characters of the first real user message.
   Built-in commands (/clear, /model, /effort, ...) and their output are
-  skipped; a custom command shows as "/build-issue 575". It stays on your Mac.
+  skipped; a custom command shows as "/build-issue 575". It is written to
+  the CSV, so read it before committing a CSV anywhere public.
 - commands: every custom slash command run in the session, in order, with
   its arguments, e.g. "/build-issue 575 | /review-pr 639"
 - refs: the issue/PR numbers the session touched most (from #N, issues/N,
   pull/N and gh issue/pr commands in prompts and tool calls), top 5 as
-  number:count. Numbers only, no text.
+  number:count, each distinct text of a response counted once. Numbers only,
+  no text. A bare number in a command's arguments counts only from two digits
+  up, so a review round number ("/review-pr <url> 1") is not taken for a PR.
 - branches: git branches the session ran on, other than main and HEAD
 - models: Claude models seen
 - input, cache_write, cache_read, output: raw token counts, all agents
@@ -64,7 +67,8 @@ BUILTIN = {"clear", "model", "effort", "login", "logout", "compact", "resume",
            "rewind", "export", "release-notes", "terminal-setup", "upgrade"}
 CMD = re.compile(r"<command-name>/?([^<\s]+)</command-name>")
 ARGS = re.compile(r"<command-args>(.*?)</command-args>", re.S)
-REF = re.compile(r"(?:#|issues/|pull/|\bgh (?:issue|pr) \w+ )(\d{2,4})\b")
+REF = re.compile(r"(?:#|issues/|pull/|\bgh (?:issue|pr) \w+ )(\d{1,6})\b")
+PASTE = re.compile(r"^\s*<pasted_content[^>]*>\s*")
 
 
 def all_text(message):
@@ -83,12 +87,17 @@ def all_text(message):
     return "\n".join(out)
 
 
+SKIPPED = collections.Counter()  # lines that are not JSON, per log file
+
+
 def scan(path, row, seen, is_sub):
     with open(path, encoding="utf-8", errors="replace") as fh:
         for line in fh:
             try:
                 d = json.loads(line)
             except ValueError:
+                if line.strip():
+                    SKIPPED[path] += 1
                 continue
             ts = d.get("timestamp")
             if ts:
@@ -106,7 +115,7 @@ def scan(path, row, seen, is_sub):
                     m = CMD.search(text)
                     if m:
                         a = ARGS.search(text)
-                        cmd = ("/" + m.group(1) + " " + (a.group(1).strip() if a else "")).strip()
+                        cmd = ("/" + m.group(1) + " " + (a.group(1).strip() if a else "")).strip().replace("\n", " ")
                         if m.group(1) not in BUILTIN:
                             row["commands"].append(cmd[:60])
                             if not row["first_prompt"]:
@@ -115,8 +124,13 @@ def scan(path, row, seen, is_sub):
                     elif text.strip() and not text.startswith(("<local-command", "Caveat:")) \
                             and "tool_result" not in str(msg.get("content"))[:200]:
                         if not row["first_prompt"]:
-                            row["first_prompt"] = text.strip().replace("\n", " ")[:80]
-                row["refs"].update(REF.findall(text))
+                            row["first_prompt"] = PASTE.sub("", text).strip().replace("\n", " ")[:80]
+                # A response is logged once per content block, and a block can be
+                # repeated; count each distinct text of a response once.
+                rkey = ("refs", d.get("type"), msg.get("id"), d.get("requestId"), text)
+                if d.get("type") == "user" or rkey not in seen:
+                    seen.add(rkey)
+                    row["refs"].update(REF.findall(text))
             if d.get("type") != "assistant" or not isinstance(msg, dict):
                 continue
             model = msg.get("model") or ""
@@ -148,7 +162,11 @@ def scan(path, row, seen, is_sub):
 
 def main(root, out):
     rows = []
-    for path in sorted(glob.glob(os.path.join(root, "*", "*.jsonl"))):
+    paths = sorted(glob.glob(os.path.join(root, "*", "*.jsonl")))
+    if not paths:
+        sys.exit(f"no session logs (*.jsonl) under {root}/<project>/: mount the log folder,"
+                 " ~/.claude/projects or ~/.claude-pilot/projects, as usage/README.md step 2 shows")
+    for path in paths:
         sid = os.path.splitext(os.path.basename(path))[0]
         row = {"session_id": sid, "project": os.path.basename(os.path.dirname(path)),
                "cwd": "", "first_ts": "", "last_ts": "", "first_prompt": "",
@@ -177,6 +195,10 @@ def main(root, out):
         w.writeheader()
         w.writerows(rows)
     print(f"{len(rows)} sessions written to {out}")
+    if SKIPPED:
+        print(f"{sum(SKIPPED.values())} lines that are not JSON were skipped, in "
+              f"{len(SKIPPED)} log files",
+              file=sys.stderr)
 
 
 if __name__ == "__main__":

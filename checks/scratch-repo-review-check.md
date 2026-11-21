@@ -4,7 +4,7 @@ Pilot material, not Gravity work. Drafted 2026-11-12. It answers one open questi
 
 What is already known: `.claude/commands/review-pr.md` on `main` (`0234f0c`) never names `yamimaio/gravity`. It works through `origin`, `gh pr view <N>`, `git fetch origin pull/<N>/head`, a `../gravity-pr<N>` worktree and `scripts/stack-down.sh`. So it should work. Only a real run confirms it.
 
-**Use a plain private copy, not a GitHub fork.** In a fork, `gh` tends to send PR commands to the parent repo, and a replay review could then land on the real Gravity PRs.
+**Use a plain private copy, not a GitHub fork.** A fork keeps a link to its parent repo, and the risk is that `gh` sends PR commands there, so a replay review lands on the real Gravity PRs. That risk was not checked in `gh`'s source. A plain copy has no parent, which removes it, and the 2026-11-16 run of this check confirmed the plain copy works.
 
 Cost: about 15 minutes, plus one small review's worth of Claude usage. You run every step yourself.
 
