@@ -25,10 +25,15 @@ chmod +x "$(git rev-parse --git-common-dir)/hooks/pre-push"
 
 ### Test it (safe: `--dry-run` sends nothing, but still runs the hook)
 
+Run it from a throwaway branch with one empty commit. Git skips a ref that is already up to date before it calls the hook, so from a clone whose `HEAD` equals `origin/main` a plain `git push --dry-run origin HEAD:main` prints `Everything up-to-date` and tests nothing. `--force` keeps a clone that is behind `origin/main` from being rejected before the hook runs.
+
 ```
-git push --dry-run origin HEAD:main     # expect: pre-push-block-main: refusing ...
-git push --dry-run origin HEAD:some-branch   # expect: no refusal
-git push --dry-run origin 'HEAD@{0 seconds ago}:refs/heads/main'   # expect: refusing (a rev with spaces)
+git switch -c hook-test && git commit --allow-empty -m "hook test"
+git push --dry-run --force origin HEAD:main                              # expect: pre-push-block-main: refusing ...
+git push --dry-run --force origin 'HEAD@{0 seconds ago}:refs/heads/main' # expect: refusing (a rev with spaces)
+git push --dry-run origin :refs/heads/main                               # expect: refusing (a deletion)
+git push --dry-run origin HEAD:some-branch                               # expect: no refusal
+git switch - && git branch -D hook-test
 ```
 
-Checked on git 2.43.0 with these steps: git hands the hook one line per ref, the local ref as it was typed (spaces included), and a non-zero exit stops the push; `--no-verify` skips the hook.
+Checked on git 2.43.0 with these steps, from a clone equal to `origin/main` and from one behind it: each `main` line refuses with exit 1, the side branch passes, and the remote's `main` is unchanged afterwards.

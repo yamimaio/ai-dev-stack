@@ -176,7 +176,7 @@ b8a99f1c-10db-47f9-8518-6c1936a631b2,2026-10-22T20:55:08.919Z,2026-10-22T21:03:2
 2d0876d7-b591-4d6f-8f66-22db3b68b119,2026-10-23T19:36:11.368Z,2026-10-23T21:25:41.953Z,review,269,366,,high,/review-pr,/review-pr 366 1,/review-pr 366 1,claude-opus-5-5,2585455
 54f330a9-a1a6-4814-a103-81ee3e27199e,2026-10-23T21:31:04.878Z,2026-10-23T22:01:54.026Z,review,269,366,,high,/review-pr,/review-pr 366 2,/review-pr 366 2,claude-opus-5-5,1501222
 33e794a9-bed8-4b19-bd81-88586ab2ad85,2026-10-23T21:42:38.956Z,2026-10-24T07:30:47.120Z,build,274,,,low,issue #274 prompt,,"<pasted_content id=""025b""> # Issue #274 prompt (local Claude Code)  Fix GitHub i",claude-opus-5-5,11005424
-372c92bc-07a2-4287-9bf1-8cf6157be846,2026-10-23T21:44:47.373Z,2026-10-23T21:51:04.667Z,other,,,,low,unclear,/feedback | /feedback,"<pasted_content id=""46c8""> https://github.com/yamimaio/step-up-education-advisor",claude-opus-5-5 claude-sonnet-5-5,469294
+372c92bc-07a2-4287-9bf1-8cf6157be846,2026-10-23T21:44:47.373Z,2026-10-23T21:51:04.667Z,other,,,,low,unclear,/feedback | /feedback,,claude-opus-5-5 claude-sonnet-5-5,469294
 16fe6ac2-33e2-492f-9077-15e80b7c9ba5,2026-10-23T22:05:29.592Z,2026-10-23T23:21:19.495Z,review,192,374,,high,/review-pr,/review-pr 374 1,/review-pr 374 1,claude-opus-5-5,1591099
 66101011-8130-425f-9b12-e92b8a5e18c0,2026-10-23T22:15:20.707Z,2026-10-24T01:37:30.317Z,build,192,,,high,/build-issue,/build-issue 192,/build-issue 192,claude-opus-5-5,6148562
 787e3361-4239-4127-af22-e232d9971c0c,2026-10-23T23:24:49.981Z,2026-10-23T23:36:38.505Z,other,,,,low,test/housekeeping/tiny,,,claude-opus-5-5,70226
