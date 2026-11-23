@@ -28,7 +28,7 @@ chmod +x "$(git rev-parse --git-common-dir)/hooks/pre-push"
 Run it from a throwaway branch with one empty commit. Git skips a ref that is already up to date before it calls the hook, so from a clone whose `HEAD` equals `origin/main` a plain `git push --dry-run origin HEAD:main` prints `Everything up-to-date` and tests nothing. `--force` keeps a clone that is behind `origin/main` from being rejected before the hook runs.
 
 ```
-git switch -c hook-test && git commit --allow-empty -m "hook test"
+git switch -c hook-test && git commit --allow-empty --only -m "hook test"
 git push --dry-run --force origin HEAD:main                              # expect: pre-push-block-main: refusing ...
 git push --dry-run --force origin 'HEAD@{0 seconds ago}:refs/heads/main' # expect: refusing (a rev with spaces)
 git push --dry-run origin :refs/heads/main                               # expect: refusing (a deletion)
