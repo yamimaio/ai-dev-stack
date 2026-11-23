@@ -30,7 +30,3 @@ Result: the median build costs about 4 review rounds (middle half 2.9-6.7), coun
 | `b3bcd1e3` | 2026-11-04 | review | 495 | 571 | review in prompt |
 | `cc4fbfe6` | 2026-11-04 | review | 495 | 570 | review in prompt |
 
-
-## Redacted
-
-One cell is blank on purpose: `first_prompt` of session `372c92bc` (role `other`, no issue or PR). It held a link to another of the owner's repos. The row enters neither B nor R, so no figure above changes.
