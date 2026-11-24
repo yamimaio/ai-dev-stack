@@ -8,7 +8,7 @@ Every session starts from this file, the GitHub issue it was given, and the docs
 
 The values the rules below leave to each project.
 
-- **Big files (GEN-1):** none today. Any file over 60 KB counts as one.
+- **Big files (GEN-1):** `docs/iterations/01-local-builder/research-page.html` (139 KB), `usage/data/gravity/2026-11-13/sessions-tagged.csv` (65 KB), `docs/iterations/01-local-builder/report.md` (63 KB). Any file over 60 KB counts as one.
 - **Where the owner's rulings are recorded:** the current iteration's plan doc, linked from the Iterations table in `README.md`. A ruling on how this repo builds, reviews or records changes the rule's own text in this file or a command, and the PR body quotes the owner's words. There is no decision log or ADR folder here.
 - **Where checks run (the README's host rule):** on the Mac host only the model server, Docker, git and Claude Code itself run. A session runs linters, tests and scripts under test in a Docker container, never on the host, unless the script's own README says it runs on the host; then the session runs it only against a scratch directory and a scratch config, never the owner's real Claude config, repos or model files.
 - **The project checks (BLD-19):** `shellcheck` on every shell script the PR adds or changes (`docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:stable --severity=warning <files>`), `python3 -m py_compile` on every Python file it adds or changes (`docker run --rm -v "$PWD:/mnt" -w /mnt python:3 python3 -m py_compile <files>`), and CI (`.github/workflows/checks.yml`), which runs both on every PR.
