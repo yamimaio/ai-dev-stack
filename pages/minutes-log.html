@@ -1,0 +1,244 @@
+<title>PR Minutes Log</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one narrow column, entry form first (it is used most), then the per-PR totals that feed the gate. */
+:root {
+  --bg: #f4f6f8; --surface: #ffffff; --sunk: #e9edf1; --fg: #1b2230; --muted: #5a6474; --line: #d6dce4;
+  --accent: #0f7b78; --accent-soft: #d8efed; --local: #6a4fd1; --local-soft: #e8e3fb; --warn: #9a5b00; --bad: #b3261e;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151c; --surface: #181e27; --sunk: #0d1117; --fg: #e4e8ef; --muted: #9aa5b5; --line: #2a323e;
+    --accent: #4fd1c5; --accent-soft: #143633; --local: #a995ff; --local-soft: #262043; --warn: #f2b45a; --bad: #ff8a80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151c; --surface: #181e27; --sunk: #0d1117; --fg: #e4e8ef; --muted: #9aa5b5; --line: #2a323e;
+  --accent: #4fd1c5; --accent-soft: #143633; --local: #a995ff; --local-soft: #262043; --warn: #f2b45a; --bad: #ff8a80;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; }
+main { max-width: 680px; margin: 0 auto; display: grid; gap: 22px; }
+h1 { font-family: var(--font-display); font-size: 28px; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-size: 18px; margin: 0 0 10px; }
+p { margin: 0; max-width: 65ch; }
+.muted { color: var(--muted); font-size: 13.5px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 14px; min-width: 0; }
+label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: block; margin-bottom: 6px; }
+.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+input, select { width: 100%; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; min-width: 0; }
+input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.mins { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.mins input { width: 90px; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.btn { font: inherit; font-weight: 600; border-radius: 8px; padding: 10px 16px; cursor: pointer; border: 1px solid var(--accent); background: var(--accent); color: var(--surface); }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.timer { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 14px; color: var(--muted); }
+.status { font-size: 13.5px; color: var(--muted); min-height: 1.2em; }
+.status.err { color: var(--bad); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+.stat { background: var(--sunk); border-radius: 10px; padding: 12px; display: grid; gap: 2px; }
+.stat b { font-family: var(--font-display); font-size: 24px; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; }
+td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.arm { display: inline-block; font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.arm.local { background: var(--local-soft); color: var(--local); }
+.arm.other { background: var(--sunk); color: var(--muted); }
+.del { font: inherit; font-size: 12.5px; background: none; border: 0; color: var(--muted); cursor: pointer; text-decoration: underline; padding: 0; }
+.empty { color: var(--muted); font-size: 14px; padding: 6px 0; }
+label.check { display: flex; gap: 8px; align-items: flex-start; text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 500; color: var(--fg); margin: 0; cursor: pointer; }
+label.check input { width: auto; margin-top: 3px; }
+</style>
+
+<main>
+  <header>
+    <h1>PR minutes log</h1>
+    <p class="muted">Your own minutes per PR, for the pilot's gate: a local build may add at most 10 minutes per issue over Opus (median). Stage 0 needs 5 or more Opus PRs logged before Stage 2. Nearest 5 minutes is enough. Setup upkeep starts when pilot builds start.</p>
+  </header>
+
+  <section class="panel" aria-labelledby="add-h">
+    <h2 id="add-h">Add time</h2>
+    <div class="row">
+      <div><label for="pr">PR or issue</label><input id="pr" inputmode="numeric" placeholder="e.g. 612" autocomplete="off"></div>
+      <div><label for="arm">Built by</label>
+        <select id="arm"><option value="opus">Opus</option><option value="local">Local model</option><option value="other">Other (not a build PR)</option></select>
+        <p class="muted" style="margin-top:6px">Milestone 2 builds by Opus count as Opus, frozen rules or not.</p></div>
+      <div><label for="date">Date</label><input id="date" type="date"></div>
+    </div>
+    <div>
+      <label id="kind-l">What you did</label>
+      <div class="chips" id="kinds" role="group" aria-labelledby="kind-l"></div>
+      <p class="muted" style="margin-top:8px">Plan = everything until you approve the plan, including its questions. Rulings = questions and decisions that come up once the build has started. Your final check with the builder counts as "My own review".</p>
+    </div>
+    <div>
+      <label for="mins">Minutes</label>
+      <div class="mins">
+        <input id="mins" type="number" min="1" max="600" step="1" placeholder="0">
+        <button class="chip" type="button" data-add="5">+5</button>
+        <button class="chip" type="button" data-add="15">+15</button>
+        <button class="chip" type="button" data-add="30">+30</button>
+        <button class="btn ghost" type="button" id="timerBtn">Start timer</button>
+        <span class="timer" id="timer" aria-live="polite"></span>
+      </div>
+    </div>
+    <div><label class="check" for="outside"><input id="outside" type="checkbox"> My daily-goal session (or any Claude outside Claude Code) helped fix or diagnose this build</label></div>
+    <div><label for="note">Note (optional)</label><input id="note" maxlength="200" autocomplete="off" placeholder="e.g. answered the D-row question"></div>
+    <div class="actions">
+      <button class="btn" type="button" id="save">Log minutes</button>
+      <span class="status" id="status" role="status"></span>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="sum-h">
+    <h2 id="sum-h">Per PR</h2>
+    <div class="stats" id="stats"></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>PR</th><th>Built by</th><th>Breakdown</th><th style="text-align:right">Minutes</th></tr></thead>
+      <tbody id="perPr"><tr><td colspan="4" class="empty">Loading your log…</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="panel" aria-labelledby="ent-h">
+    <h2 id="ent-h">Entries</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date</th><th>PR</th><th>What</th><th style="text-align:right">Min</th><th></th></tr></thead>
+      <tbody id="entries"><tr><td colspan="5" class="empty">Loading your log…</td></tr></tbody>
+    </table></div>
+  </section>
+</main>
+
+<script>
+const KINDS = [
+  ["plan", "Plan: my own review"],
+  ["plansteer", "Plan: with my steering session"],
+  ["rulings", "Rulings during the build"],
+  ["review", "Reading the review, commenting"],
+  ["ownreview", "My own review"],
+  ["fixes", "Fixes by hand"],
+  ["merge", "Merge"],
+  ["learnings", "Learnings after merge"],
+  ["other", "Other"]
+];
+const KIND_LABEL = Object.fromEntries(KINDS);
+const ARM_LABEL = { opus: "Opus", local: "Local", other: "Other" };
+const $ = id => document.getElementById(id);
+let kind = "rulings", db = null, rows = [], timerStart = null, tick = null;
+
+function today() { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); }
+$("date").value = today();
+
+const kindsEl = $("kinds");
+KINDS.forEach(([k, label]) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.textContent = label; b.dataset.kind = k;
+  b.setAttribute("aria-pressed", k === kind ? "true" : "false");
+  b.addEventListener("click", () => { kind = k; kindsEl.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c.dataset.kind === k ? "true" : "false")); });
+  kindsEl.appendChild(b);
+});
+document.querySelectorAll("[data-add]").forEach(b => b.addEventListener("click", () => {
+  $("mins").value = (parseInt($("mins").value, 10) || 0) + parseInt(b.dataset.add, 10);
+}));
+
+$("timerBtn").addEventListener("click", () => {
+  if (timerStart === null) {
+    timerStart = Date.now(); $("timerBtn").textContent = "Stop timer";
+    tick = setInterval(() => { const s = Math.floor((Date.now() - timerStart) / 1000); $("timer").textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); }, 1000);
+  } else {
+    const m = Math.max(1, Math.round((Date.now() - timerStart) / 60000));
+    clearInterval(tick); timerStart = null; $("timerBtn").textContent = "Start timer"; $("timer").textContent = "";
+    $("mins").value = (parseInt($("mins").value, 10) || 0) + m;
+  }
+});
+
+function setStatus(t, err) { const s = $("status"); s.textContent = t; s.className = "status" + (err ? " err" : ""); }
+function cleanPr(v) { return String(v || "").replace(/[^0-9]/g, "").slice(0, 7); }
+
+$("save").addEventListener("click", async () => {
+  const pr = cleanPr($("pr").value), mins = parseInt($("mins").value, 10);
+  if (!pr) { setStatus("Add the PR or issue number.", true); $("pr").focus(); return; }
+  if (!mins || mins < 1 || mins > 600) { setStatus("Minutes must be between 1 and 600.", true); $("mins").focus(); return; }
+  if (!db) { setStatus("Can't save here: the log needs you signed in to claude.ai.", true); return; }
+  $("save").disabled = true;
+  try {
+    await db.collection("minutes").add({ pr, arm: $("arm").value, kind, minutes: mins, date: $("date").value || today(), note: $("note").value.trim().slice(0, 200), outsideClaude: $("outside").checked, createdAt: Date.now() });
+    setStatus("Logged " + mins + " min on #" + pr + ".");
+    $("mins").value = ""; $("note").value = ""; $("outside").checked = false;
+  } catch (e) { setStatus("Didn't save (" + (e && e.code || "error") + "). Try again.", true); }
+  $("save").disabled = false;
+});
+
+function median(a) { if (!a.length) return null; const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+function armPill(arm) { const s = document.createElement("span"); s.className = "arm" + (arm === "local" ? " local" : arm === "other" ? " other" : ""); s.textContent = ARM_LABEL[arm] || arm; return s; }
+function td(text, cls) { const c = document.createElement("td"); if (cls) c.className = cls; if (text instanceof Node) c.appendChild(text); else c.textContent = text; return c; }
+
+function render() {
+  const per = new Map();
+  rows.forEach(r => {
+    const key = r.pr + "|" + r.arm;
+    if (!per.has(key)) per.set(key, { pr: r.pr, arm: r.arm, total: 0, kinds: {}, last: "" });
+    const p = per.get(key); p.total += r.minutes; p.kinds[r.kind] = (p.kinds[r.kind] || 0) + r.minutes; if (r.date > p.last) p.last = r.date;
+  });
+  const prs = [...per.values()].sort((a, b) => b.last.localeCompare(a.last));
+  const opus = prs.filter(p => p.arm === "opus").map(p => p.total), local = prs.filter(p => p.arm === "local").map(p => p.total);
+  const stats = $("stats"); stats.textContent = "";
+  [[opus.length + " / 5", "Opus PRs logged (Stage 0 needs 5+)"],
+   [median(opus) === null ? "–" : median(opus) + " min", "Median per Opus PR"],
+   [median(local) === null ? "–" : median(local) + " min", "Median per local PR"]].forEach(([b, s]) => {
+    const d = document.createElement("div"); d.className = "stat"; const bb = document.createElement("b"); bb.textContent = b; const ss = document.createElement("span"); ss.textContent = s; d.append(bb, ss); stats.appendChild(d);
+  });
+  const tb = $("perPr"); tb.textContent = "";
+  if (!prs.length) { const tr = document.createElement("tr"); tr.appendChild(td("No PRs yet. Log your first minutes above.", "empty")).colSpan = 4; tb.appendChild(tr); }
+  prs.forEach(p => {
+    const tr = document.createElement("tr");
+    tr.append(td("#" + p.pr), td(armPill(p.arm)), td(Object.entries(p.kinds).map(([k, m]) => (KIND_LABEL[k] || k) + " " + m).join(" · ")), td(String(p.total), "num"));
+    tb.appendChild(tr);
+  });
+  const te = $("entries"); te.textContent = "";
+  if (!rows.length) { const tr = document.createElement("tr"); tr.appendChild(td("Nothing logged yet.", "empty")).colSpan = 5; te.appendChild(tr); }
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    const what = (KIND_LABEL[r.kind] || r.kind) + (r.outside ? " (+ outside Claude helped the build)" : "") + (r.note ? " – " + r.note : "");
+    const del = document.createElement("button"); del.className = "del"; del.type = "button"; del.textContent = "Remove";
+    del.setAttribute("aria-label", "Remove " + r.minutes + " minutes on #" + r.pr);
+    del.addEventListener("click", async () => {
+      if (del.dataset.armed !== "1") { del.dataset.armed = "1"; del.textContent = "Confirm"; setTimeout(() => { del.dataset.armed = ""; del.textContent = "Remove"; }, 4000); return; }
+      try { await db.collection("minutes").doc(r.id).delete(); } catch (e) { setStatus("Couldn't remove it (" + (e && e.code || "error") + ").", true); }
+    });
+    tr.append(td(r.date), td("#" + r.pr), td(what), td(String(r.minutes), "num"), td(del));
+    te.appendChild(tr);
+  });
+}
+
+function showUnavailable(msg) {
+  ["perPr", "entries"].forEach(id => { const tb = $(id); tb.textContent = ""; const tr = document.createElement("tr"); const c = td(msg, "empty"); c.colSpan = 5; tr.appendChild(c); tb.appendChild(tr); });
+  $("stats").textContent = "";
+}
+
+(async () => {
+  const timeout = setTimeout(() => { if (!rows.length) showUnavailable("The log didn't load. Check you're signed in to claude.ai, then reload."); }, 10000);
+  try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch (e) { db = null; }
+  if (!db) { clearTimeout(timeout); showUnavailable("The log is only available when you're signed in to claude.ai."); $("save").disabled = true; return; }
+  db.collection("minutes").orderBy("createdAt", "desc").onSnapshot(snap => {
+    clearTimeout(timeout);
+    rows = snap.docs.map(d => { const v = d.data() || {}; return { id: d.id, pr: String(v.pr || ""), arm: String(v.arm || "opus"), kind: String(v.kind || "other"), minutes: Number(v.minutes) || 0, date: String(v.date || ""), note: String(v.note || ""), outside: v.outsideClaude === true }; });
+    render();
+  }, err => { clearTimeout(timeout); showUnavailable("The log didn't load (" + (err && err.code || "error") + "). Reload to try again."); });
+})();
+</script>

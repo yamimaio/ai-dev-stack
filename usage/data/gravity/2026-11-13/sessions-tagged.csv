@@ -1,0 +1,342 @@
+session_id,first_ts,last_ts,role,issue,pr,decision_pr,confidence,why,commands,first_prompt,models,weighted
+edb9c1c5-5f2a-4cf3-aa41-b7a99dd5ca2f,2026-10-03T17:41:33.735Z,2026-10-03T17:42:29.889Z,other,,,,low,test/housekeeping/tiny,,Can you see the A4 open branches and the PRs associated to them?,claude-opus-5-5,66411
+ce97c135-19e3-4155-a111-957d00419edb,2026-10-17T00:04:59.292Z,2026-10-17T00:34:23.635Z,other,,,,low,unclear,,"<pasted_content id=""de0c""> Baseline check before Day 1. Do not change any code. ",claude-opus-5-5,652233
+509e2214-4545-4949-b664-8d3a33e527d3,2026-10-17T00:43:34.749Z,2026-10-17T04:41:51.046Z,build,102,,,high,/build-issue,/build-issue 102,/build-issue 102,claude-opus-5-5,3025725
+253fa2be-9621-4442-a69f-3c1d045e3708,2026-10-17T00:44:31.532Z,2026-10-17T04:25:34.020Z,build,103,,,high,/build-issue,/build-issue 103,/build-issue 103,claude-opus-5-5,1976903
+906af99a-87d1-411c-89e8-58d1900dae0e,2026-10-17T00:44:33.937Z,2026-10-17T01:26:28.677Z,review,102,125,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/125 1,/review-pr https://github.com/yamimaio/gravity/pull/125 1,claude-opus-5-5,757105
+520b0813-e91d-4ac3-9fe6-5b4d2752e0a1,2026-10-17T00:44:46.554Z,2026-10-17T01:30:42.089Z,review,103,126,,low,review in prompt,,"For the following, use your own DB as there is a another review running in paral",claude-opus-5-5,859314
+f86d7f3c-94d4-4638-a4dd-2f0dd6faefc0,2026-10-17T01:53:32.689Z,2026-10-17T01:54:04.328Z,review,102,125,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/125 2,/review-pr https://github.com/yamimaio/gravity/pull/125 2,claude-opus-5-5,81371
+a3730519-83f1-4dcc-8dd9-72a55f47c0d1,2026-10-17T01:54:09.636Z,2026-10-17T02:07:23.183Z,review,103,126,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/126 2,/review-pr https://github.com/yamimaio/gravity/pull/126 2,claude-opus-5-5,948732
+452b538a-f8d5-45ee-960b-33462fa44a71,2026-10-17T01:58:33.979Z,2026-10-17T04:13:33.860Z,review,102,125,,low,review in prompt,,You will need to run your own databas as their are parallel reviews running /rev,claude-opus-5-5,932326
+55cac687-a1a1-42ba-864d-72c9b7cbbcea,2026-10-17T04:25:06.907Z,2026-10-17T05:50:32.521Z,review,104,142,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/142 1,/review-pr https://github.com/yamimaio/gravity/pull/142 1,claude-opus-5-5,1108978
+557c3fb8-4944-4a2f-8de9-5fed3f299eee,2026-10-17T04:25:48.589Z,2026-10-17T04:37:44.119Z,review,102,125,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/125 2,/review-pr https://github.com/yamimaio/gravity/pull/125 2,claude-opus-5-5,996202
+914454d1-9ba1-488c-9250-f6688adc1fdd,2026-10-17T04:26:53.527Z,2026-10-17T05:57:45.150Z,build,104,,,high,/build-issue,/build-issue 104,/build-issue 104,claude-opus-5-5,4066851
+b17da465-6ebb-4572-9698-f0f5d76fb886,2026-10-17T04:34:08.899Z,2026-10-17T05:57:21.451Z,build,116,,,high,/build-issue,/build-issue 116,/build-issue 116,claude-opus-5-5,2308982
+8f0a1802-db9b-4873-98b9-4b4ffabc254b,2026-10-17T04:34:35.554Z,2026-10-17T05:19:34.989Z,review,116,141,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/141 1,/review-pr https://github.com/yamimaio/gravity/pull/141 1,claude-opus-5-5,744974
+31d5b1d8-a5d5-4740-83b7-7e33933d7394,2026-10-17T04:41:21.288Z,2026-10-17T05:43:13.105Z,review,124,144,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/144 1,/review-pr https://github.com/yamimaio/gravity/pull/144 1,claude-opus-5-5,522824
+771d5be6-daa9-4d97-90f9-0b887cc0c15f,2026-10-17T04:42:41.744Z,2026-10-17T06:14:06.308Z,build,124,,,high,/build-issue,/build-issue 124,/build-issue 124,claude-opus-5-5,2111773
+dcc21ed6-9325-47a3-bc3e-3cd957210ba9,2026-10-17T04:44:14.363Z,2026-10-17T06:45:51.545Z,build,122,,,high,/build-issue,/build-issue 122,/build-issue 122,claude-opus-5-5,2328093
+763b9394-5d9f-403c-a12c-9e24d70015f0,2026-10-17T04:44:22.288Z,2026-10-17T05:46:45.893Z,review,122,145,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/145 1,/review-pr https://github.com/yamimaio/gravity/pull/145 1,claude-opus-5-5,693622
+71df629f-835f-4e13-a5e1-254a7dbe2089,2026-10-17T05:38:24.687Z,2026-10-17T05:57:23.860Z,review,116,141,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/141 2,/review-pr https://github.com/yamimaio/gravity/pull/141 2,claude-opus-5-5,871217
+7606d449-4416-428d-8427-bcc4b2842dfb,2026-10-17T05:47:41.202Z,2026-10-17T05:58:05.008Z,review,124,144,,high,/review-pr,,❯ /review-pr https://github.com/yamimaio/gravity/pull/144 2,claude-opus-5-5,619036
+8232b592-8487-48f7-a9ea-ec2a7b485afb,2026-10-17T05:54:08.807Z,2026-10-17T06:26:49.206Z,review,115,155,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/155 1,/review-pr https://github.com/yamimaio/gravity/pull/155 1,claude-opus-5-5,575095
+4f43cf6d-ae28-40ba-9be4-1199c13b7c64,2026-10-17T05:57:23.869Z,2026-10-17T20:28:42.333Z,review,106,167,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/167 1,/review-pr https://github.com/yamimaio/gravity/pull/167 1,claude-opus-5-5,1154948
+67843ebe-a56d-4c92-8aa5-6ad0c1e75fca,2026-10-17T05:57:44.039Z,2026-10-17T06:07:24.467Z,review,122,145,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/145 2,/review-pr https://github.com/yamimaio/gravity/pull/145 2,claude-opus-5-5,567496
+e7a254a7-c128-4055-bce5-503bedcbb38d,2026-10-17T05:58:06.841Z,2026-10-17T19:46:52.263Z,build,129,,,high,/build-issue,/build-issue 129,/build-issue 129,claude-opus-5-5,610970
+366656f9-8721-4f32-8814-32df7d88f650,2026-10-17T05:59:12.864Z,2026-10-17T06:44:19.432Z,build,115,,,high,/build-issue,/build-issue 115,/build-issue 115,claude-opus-5-5,1374729
+3f98a79b-b1a7-4d56-a072-659ac657f291,2026-10-17T06:03:41.169Z,2026-10-17T19:25:16.754Z,review,157,163,,high,/review-pr,,/review-pr 163 1,claude-opus-5-5,419188
+d839320e-d6c7-4d89-8823-f6e0f1e94ed8,2026-10-17T06:08:29.051Z,2026-10-17T06:20:44.056Z,review,122,145,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/145 2,/review-pr https://github.com/yamimaio/gravity/pull/145 2,claude-opus-5-5,86886
+02c4d1ec-6415-4977-80f6-048e23a0bbac,2026-10-17T06:14:28.110Z,2026-10-17T06:41:46.788Z,other,,,,low,testing/docker help,,"as a tester, build and run the new prod image as §12 of docs/development/local-e",claude-opus-5-5,276837
+516b755c-3bf4-4d6c-a0b2-acd886e79a8e,2026-10-17T06:20:52.814Z,2026-10-17T06:28:20.032Z,review,122,145,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/145 | /review-pr https://github.com/yamimaio/gravity/pull/145 3,/review-pr https://github.com/yamimaio/gravity/pull/145,claude-opus-5-5,571028
+a3c75c16-750f-4316-8fdd-6cb8e0151008,2026-10-17T06:28:35.573Z,2026-10-17T19:25:45.702Z,review,136,162,,high,/review-pr,/review-pr 162 1,/review-pr 162 1,claude-opus-5-5,357453
+32df75f2-68d4-4344-8231-2757c18bcd43,2026-10-17T06:29:37.084Z,2026-10-17T06:35:47.892Z,review,115,155,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/155 2,/review-pr https://github.com/yamimaio/gravity/pull/155 2,claude-opus-5-5,629537
+4b263999-38b9-4ab4-8593-3310fe09bb87,2026-10-17T06:43:43.762Z,2026-10-17T19:06:46.513Z,other,,,,low,testing/docker help,,I tried to start docker   docker compose up -d --build docker compose exec app n,claude-opus-5-5,269731
+1c20740d-95f4-45d2-9dde-f202734d5aea,2026-10-17T06:43:52.102Z,2026-10-17T07:24:32.655Z,other,,,,low,test/housekeeping/tiny,,,claude-opus-5-5,135863
+c04814e2-c383-4ead-b35f-ca8023a6286a,2026-10-17T06:44:55.539Z,2026-10-17T19:39:09.393Z,build,157,,,high,/build-issue,/build-issue 157,/build-issue 157,claude-opus-5-5,654125
+2bbe4653-422e-4dc3-ae5b-c4f60fc0c7ba,2026-10-17T06:45:57.840Z,2026-10-17T19:34:53.708Z,build,136,,,high,/build-issue,/build-issue 136,/build-issue 136,claude-opus-5-5,394325
+94c0f647-6342-4800-9db7-dbbf37738fd1,2026-10-17T19:09:24.733Z,2026-10-17T19:09:50.874Z,other,,,,low,test/housekeeping/tiny,,Delete the memory note that says D rows for rulings go to Yami's end-of-day docs,claude-opus-5-5,43278
+19885c22-b39a-4def-b509-524612f1125f,2026-10-17T19:10:03.158Z,2026-10-17T22:22:17.230Z,build,106,,,high,/build-issue,,"Start in plan mode, as this is the fisrt UI we are building  /build-issue 106",claude-opus-5-5,9232205
+f88e76fc-e1bd-498e-996e-ec92799cb659,2026-10-17T19:20:37.816Z,2026-10-17T19:26:56.108Z,review,129,161,,high,/review-pr,/review-pr 161 1,/review-pr 161 1,claude-opus-5-5,194237
+ae763392-89eb-45b5-919b-768078797d74,2026-10-17T19:27:23.259Z,2026-10-17T19:31:14.927Z,review,157,163,,high,/review-pr,,❯  /review-pr 163 2,claude-opus-5-5,413038
+9988b492-9a8d-4765-9c56-d612f3fd5140,2026-10-17T19:27:55.225Z,2026-10-17T19:33:33.855Z,review,129,161,,high,/review-pr,,❯ /review-pr 161 2,claude-opus-5-5,219798
+f1be90ed-3ce8-4411-ae48-40cd76809dd8,2026-10-17T19:28:29.800Z,2026-10-17T22:34:57.148Z,review,112,179,,high,/review-pr,/review-pr 179 1,/review-pr 179 1,claude-opus-5-5,1003784
+52488a45-e0b5-42a7-81d5-0907b5f6b291,2026-10-17T19:33:19.726Z,2026-10-17T21:29:36.687Z,review,173,177,,high,/review-pr,,/review-pr 177 1,claude-opus-5-5,318859
+86c7b81a-c2c4-4da7-8f4c-23dd0d730bce,2026-10-17T19:40:35.742Z,2026-10-17T21:54:04.047Z,build,173,,,high,/build-issue,/build-issue 173,/build-issue 173,claude-opus-5-5,427886
+fb4cf2eb-9c55-4781-ad31-c9cf4aaa1a26,2026-10-17T19:45:06.000Z,2026-10-17T21:31:34.972Z,review,147,174,,high,/review-pr,,/review-pr 174 1,claude-opus-5-5,288333
+9c1934a8-53f1-4b8e-b831-c86828e374a8,2026-10-17T19:45:14.942Z,2026-10-19T19:23:32.718Z,build,112,,,high,/build-issue,/build-issue 112,/build-issue 112,claude-opus-5-5,5006698
+7655e8ac-75a3-419e-b4bf-e4f2189ca94c,2026-10-17T19:48:10.652Z,2026-10-17T22:25:05.246Z,build,147,,,high,/build-issue,/build-issue 147,/build-issue 147,claude-opus-5-5,504191
+c95798aa-f369-4e1b-9fbc-c2a5a80b8492,2026-10-17T20:42:14.612Z,2026-10-17T21:01:42.599Z,review,106,167,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/167 2,/review-pr https://github.com/yamimaio/gravity/pull/167 2,claude-opus-5-5,1036880
+a80ebbb1-fc57-4738-8c23-2528b55d8141,2026-10-17T21:04:26.437Z,2026-10-17T21:22:13.487Z,review,106,167,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/167 3,/review-pr https://github.com/yamimaio/gravity/pull/167 3,claude-opus-5-5,994198
+6e81d9e2-ade8-4e7c-8c47-76c79222768d,2026-10-17T21:24:12.625Z,2026-10-17T22:10:52.418Z,review,106,167,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/167 4,/review-pr https://github.com/yamimaio/gravity/pull/167 4,claude-opus-5-5,1006748
+444f1e5f-44bf-43df-bb4c-b7cd4d3b62e0,2026-10-17T21:51:23.421Z,2026-10-19T17:58:16.343Z,review,108,190,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/190 1,/review-pr https://github.com/yamimaio/gravity/pull/190 1,claude-opus-5-5,1163993
+ef7bafc9-b333-4b1a-91db-9622b91c9ef1,2026-10-17T21:55:13.661Z,2026-10-20T01:22:53.047Z,build,108,,,high,/build-issue,/build-issue 108,/build-issue 108,claude-opus-5-5,17858354
+ebd55f10-90ab-4d6a-b5b2-77f02710389e,2026-10-17T22:01:29.373Z,2026-10-17T22:12:37.596Z,review,147,174,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/174 2,/review-pr https://github.com/yamimaio/gravity/pull/174 2,claude-opus-5-5,185830
+d0729ad6-130e-4054-a060-6cca7209128b,2026-10-17T22:12:23.948Z,2026-10-19T17:57:51.647Z,review,107,183,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/183 1,/review-pr https://github.com/yamimaio/gravity/pull/183 1,claude-opus-5-5,1523568
+ee72359b-6200-4416-9289-eb7c6977dc34,2026-10-17T22:13:11.361Z,2026-10-19T19:32:14.778Z,review,110,193,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/193 1,/review-pr https://github.com/yamimaio/gravity/pull/193 1,claude-opus-5-5,1266840
+b73d0f04-3e0f-451b-8b8b-b2a9e412c3b8,2026-10-17T22:24:00.295Z,2026-10-19T20:03:27.608Z,build,107,,,high,/build-issue,/build-issue 107,/build-issue 107,claude-opus-5-5,8883477
+f256ba9d-0997-4a77-96de-5b49e1d39fcd,2026-10-17T22:25:45.397Z,2026-10-20T03:05:01.744Z,build,110,,,high,/build-issue,/build-issue 110,/build-issue 110,claude-opus-5-5,14464192
+1f98b07a-4ef1-42a1-94d4-1ddfa6af4cdb,2026-10-17T23:08:02.328Z,2026-10-19T18:04:17.367Z,review,112,179,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/179 2,/review-pr https://github.com/yamimaio/gravity/pull/179 2,claude-opus-5-5,981342
+4c061ab8-a746-4279-8397-8286b1d4a9a0,2026-10-19T18:03:55.581Z,2026-10-19T19:29:23.666Z,review,108,190,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/190 2,/review-pr https://github.com/yamimaio/gravity/pull/190 2,claude-opus-5-5,1194577
+5f1973b3-2db2-4853-8852-32669c7175ad,2026-10-19T18:20:14.518Z,2026-10-19T19:09:12.539Z,other,,,,low,test/housekeeping/tiny,,run docker image ls && docker container ls --all and we'll analize everything th,claude-opus-5-5,962833
+c70f2590-db67-46ed-b08c-f4e475092d36,2026-10-19T18:37:22.223Z,2026-10-19T19:20:29.126Z,review,107,183,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/183 2,/review-pr https://github.com/yamimaio/gravity/pull/183 2,claude-opus-5-5,1285413
+869ec8c5-df93-4de0-b1ff-6696f9094cb2,2026-10-19T19:19:36.400Z,2026-10-19T20:04:30.207Z,review,194,206,yes,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/206 1,/review-pr https://github.com/yamimaio/gravity/pull/206 1,claude-opus-5-5,386570
+1369a751-66d2-42a1-899a-a0f9d1b8dc46,2026-10-19T19:24:52.061Z,2026-10-20T03:49:00.464Z,build,194,,,high,/build-issue,/build-issue 194,/build-issue 194,claude-opus-5-5,4073294
+91687fc5-18aa-49bb-b84d-960c4e0bcfd2,2026-10-19T19:32:59.787Z,2026-10-19T19:54:10.914Z,review,107,183,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/183 3,/review-pr https://github.com/yamimaio/gravity/pull/183 3,claude-opus-5-5,1160615
+e87b8059-c80d-492c-a54c-1916d787d9b8,2026-10-19T19:38:42.134Z,2026-10-19T20:47:57.463Z,review,110,193,,high,/review-pr,,/review-pr https://github.com/yamimaio/gravity/pull/193 2,claude-opus-5-5,2089816
+23c0b531-b0ff-43cc-baa4-24a69ce721f3,2026-10-19T19:41:13.151Z,2026-10-19T20:05:24.594Z,review,108,190,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/190 3,/review-pr https://github.com/yamimaio/gravity/pull/190 3,claude-opus-5-5,1281612
+fa2003c4-9b08-4da2-ba10-5db7b92ecf07,2026-10-19T19:55:55.405Z,2026-10-20T03:56:38.530Z,review,218,220,,high,/review-pr,/review-pr 220 1,/review-pr 220 1,claude-opus-5-5,277280
+434d01c4-3897-4d4e-aef1-a7f5dec90e5b,2026-10-19T20:03:52.385Z,2026-10-20T04:05:13.274Z,build,218,,,low,build/fix/decision in prompt,,https://github.com/yamimaio/gravity/issues/218,claude-opus-5-5,657733
+abae1304-f009-4e0d-ac74-d7de33236116,2026-10-19T20:06:28.560Z,2026-10-19T20:34:21.540Z,review,108,190,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/190 4,/review-pr https://github.com/yamimaio/gravity/pull/190 4,claude-opus-5-5,1202235
+fd5fddb1-19b9-400f-9a6a-efd73fa33608,2026-10-19T20:10:55.704Z,2026-10-19T20:32:50.954Z,review,194,206,yes,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/206 2,/review-pr https://github.com/yamimaio/gravity/pull/206 2,claude-opus-5-5,409035
+01d42612-4e7a-44c3-883b-868a3f869a9d,2026-10-19T20:37:22.469Z,2026-10-19T20:59:35.387Z,review,108,190,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/190 5,/review-pr https://github.com/yamimaio/gravity/pull/190 5,claude-opus-5-5,1036652
+c6b3724b-9ee8-429b-8244-e3347a83f29a,2026-10-19T20:37:55.738Z,2026-10-20T00:06:16.870Z,review,194,206,yes,high,/review-pr,,/review-pr https://github.com/yamimaio/gravity/pull/206 3,claude-opus-5-5,467962
+83983bdf-fcd7-436e-8502-a6019c10e41a,2026-10-19T20:49:03.510Z,2026-10-20T00:35:38.203Z,review,110,193,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/193 3,/review-pr https://github.com/yamimaio/gravity/pull/193 3,claude-opus-5-5,1385593
+f0434cdc-ae2e-4743-9079-bc8840dea01a,2026-10-19T23:55:13.598Z,2026-10-20T00:34:01.259Z,review,108,190,,high,/review-pr,,/review-pr https://github.com/yamimaio/gravity/pull/190 6,claude-opus-5-5,1249993
+9132eb54-d63d-4ad9-8074-a3a1efa24f7d,2026-10-20T00:21:59.784Z,2026-10-20T03:15:30.459Z,review,194,206,yes,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/206 4.,/review-pr https://github.com/yamimaio/gravity/pull/206 4.,claude-opus-5-5,422466
+9d192713-a604-4bd3-9292-706f0962ba6f,2026-10-20T00:41:24.658Z,2026-10-20T04:24:42.383Z,review,198,222,,high,/review-pr,/review-pr 222 1,/review-pr 222 1,claude-opus-5-5,555043
+25dcc8d8-36e1-4417-9fd4-761b70206434,2026-10-20T00:47:52.194Z,2026-10-20T01:56:50.970Z,review,110,193,,high,/review-pr,,/review-pr https://github.com/yamimaio/gravity/pull/193 4,claude-opus-5-5,989906
+2a59bff4-b157-4861-81f3-733818e5f4eb,2026-10-20T01:25:36.941Z,2026-10-20T05:02:36.870Z,build,198,,,high,/build-issue,/build-issue 198,/build-issue 198,claude-opus-5-5,2616531
+60d6d7a4-da9e-4cc0-b54f-bca68263f9b9,2026-10-20T02:27:12.182Z,2026-10-20T02:39:43.812Z,review,110,193,,high,/review-pr,,/review-pr https://github.com/yamimaio/gravity/pull/193 5,claude-opus-5-5,874514
+041f0774-a51d-44d2-82ce-35941cd7ba87,2026-10-20T03:56:10.333Z,2026-10-20T03:56:48.988Z,other,,,,low,test/housekeeping/tiny,,please check if main has divergence problems,claude-opus-5-5,42663
+a3fa26c9-96d8-428a-b6af-c68d703aa2de,2026-10-20T03:56:53.689Z,2026-10-20T03:57:20.497Z,other,,,,low,test/housekeeping/tiny,,Review the pending changes in this repo. Flag issues a careful maintainer would ,claude-opus-5-5,61519
+1994e44d-b31f-486e-8135-00bc55308a57,2026-10-20T03:59:04.834Z,2026-10-20T04:01:38.660Z,review,218,220,,high,/review-pr,,/review-pr 220 2,claude-opus-5-5,273546
+c8fa312b-c399-43cd-b378-c3746239535f,2026-10-20T04:02:47.830Z,2026-10-20T06:13:15.885Z,review,109,235,,high,/review-pr,/review-pr 235 1,/review-pr 235 1,claude-opus-5-5,1086222
+54ea4b17-ba12-46c8-89a5-6de9740dc2b2,2026-10-20T04:05:36.912Z,2026-10-20T14:19:54.017Z,build,109,,,high,/build-issue,/build-issue 109,/build-issue 109,claude-opus-5-5,11575410
+ad1314fa-f29c-45f1-9d8e-e62eed2602c2,2026-10-20T04:15:56.693Z,2026-10-20T14:58:18.873Z,build,255,,,low,build/fix/decision in prompt,,https://github.com/yamimaio/gravity/issues/255,claude-opus-5-5,1175263
+07e4c9b9-e94c-47db-be29-89913413c64b,2026-10-20T04:16:06.542Z,2026-10-20T13:59:21.634Z,review,255,257,,high,/review-pr,,/review-pr https://github.com/yamimaio/gravity/pull/257 1,claude-opus-5-5,422256
+6acd2f4f-a45b-4514-9b2f-332542d0ddaf,2026-10-20T04:29:24.980Z,2026-10-20T04:50:24.527Z,review,198,222,,high,/review-pr,/review-pr 222 2,/review-pr 222 2,claude-opus-5-5,766561
+4b4c2dbf-7601-4a92-8999-917595a0afea,2026-10-20T04:50:38.755Z,2026-10-20T06:25:52.613Z,review,111,236,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/236 1,/review-pr https://github.com/yamimaio/gravity/pull/236 1,claude-opus-5-5,1221895
+949154c6-b2eb-45fd-b864-74e99566ac78,2026-10-20T05:03:20.044Z,2026-10-20T17:07:16.606Z,build,111,,,high,/build-issue,/build-issue 111,/build-issue 111,claude-opus-5-5,22920966
+f0c6d7ef-a1bd-4e73-8bd2-b24db72b5c02,2026-10-20T06:15:29.914Z,2026-10-20T06:40:10.175Z,review,109,235,,high,/review-pr,/review-pr 235 2,/review-pr 235 2,claude-opus-5-5,1272184
+db956abf-23a8-48b8-9556-394f4962adca,2026-10-20T06:28:34.578Z,2026-10-20T06:57:46.989Z,review,111,236,,high,/review-pr,/review-pr 236 2,/review-pr 236 2,claude-opus-5-5,1086774
+b57b02d2-aadd-41d8-ac96-8f689a9a5ce7,2026-10-20T06:41:55.488Z,2026-10-20T07:04:02.882Z,review,109,235,,high,/review-pr,/review-pr 235 3,/review-pr 235 3,claude-opus-5-5,1207317
+b0e28428-913d-4b09-aba1-fb68768f379b,2026-10-20T06:58:47.653Z,2026-10-20T07:16:52.046Z,review,111,236,,high,/review-pr,,/review-pr https://github.com/yamimaio/gravity/pull/236 3,claude-opus-5-5,1138230
+84f51be2-a2a8-4105-af1c-51f88d8943fd,2026-10-20T07:05:35.124Z,2026-10-20T12:32:19.735Z,review,109,235,,high,/review-pr,/review-pr 235 4,/review-pr 235 4,claude-opus-5-5,1176550
+09b36a12-e62e-42a8-b46e-36553637b893,2026-10-20T07:19:06.520Z,2026-10-20T07:40:03.647Z,review,111,236,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/236 4,/review-pr https://github.com/yamimaio/gravity/pull/236 4,claude-opus-5-5,1771846
+30b850a6-9aa5-4d4c-947e-f6450540cd13,2026-10-20T12:32:25.409Z,2026-10-20T13:48:53.041Z,review,111,236,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/236 5,/review-pr https://github.com/yamimaio/gravity/pull/236 5,claude-opus-5-5,1509653
+3de756a2-8a2d-4dc5-b4ed-d69d36643e9d,2026-10-20T13:09:50.557Z,2026-10-20T13:23:33.281Z,review,109,235,,high,/review-pr,/review-pr 235 for round 5,/review-pr 235 for round 5,claude-opus-5-5,1103443
+c33aa3b3-08a1-4e87-9ef7-3c44b0926345,2026-10-20T13:24:53.033Z,2026-10-20T13:52:36.671Z,review,109,235,,high,/review-pr,/review-pr 235 6,/review-pr 235 6,claude-opus-5-5,1181660
+78a10f0c-edf0-480f-aa97-3da21139d015,2026-10-20T13:51:55.786Z,2026-10-20T14:44:51.554Z,review,111,236,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/236 6,/review-pr https://github.com/yamimaio/gravity/pull/236 6,claude-opus-5-5,1416388
+70ebdd59-952b-432c-9949-002e9fa85984,2026-10-20T13:55:56.127Z,2026-10-20T18:41:33.306Z,review,215,274,,high,/review-pr,/review-pr 274 1,/review-pr 274 1,claude-opus-5-5,946153
+b3d4805d-33d4-4248-887a-a5871e893d8c,2026-10-20T14:00:22.875Z,2026-10-20T14:16:27.843Z,review,255,257,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/257 2,/review-pr https://github.com/yamimaio/gravity/pull/257 2,claude-opus-5-5,288067
+619790ec-bc96-4265-a25a-6272bec97a0c,2026-10-20T14:17:53.493Z,2026-10-20T14:28:58.281Z,review,255,257,,high,/review-pr,,/review-pr https://github.com/yamimaio/gravity/pull/257 3,claude-opus-5-5,341771
+d500214e-153a-4d40-8a3f-48ed5c75d413,2026-10-20T14:20:26.850Z,2026-10-20T20:12:45.628Z,build,215,,,high,/build-issue,/build-issue 215,/build-issue 215,claude-opus-5-5,5095588
+1dfc7467-6b63-49f1-b115-848ecb231434,2026-10-20T14:29:59.310Z,2026-10-20T22:01:32.592Z,review,201,287,yes,high,/review-pr,/review-pr 287 2,/review-pr 287 2,claude-opus-5-5,1090594
+fc6d02e9-4f08-4be6-bfe8-8232e60c004d,2026-10-20T14:54:17.140Z,2026-10-20T15:16:23.727Z,review,111,236,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/236 7,/review-pr https://github.com/yamimaio/gravity/pull/236 7,claude-opus-5-5,1416088
+9273b148-6340-49ff-99a2-1473e1de17d9,2026-10-20T14:58:54.098Z,2026-10-20T20:50:29.182Z,build,280,,,high,/build-issue,,build-issue 280,claude-opus-5-5,358895
+297e8f4b-6cda-41be-bb68-50e4ea822ef1,2026-10-20T15:18:40.961Z,2026-10-20T15:43:31.846Z,review,111,236,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/236 8,/review-pr https://github.com/yamimaio/gravity/pull/236 8,claude-opus-5-5,1168789
+ec5ad2e3-ca23-45fa-9fc1-8fed721401ef,2026-10-20T15:52:33.458Z,2026-10-20T16:35:09.256Z,review,111,236,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/236 9,/review-pr https://github.com/yamimaio/gravity/pull/236 9,claude-opus-5-5,1047310
+b644b955-7eb6-4ff1-9870-420cd9e50a1e,2026-10-20T17:00:19.326Z,2026-10-20T21:23:30.074Z,review,201,284,yes,low,review in prompt,,"I didn't realize and merged 284 without a round of your review. REview anyway, a",claude-opus-5-5,499812
+358f2814-a315-4f0e-b244-f1b82bae77d9,2026-10-20T17:08:50.856Z,2026-10-20T20:27:39.033Z,build,273,,,high,/build-issue url,/build-issue https://github.com/yamimaio/gravity/issues/273,/build-issue https://github.com/yamimaio/gravity/issues/273,claude-opus-5-5,429531
+40d42683-e92a-4324-b041-71c5ede05709,2026-10-20T18:46:37.978Z,2026-10-20T18:59:39.218Z,review,215,274,,high,/review-pr,/review-pr 274 2,/review-pr 274 2,claude-opus-5-5,1038135
+33783c66-530f-4339-a32c-5257156874ef,2026-10-20T20:13:01.825Z,2026-10-20T22:52:23.165Z,build,196,,,high,/build-issue,/build-issue 196,/build-issue 196,claude-opus-5-5,7508344
+49249216-9808-44c4-9226-022046d34c12,2026-10-20T20:28:53.838Z,2026-10-21T03:01:40.536Z,build,201,,,high,/build-issue,/build-issue 201,/build-issue 201,claude-opus-5-5,3824929
+b2680f76-c69b-4aa5-b0ba-e8f89037e9f3,2026-10-20T20:28:56.913Z,2026-10-20T21:51:07.842Z,review,196,286,,high,/review-pr,/review-pr 286 1,/review-pr 286 1,claude-opus-5-5,1222941
+24f19398-040f-44ff-b0d5-954b61ec87dc,2026-10-20T20:50:34.956Z,2026-10-20T22:35:10.795Z,build,201,284,,low,fix after review of PR 284,,I accidentally merged 284 before review.  The review is in (I did it anyway). Op,claude-opus-5-5,1082524
+84a3f623-58fd-4267-b295-dccbeda5f0f9,2026-10-20T21:27:02.003Z,2026-10-20T22:39:01.855Z,other,,,,low,test/housekeeping/tiny,,exir,claude-opus-5-5,23168
+1052a303-11c6-4779-9976-e5efc2c63ac7,2026-10-20T22:13:10.776Z,2026-10-20T22:28:26.417Z,review,196,286,,high,/review-pr,,/review-pr 286 2,claude-opus-5-5,1379139
+514cba8e-1530-48c7-a529-db792c0364a1,2026-10-20T22:38:31.623Z,2026-10-21T23:58:17.067Z,review,165,309,,high,/review-pr,/review-pr 309 1,/review-pr 309 1,claude-opus-5-5,948946
+aab81046-5e83-484f-abc9-35dd85469aa3,2026-10-20T22:38:52.145Z,2026-10-22T00:08:20.268Z,build,294,,,high,/build-issue,/build-issue 294,/build-issue 294,claude-opus-5-5,3819265
+3431f52c-2972-4782-ba05-5c9eccabf60a,2026-10-20T22:39:10.311Z,2026-10-20T23:06:46.306Z,review,201,285,,high,/review-pr,/review-pr 285 1,/review-pr 285 1,claude-opus-5-5,713195
+9cfa0539-d113-4501-8ac2-32f6ff3c0bba,2026-10-20T23:08:17.783Z,2026-10-20T23:30:57.840Z,review,201,285,,high,/review-pr,/review-pr 285 2,/review-pr 285 2,claude-opus-5-5,793307
+8bed8886-f6e8-490f-b2ec-761f258539ac,2026-10-21T20:18:20.549Z,2026-10-21T23:36:08.493Z,build,186,,,high,/build-issue,/build-issue 186,/build-issue 186,claude-opus-5-5,2536272
+b433c064-5874-4acd-9af5-7bb865d3d7f4,2026-10-21T21:59:19.953Z,2026-10-21T23:30:13.041Z,build,210,,,high,/build-issue,/build-issue 210,/build-issue 210,claude-haiku-5-5 claude-opus-5-5,2111728
+d7aab742-c706-4d5a-8e84-e563f70fc184,2026-10-21T22:39:51.578Z,2026-10-21T22:45:24.625Z,review,210,300,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/300 1,/review-pr https://github.com/yamimaio/gravity/pull/300 1,claude-opus-5-5,479750
+16fd1d5a-f8b6-40a0-89eb-29a5418b88fb,2026-10-21T22:46:31.052Z,2026-10-21T23:08:20.304Z,review,210,300,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/300 2,/review-pr https://github.com/yamimaio/gravity/pull/300 2,claude-opus-5-5,602617
+5a48ff78-8e09-42bd-bc6c-830806a78a6f,2026-10-21T22:48:19.087Z,2026-10-22T07:55:20.038Z,build,165,,,high,/build-issue,/build-issue 165,/build-issue 165,claude-opus-5-5,7433212
+e868871a-15f9-4d17-a540-7bfc1de041db,2026-10-21T22:54:18.706Z,2026-10-21T23:04:54.829Z,review,186,302,,high,/review-pr,/review-pr 302 1,/review-pr 302 1,claude-opus-5-5,829667
+5222640f-8584-425d-977d-ea4ecf21e7cc,2026-10-21T23:01:55.254Z,2026-10-21T23:10:35.179Z,review,294,301,,high,/review-pr,/review-pr 301 1,/review-pr 301 1,claude-opus-5-5,630710
+68cc4c01-f25c-49a0-8191-c280e61a9111,2026-10-21T23:10:24.056Z,2026-10-22T05:00:27.895Z,build,324,,,high,/build-issue,/build-issue 324,/build-issue 324,claude-haiku-5-5 claude-opus-5-5,3090253
+b74432b0-500e-4376-84a7-a8d07838637a,2026-10-21T23:11:38.474Z,2026-10-22T01:08:13.348Z,review,,316,,high,/review-pr,/review-pr 316 1,/review-pr 316 1,claude-opus-5-5,54498
+748ed7f0-f71d-497a-b80d-d0a6aae8c290,2026-10-21T23:12:13.791Z,2026-10-21T23:54:00.292Z,review,294,301,,high,/review-pr,/review-pr 301 2,/review-pr 301 2,claude-opus-5-5,1311991
+384e39bd-a54f-4665-9208-0c27ae024658,2026-10-21T23:44:14.171Z,2026-10-22T14:18:12.706Z,build,262,,,high,/build-issue,/build-issue 262,/build-issue 262,claude-opus-5-5,17282800
+19e10b7a-1c20-4fc4-aeda-e795d8abe4f0,2026-10-21T23:58:56.809Z,2026-10-22T00:20:45.842Z,review,165,309,,high,/review-pr,/review-pr 309 2,/review-pr 309 2,claude-opus-5-5,769104
+6f476330-4153-4d28-a075-f5e33a526569,2026-10-22T00:27:36.195Z,2026-10-22T02:21:00.102Z,build,316,,,high,/build-issue,/build-issue 316,/build-issue 316,claude-haiku-5-5 claude-opus-5-5,3712232
+96558193-34dd-4a92-9ee8-dca565ec52b2,2026-10-22T00:32:55.156Z,2026-10-22T07:36:45.719Z,review,165,309,,high,/review-pr,/review-pr 309 1,/review-pr 309 1,claude-opus-5-5,964652
+c08fac37-2445-49c9-ae6a-d8459a049084,2026-10-22T01:08:16.640Z,2026-10-22T01:08:40.644Z,other,,,,low,test/housekeeping/tiny,,how do I exti full screen?,claude-opus-5-5,25644
+6f34ae9f-1a63-4dc8-aceb-aedb50cb9cfe,2026-10-22T01:09:00.950Z,2026-10-22T01:54:04.825Z,review,316,319,,high,/review-pr,/review-pr 319 1,/review-pr 319 1,claude-opus-5-5,986914
+24c1d2d0-ff05-4cbd-a063-6cc1c3ba4d77,2026-10-22T01:56:15.465Z,2026-10-22T02:05:33.446Z,review,316,319,,high,/review-pr,/review-pr 319 2,/review-pr 319 2,claude-opus-5-5,1040224
+47751778-a240-4f85-9762-fa8833552b48,2026-10-22T02:17:38.128Z,2026-10-22T02:33:28.394Z,review,211,323,,high,/review-pr,/review-pr 323 1,/review-pr 323 1,claude-opus-5-5,285718
+21422407-6bbb-4de3-b4e3-9c6bcaad5e43,2026-10-22T02:21:28.019Z,2026-10-22T03:27:27.437Z,build,211,,,high,/build-issue,/build-issue 211,/build-issue 211,claude-opus-5-5,894719
+86784c5c-c552-4c53-8076-7c3192cfa515,2026-10-22T02:38:17.572Z,2026-10-22T03:06:09.299Z,review,211,323,,high,/review-pr,/review-pr 323 2,/review-pr 323 2,claude-opus-5-5,313694
+82978e73-6b1f-44d9-b5e1-9659ba209d21,2026-10-22T03:24:53.289Z,2026-10-22T04:02:23.683Z,review,324,326,,high,/review-pr,/review-pr 326 1,/review-pr 326 1,claude-haiku-5-5 claude-opus-5-5,694716
+9344cac3-00e2-4260-ba3d-68308f8b1575,2026-10-22T03:30:17.294Z,2026-10-22T05:50:15.738Z,review,262,315,,high,/review-pr,,/review-pr 315 1,claude-opus-5-5,834108
+4b9a7b85-0145-4e5e-88e7-56bd031273cf,2026-10-22T03:34:42.863Z,2026-10-22T03:35:46.594Z,other,,,,low,test/housekeeping/tiny,,"This is a permissions test. Run each command below with the Bash tool, one Bash ",claude-haiku-5-5,142098
+3dafde90-2a02-4e5b-94bf-17b30d2f34bb,2026-10-22T03:36:24.925Z,2026-10-22T03:36:35.040Z,other,,,,low,test/housekeeping/tiny,,"This is a permissions test. Use the Agent tool once, subagent_type general-purpo",claude-haiku-5-5,60955
+312104d5-52b3-43c8-a7ee-4b6d51263577,2026-10-22T03:37:58.735Z,2026-10-22T03:38:53.129Z,other,,,,low,test/housekeeping/tiny,,"This is a permissions test. Run each command below with the Bash tool, one Bash ",claude-haiku-5-5,133800
+e48e4c8e-8914-4651-89bb-04cfefa928d1,2026-10-22T03:39:01.864Z,2026-10-22T03:39:11.357Z,other,,,,low,test/housekeeping/tiny,,"This is a permissions test. Use the Agent tool once, subagent_type general-purpo",claude-haiku-5-5,58916
+caf51e59-2754-4066-9c35-9756c103df35,2026-10-22T03:55:30.753Z,2026-10-22T03:55:42.138Z,other,,,,low,test/housekeeping/tiny,,"Run each of these shell commands with the Bash tool, one Bash call per command, ",claude-haiku-5-5,48654
+d6631e34-9382-4d36-8d2e-c5a2745d159d,2026-10-22T04:01:00.273Z,2026-10-22T04:01:13.149Z,other,,,,low,test/housekeeping/tiny,,"This is a permissions test. Run each command below with the Bash tool, one Bash ",claude-haiku-5-5,50195
+906862a1-8f3d-4927-b6fe-af51d908dea5,2026-10-22T04:05:10.798Z,2026-10-22T04:20:00.868Z,review,324,326,,high,/review-pr,,/review-pr 326 2,claude-opus-5-5,605915
+ad39fddc-18e7-4e48-98bf-8e01cb89eca9,2026-10-22T04:20:14.468Z,2026-10-22T04:37:19.758Z,review,324,326,,high,/review-pr,/review-pr 326 3,/review-pr 326 3,claude-opus-5-5,858277
+2897bc8f-a156-4f45-8600-dbe94466089b,2026-10-22T04:37:19.766Z,2026-10-22T04:50:58.919Z,review,324,326,,high,/review-pr,/review-pr 326 4,/review-pr 326 4,claude-haiku-5-5 claude-opus-5-5,815421
+f3311fcd-dc10-4881-9154-f5de1d3e101a,2026-10-22T05:01:51.570Z,2026-10-22T07:11:27.991Z,build,321,,,high,/build-issue,/build-issue 321,/build-issue 321,claude-haiku-5-5 claude-opus-5-5,3992142
+bbcf88b6-2406-408e-9be1-d22c418975f9,2026-10-22T05:33:42.940Z,2026-10-22T05:42:03.978Z,review,321,332,,high,/review-pr,/review-pr 332 1,/review-pr 332 1,claude-opus-5-5,620270
+5e13ce95-dd7d-4f28-a938-d7df8b676be4,2026-10-22T05:58:15.695Z,2026-10-22T06:07:09.669Z,review,321,332,,high,/review-pr,/review-pr 332 2,/review-pr 332 2,claude-opus-5-5,845440
+1caf1426-e276-4b3a-acaf-7b8daebeaa56,2026-10-22T06:00:38.312Z,2026-10-22T06:28:55.747Z,review,262,315,,high,/review-pr,/review-pr 315 2,/review-pr 315 2,claude-opus-5-5,1289606
+f0fe5645-b269-4bd2-ac32-a8a163eef27f,2026-10-22T06:36:34.201Z,2026-10-22T06:45:01.056Z,review,321,332,,high,/review-pr,/review-pr 332 3,/review-pr 332 3,claude-haiku-5-5 claude-opus-5-5,804188
+f5a64819-1596-400a-8767-af6e7ae467f0,2026-10-22T06:37:00.873Z,2026-10-22T07:06:42.361Z,review,262,315,,high,/review-pr,"/review-pr 315 3
+
+CI is blocked until november so you'll nee","/review-pr 315 3
+
+CI is blocked until november so you'll need to do all ci check",claude-opus-5-5,1147462
+1c5ca568-1f99-46fd-a2fa-4d67c6864ae4,2026-10-22T07:17:50.531Z,2026-10-22T07:30:59.364Z,review,262,315,,high,/review-pr,/review-pr 315 4,/review-pr 315 4,claude-opus-5-5,1225963
+241d1143-8d88-47f1-9121-31c339da7875,2026-10-22T07:38:39.768Z,2026-10-22T08:01:27.722Z,other,,,,low,test/housekeeping/tiny,,,claude-opus-5-5,118107
+f8659ded-744f-4ddd-b801-e11753411f04,2026-10-22T08:03:13.467Z,2026-10-22T08:20:35.468Z,review,262,315,,high,/review-pr,/review-pr 315 5,/review-pr 315 5,claude-opus-5-5,1301524
+e04c56c2-ecc2-45b3-9fde-af0a28e6aa02,2026-10-22T08:23:35.729Z,2026-10-22T08:45:18.955Z,review,262,315,,high,/review-pr,/review-pr 315 6,/review-pr 315 6,claude-opus-5-5,1343677
+d7dad6c1-e311-4569-8beb-b7019cb5128e,2026-10-22T13:46:59.599Z,2026-10-22T15:28:08.849Z,review,261,356,yes,high,/review-pr,/review-pr 356 1,/review-pr 356 1,claude-opus-5-5,1027126
+a4ea6e56-267b-422e-886f-688c74dd67df,2026-10-22T14:21:59.336Z,2026-10-22T18:17:57.082Z,build,261,,,high,/build-issue,/build-issue 261,/build-issue 261,claude-opus-5-5,8060435
+5c3813bf-d062-4c02-8435-c1e5000bb4ed,2026-10-22T16:04:49.865Z,2026-10-22T16:15:29.832Z,review,261,356,yes,high,/review-pr,/review-pr 356 2,/review-pr 356 2,claude-opus-5-5,1124977
+451b46fe-a323-4876-91c3-9de5a2746ab3,2026-10-22T16:27:19.555Z,2026-10-22T16:52:42.940Z,review,261,358,,high,/review-pr,/review-pr 358 1,/review-pr 358 1,claude-opus-5-5,1330407
+0287e6c5-7b4c-4239-8c5e-e40ce0102c68,2026-10-22T16:57:50.391Z,2026-10-22T17:26:09.610Z,review,261,358,,high,/review-pr,/review-pr 358 2,/review-pr 358 2,claude-opus-5-5,1313088
+f2149675-c83e-4506-92bf-9a12425121d1,2026-10-22T18:19:16.593Z,2026-10-23T22:12:43.392Z,build,269,,,high,/build-issue,/build-issue 269,/build-issue 269,claude-haiku-5-5 claude-opus-5-5,15219713
+07d0a918-b2b6-4d89-beb3-cd8ca92a7a49,2026-10-22T19:48:58.805Z,2026-10-22T19:59:38.303Z,review,269,365,yes,high,/review-pr,/review-pr 365 1,/review-pr 365 1,claude-opus-5-5,1039662
+b8a99f1c-10db-47f9-8518-6c1936a631b2,2026-10-22T20:55:08.919Z,2026-10-22T21:03:29.471Z,review,269,365,yes,high,/review-pr,/review-pr 365 2,/review-pr 365 2,claude-opus-5-5,943167
+09ecfbde-fa5d-4b70-a911-c88eb676207d,2026-10-23T01:39:51.407Z,2026-10-23T01:48:58.549Z,review,269,365,yes,high,/review-pr,/review-pr 365 3,/review-pr 365 3,claude-opus-5-5,1067021
+2d0876d7-b591-4d6f-8f66-22db3b68b119,2026-10-23T19:36:11.368Z,2026-10-23T21:25:41.953Z,review,269,366,,high,/review-pr,/review-pr 366 1,/review-pr 366 1,claude-opus-5-5,2585455
+54f330a9-a1a6-4814-a103-81ee3e27199e,2026-10-23T21:31:04.878Z,2026-10-23T22:01:54.026Z,review,269,366,,high,/review-pr,/review-pr 366 2,/review-pr 366 2,claude-opus-5-5,1501222
+33e794a9-bed8-4b19-bd81-88586ab2ad85,2026-10-23T21:42:38.956Z,2026-10-24T07:30:47.120Z,build,274,,,low,issue #274 prompt,,"<pasted_content id=""025b""> # Issue #274 prompt (local Claude Code)  Fix GitHub i",claude-opus-5-5,11005424
+372c92bc-07a2-4287-9bf1-8cf6157be846,2026-10-23T21:44:47.373Z,2026-10-23T21:51:04.667Z,other,,,,low,unclear,/feedback | /feedback,"<pasted_content id=""46c8""> https://github.com/yamimaio/step-up-education-advisor",claude-opus-5-5 claude-sonnet-5-5,469294
+16fe6ac2-33e2-492f-9077-15e80b7c9ba5,2026-10-23T22:05:29.592Z,2026-10-23T23:21:19.495Z,review,192,374,,high,/review-pr,/review-pr 374 1,/review-pr 374 1,claude-opus-5-5,1591099
+66101011-8130-425f-9b12-e92b8a5e18c0,2026-10-23T22:15:20.707Z,2026-10-24T01:37:30.317Z,build,192,,,high,/build-issue,/build-issue 192,/build-issue 192,claude-opus-5-5,6148562
+787e3361-4239-4127-af22-e232d9971c0c,2026-10-23T23:24:49.981Z,2026-10-23T23:36:38.505Z,other,,,,low,test/housekeeping/tiny,,,claude-opus-5-5,70226
+bc93cd73-f2d4-4f79-a1f2-65ab35ad4881,2026-10-23T23:39:43.598Z,2026-10-24T01:02:21.042Z,review,192,374,,high,/review-pr,/review-pr 374 2,/review-pr 374 2,claude-opus-5-5,2117290
+53fb9708-bb6f-4a14-bc74-ad6e308bd254,2026-10-24T05:09:56.789Z,2026-10-24T07:32:40.180Z,build,379,,,high,/build-issue,/build-issue 379,/build-issue 379,claude-opus-5-5,2628024
+3ec3f73a-78cf-4414-8302-ca404fd23691,2026-10-24T05:16:09.369Z,2026-10-24T08:02:59.693Z,build,368,,,high,/build-issue,/build-issue 368,/build-issue 368,claude-opus-5-5,3213255
+03091e6c-c14a-4af1-9123-2d6ef5159742,2026-10-24T05:18:30.130Z,2026-10-24T16:40:15.097Z,build,369,,,high,/build-issue,/build-issue 369,/build-issue 369,claude-opus-5-5,7849939
+8bd09ec0-2de4-46cf-a263-327b836616d1,2026-10-24T05:56:18.093Z,2026-10-24T06:12:46.382Z,review,379,383,,high,/review-pr,/review-pr 383 1,/review-pr 383 1,claude-opus-5-5,987379
+70e22658-4926-4ce8-9a50-1ff47f452558,2026-10-24T06:00:56.439Z,2026-10-24T06:09:34.631Z,review,369,382,yes,high,/review-pr,/review-pr 382 1,/review-pr 382 1,claude-opus-5-5,623552
+10f04326-2590-4725-b55f-aca8c2fa48a2,2026-10-24T06:02:05.248Z,2026-10-24T06:20:29.766Z,review,368,384,,high,/review-pr,/review-pr 384 1,/review-pr 384 1,claude-opus-5-5,867983
+32c6e22b-663e-432c-8868-1c1ff05151b9,2026-10-24T06:20:05.741Z,2026-10-24T06:57:39.990Z,review,379,383,,high,/review-pr,/review-pr 383 2,/review-pr 383 2,claude-opus-5-5,1506762
+84795422-2133-4881-ab1e-cda163f04df5,2026-10-24T06:20:35.646Z,2026-10-24T06:48:02.016Z,review,368,384,,high,/review-pr,/review-pr 384 2,/review-pr 384 2,claude-opus-5-5,823694
+d5ea48eb-4f6b-4064-8ae5-5b3171ccd804,2026-10-24T06:21:55.282Z,2026-10-24T07:44:55.084Z,review,369,382,yes,high,/review-pr,/review-pr 382 2,/review-pr 382 2,claude-opus-5-5,742783
+94ec30b0-37f1-458b-9296-099cec6030ce,2026-10-24T07:26:26.447Z,2026-10-24T16:16:27.210Z,review,348,396,,high,/review-pr,/review-pr 396 q,/review-pr 396 q,claude-opus-5-5,1039413
+faf42eba-8ae6-4139-b3d7-4e43c9bdd9e4,2026-10-24T07:32:51.191Z,2026-10-24T08:15:59.743Z,build,312,,,high,/build-issue,/build-issue 312,/build-issue 312,claude-opus-5-5,1248357
+e3c81265-4102-4987-ad77-50bf27ee3312,2026-10-24T07:33:14.099Z,2026-10-24T18:46:04.010Z,review,113,403,,high,/review-pr,/review-pr 403 1,/review-pr 403 1,claude-opus-5-5,2715563
+c91cfaea-19b8-46da-a974-39edfe22c506,2026-10-24T07:47:32.962Z,2026-10-24T08:16:59.498Z,review,369,382,yes,high,/review-pr,/review-pr 382 3,/review-pr 382 3,claude-opus-5-5,605593
+e5aed750-3919-4fdb-a271-4d6f303fb033,2026-10-24T08:00:25.540Z,2026-10-24T16:21:49.709Z,build,357,,,high,/build-issue,/build-issue 357,/build-issue 357,claude-opus-5-5,1891398
+a3072512-e22a-4d68-81d7-f61881c248fe,2026-10-24T08:03:09.746Z,2026-10-24T08:22:18.882Z,build,355,,,high,/build-issue,/build-issue 355,/build-issue 355,claude-opus-5-5,135011
+83b31488-0a6a-45ef-9ab6-fbe2c67c36cb,2026-10-24T08:17:10.762Z,2026-10-24T17:44:07.190Z,build,348,,,high,/build-issue,/build-issue 348,/build-issue 348,claude-opus-5-5,5634819
+df53c31b-d345-45a7-b383-ac1ba0bd05b1,2026-10-24T08:19:19.612Z,2026-10-24T08:47:41.937Z,review,369,385,,high,/review-pr,/review-pr 385 1,/review-pr 385 1,claude-opus-5-5,1259810
+ab863e7e-cf13-4ffc-94fe-b879a829c008,2026-10-24T08:22:27.108Z,2026-10-24T22:17:47.129Z,build,113,,,high,/build-issue,/build-issue 113,/build-issue 113,claude-opus-5-5,26865524
+16ba413d-f16a-4160-bba3-8c2fe0c7af2b,2026-10-24T08:32:06.516Z,2026-10-24T08:42:32.397Z,review,357,395,,high,/review-pr,/review-pr 395 1,/review-pr 395 1,claude-opus-5-5,720606
+bfaa52b0-b2cc-4e8f-bce2-47477aff1948,2026-10-24T16:02:53.723Z,2026-10-24T16:15:29.614Z,review,348,396,,high,/review-pr,/review-pr 396 2,/review-pr 396 2,claude-opus-5-5,72594
+904dfd8e-d38e-47ab-829e-e6ed2cf5687c,2026-10-24T16:03:45.140Z,2026-10-24T16:15:03.368Z,review,357,395,,high,/review-pr,/review-pr 395 2,/review-pr 395 2,claude-opus-5-5,561734
+c6e48aa8-b091-4cb6-846a-bcca9da6c152,2026-10-24T16:15:33.096Z,2026-10-24T16:32:23.645Z,review,369,385,,high,/review-pr,/review-pr 385 2,/review-pr 385 2,claude-opus-5-5,1123105
+141e1a3a-907c-48c0-9cc3-02f6fa5f1586,2026-10-24T16:17:08.188Z,2026-10-24T16:55:27.834Z,review,348,396,,high,/review-pr,,/review-pr https://github.com/yamimaio/gravity/pull/396 2,claude-opus-5-5,1353765
+86d85645-dbc0-4ab0-812d-87c82264af43,2026-10-24T16:39:40.208Z,2026-10-25T18:25:53.327Z,other,,,,low,test/housekeeping/tiny,,exot,claude-opus-5-5,21095
+aa3e4186-2d6a-4934-8be6-5c8f98ea37ae,2026-10-24T16:57:42.192Z,2026-10-24T17:29:05.538Z,review,348,396,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/396 3,/review-pr https://github.com/yamimaio/gravity/pull/396 3,claude-opus-5-5,1307799
+2b5b749d-d62b-476a-b427-e6a0f5e0b43b,2026-10-24T17:42:51.308Z,2026-10-24T18:34:11.953Z,review,355,405,,high,/review-pr,/review-pr 405 1,/review-pr 405 1,claude-opus-5-5,698537
+39f9c6e7-3a6e-4de6-988c-e5f1af786de1,2026-10-24T17:44:12.556Z,2026-10-24T19:15:28.911Z,build,355,,,high,/build-issue,/build-issue 355,/build-issue 355,claude-opus-5-5,2775245
+876c1580-19f4-4f6b-bdec-bc03669314d3,2026-10-24T18:36:30.628Z,2026-10-24T19:14:23.585Z,review,355,405,,high,/review-pr,/review-pr 405 2,/review-pr 405 2,claude-opus-5-5,712435
+ae375853-f18c-4153-8f8b-4a49b442aa09,2026-10-24T18:46:33.722Z,2026-10-24T19:16:43.227Z,review,,107,,high,/review-pr,/review-pr 107,/review-pr 107,claude-opus-5-5,27647
+f34ea6d6-db5d-4d0b-89a4-385b0d537d70,2026-10-24T19:14:56.065Z,2026-10-24T19:55:38.768Z,review,363,410,,high,/review-pr,/review-pr 410 1,/review-pr 410 1,claude-opus-5-5,680589
+fd2214b9-bd46-40a4-b366-fa618ee575c9,2026-10-24T19:16:05.937Z,2026-10-24T20:28:42.493Z,build,363,,,high,/build-issue,/build-issue 363,/build-issue 363,claude-opus-5-5,1872743
+9e3026f9-33a5-4752-abb2-b851dd40b1bd,2026-10-24T19:16:45.935Z,2026-10-24T19:32:51.455Z,review,113,407,yes,high,/review-pr,/review-pr 407,/review-pr 407,claude-opus-5-5,1107307
+6ba6658d-dcf2-4a25-bdc8-dd728634bec4,2026-10-24T19:41:04.777Z,2026-10-24T20:06:59.701Z,review,113,407,yes,high,/review-pr,/review-pr 407 2,/review-pr 407 2,claude-opus-5-5,987683
+daaf613a-879e-4faf-8708-bfc0e1f30422,2026-10-24T19:56:59.047Z,2026-10-24T20:27:07.243Z,review,363,410,,high,/review-pr,/review-pr 410 2,/review-pr 410 2,claude-opus-5-5,756159
+154c4701-bda6-47f9-a8df-cae0962c9a96,2026-10-24T20:29:53.771Z,2026-10-24T22:37:58.062Z,build,342,,,high,/build-issue,/build-issue 342,/build-issue 342,claude-opus-5-5,2188127
+dea64e0f-9d7e-411d-a7af-da88efd4ee10,2026-10-24T20:29:58.646Z,2026-10-24T20:53:52.944Z,review,113,407,yes,high,/review-pr,/review-pr 407 3,/review-pr 407 3,claude-opus-5-5,825292
+5931d03b-d893-4583-925a-f3bea3054f34,2026-10-24T20:47:20.373Z,2026-10-24T21:59:47.777Z,review,342,416,,high,/review-pr,/review-pr 416 1,/review-pr 416 1,claude-opus-5-5,566467
+1c41198a-5ed3-4a4f-b0b9-4bf683297e9f,2026-10-24T21:52:47.046Z,2026-10-24T22:08:41.265Z,review,113,403,,high,/review-pr,/review-pr 403 2,/review-pr 403 2,claude-opus-5-5,2190136
+e065c4c6-8207-4ff0-a38b-6321046fb8ed,2026-10-24T22:05:40.012Z,2026-10-24T22:35:00.390Z,review,342,416,,high,/review-pr,/review-pr 416 2,/review-pr 416 2,claude-opus-5-5,726578
+22e0e935-7992-4649-ab5f-e892005224cd,2026-10-24T22:17:15.237Z,2026-10-24T22:52:36.260Z,review,360,421,yes,high,/review-pr,/review-pr 421 1,/review-pr 421 1,claude-opus-5-5,889062
+95a2f3b9-2bd3-4135-ad23-542ae511cb54,2026-10-24T22:18:00.101Z,2026-10-25T01:17:29.615Z,build,360,,,high,/build-issue,/build-issue 360,/build-issue 360,claude-opus-5-5,3792802
+5e0cead6-1b4a-4dd8-b77b-92d2cacfcc77,2026-10-24T22:35:15.932Z,2026-10-24T23:41:34.790Z,build,377,,,high,/build-issue,/build-issue 377,/build-issue 377,claude-opus-5-5,1362005
+f034bafd-298e-44fa-b3aa-8cfd357cc14b,2026-10-24T22:38:32.194Z,2026-10-24T23:04:01.808Z,review,377,423,,high,/review-pr,/review-pr 423 1,/review-pr 423 1,claude-opus-5-5,664018
+ba8d6f21-4a69-432c-86b4-bd0f5c16631a,2026-10-24T22:54:10.169Z,2026-10-24T23:11:56.653Z,review,360,421,yes,high,/review-pr,/review-pr 421 2,/review-pr 421 2,claude-opus-5-5,790321
+731ed89d-3019-4298-80a8-fdaf97a4d6f6,2026-10-24T23:05:41.599Z,2026-10-24T23:27:38.285Z,review,377,423,,high,/review-pr,/review-pr 423 2,/review-pr 423 2,claude-opus-5-5,470630
+c46f1023-f5a8-478c-a70b-4a25b25b1435,2026-10-24T23:17:41.241Z,2026-10-24T23:48:49.781Z,review,360,421,yes,high,/review-pr,/review-pr 421 3,/review-pr 421 3,claude-opus-5-5,825587
+9fa437d4-3a50-4c9c-a05a-4984eb7a9a3c,2026-10-24T23:37:17.929Z,2026-10-25T00:21:27.245Z,review,378,429,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/429 1.,/review-pr https://github.com/yamimaio/gravity/pull/429 1.,claude-opus-5-5,851102
+02248703-238f-41d1-892d-e52cbd0b3c28,2026-10-24T23:43:09.664Z,2026-10-25T01:52:33.840Z,build,378,,,high,/build-issue,/build-issue 378,/build-issue 378,claude-opus-5-5,2732384
+51554d04-0194-4b2c-b087-42457bc826ce,2026-10-24T23:50:36.984Z,2026-10-25T00:19:34.853Z,review,360,422,,high,/review-pr,/review-pr 422 1,/review-pr 422 1,claude-opus-5-5,1316564
+5e9ddce5-5a8f-495d-ac44-f58fae2ec823,2026-10-25T00:20:58.671Z,2026-10-25T01:12:59.249Z,review,360,422,,high,/review-pr,/review-pr 422 2,/review-pr 422 2,claude-opus-5-5,1118907
+71ee4334-c154-4427-825b-d2549b02bcd8,2026-10-25T00:22:28.898Z,2026-10-25T01:07:41.695Z,review,378,429,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/429 2,/review-pr https://github.com/yamimaio/gravity/pull/429 2,claude-opus-5-5,919119
+5e850899-2d41-4b1d-8a6b-4df0a4cf020b,2026-10-25T01:09:41.484Z,2026-10-25T01:29:13.078Z,review,378,429,,high,/review-pr,/review-pr https://github.com/yamimaio/gravity/pull/429 3,/review-pr https://github.com/yamimaio/gravity/pull/429 3,claude-opus-5-5,1025105
+1e176f87-d559-4637-8435-fe3fd85026cc,2026-10-25T01:17:50.638Z,2026-10-27T01:22:13.258Z,build,114,,,high,/build-issue,/build-issue 114,/build-issue 114,claude-fable-5 claude-opus-5-5,54522576
+21e62a63-2fc0-491d-b780-3b3619849ab1,2026-10-25T01:41:47.691Z,2026-10-25T18:22:57.004Z,other,,,,low,test/housekeeping/tiny,,doctor,claude-opus-5-5,430149
+9aedab82-ec89-4f91-8838-aa9691c093ac,2026-10-25T01:53:01.339Z,2026-10-25T19:39:50.136Z,build,420,,,high,/build-issue,/build-issue 420,/build-issue 420,claude-opus-5-5,4096820
+1166f34f-15f7-4b09-a3a7-332ed1f409b8,2026-10-25T18:31:29.448Z,2026-10-25T18:48:27.881Z,review,114,442,,high,/review-pr,/review-pr 442 1,/review-pr 442 1,claude-opus-5-5,2382613
+b1543fbf-501b-410f-a4b4-12b4e54fedca,2026-10-25T18:37:10.531Z,2026-10-25T18:47:05.385Z,review,420,435,,high,/review-pr,/review-pr 435 1,/review-pr 435 1,claude-opus-5-5,557296
+f87c5403-e85c-4525-9909-a7a9b65d5be3,2026-10-25T18:47:57.936Z,2026-10-25T19:14:44.172Z,review,420,435,,high,/review-pr,/review-pr 435 2,/review-pr 435 2,claude-opus-5-5,772983
+f5a19a6d-d670-46ef-9c25-9e8488b48210,2026-10-25T18:48:51.253Z,2026-10-25T19:51:21.212Z,review,114,442,,high,/review-pr,/review-pr 442 2,/review-pr 442 2,claude-opus-5-5,1800865
+e6d0067a-e1fa-4113-ad72-84dafa9ad88d,2026-10-25T19:40:20.287Z,2026-10-25T23:21:04.615Z,review,444,451,,high,/review-pr,/review-pr 451 1,/review-pr 451 1,claude-opus-5-5,1111989
+ac71df7c-5c32-4a49-b3ae-16a69e66539d,2026-10-25T19:41:14.024Z,2026-10-26T04:04:04.205Z,build,444,,,high,/build-issue,/build-issue 444,/build-issue 444,claude-opus-5-5,4508231
+c881f3da-d3ef-4ede-bdba-2cee055efc04,2026-10-25T19:56:14.185Z,2026-10-25T21:30:24.821Z,review,114,442,,high,/review-pr,/review-pr 442 3,/review-pr 442 3,claude-opus-5-5,2112382
+96ee33d3-f465-45cd-a6ef-a292eeef711f,2026-10-25T23:09:24.787Z,2026-10-26T03:29:41.295Z,review,114,442,,high,/review-pr,/review-pr 442 4,claude,claude-opus-5-5,2196961
+b2b71117-14b3-4f17-8428-7244dfa5a4c8,2026-10-25T23:31:01.357Z,2026-10-26T03:32:17.379Z,review,444,451,,high,/review-pr,/review-pr 451 2,/review-pr 451 2,claude-opus-5-5,1212473
+4b62bfee-b44e-4a2b-9a34-9b8a5419c489,2026-10-26T04:03:49.764Z,2026-10-26T04:41:56.809Z,review,445,458,,high,/review-pr,/review-pr 458 1,/review-pr 458 1,claude-opus-5-5,811957
+bb495170-6c31-48b5-bf6d-cc96d55229ab,2026-10-26T04:04:42.290Z,2026-10-26T06:15:49.859Z,build,445,,,high,/build-issue,/build-issue 445,/build-issue 445,claude-opus-5-5,1536350
+b1fbcab9-f838-4503-a3a9-a08cd2ec6a55,2026-10-26T04:05:37.194Z,2026-10-26T04:54:47.337Z,review,114,442,,high,/review-pr,/review-pr 442 5,/review-pr 442 5,claude-opus-5-5,2482803
+14bf94b3-b110-4d88-a501-86b22be96e8c,2026-10-26T05:13:16.994Z,2026-10-26T05:36:56.641Z,review,445,458,,high,/review-pr,,(/review-pr 458 2,claude-opus-5-5,514222
+e73467e1-1fec-418f-86d2-ff578cf4b025,2026-10-26T05:15:48.816Z,2026-10-26T06:26:56.620Z,review,114,442,,high,/review-pr,,We did a redesign so we are resseting the review count /review-pr 442 1,claude-opus-5-5,1907981
+971cfec0-3fbc-4168-80fb-a6bbf53e678c,2026-10-26T05:29:10.037Z,2026-10-26T06:09:36.435Z,other,,,,low,test/housekeeping/tiny,,"Review 1 is in, go fix",claude-opus-5-5,31730
+70dfe1fe-6399-4c69-aed5-ca411639a53e,2026-10-26T06:15:09.556Z,2026-10-26T06:35:54.200Z,review,457,464,,high,/review-pr,/review-pr 464 1,/review-pr 464 1,claude-opus-5-5,453155
+e3fdeaf9-6fbb-42d1-9f35-68bb766fe3ab,2026-10-26T06:18:27.509Z,2026-10-26T07:07:13.494Z,build,457,,,high,/build-issue,/build-issue 457,/build-issue 457,claude-opus-5-5,1031920
+4782088f-8d79-4e01-bf9b-786c00c8ea8c,2026-10-26T06:29:58.118Z,2026-10-26T07:49:15.135Z,review,114,442,,high,/review-pr,/review-pr 442 7,/review-pr 442 7,claude-opus-5-5,2296286
+ca3d9769-8e61-4784-bc26-1acdc5a49c82,2026-10-26T06:39:23.690Z,2026-10-26T06:52:04.764Z,review,457,464,,high,/review-pr,,/review-pr 464 2,claude-opus-5-5,327216
+865fc1f9-2c59-488b-a1d8-dbcb518197ff,2026-10-26T07:05:05.810Z,2026-10-26T07:27:52.832Z,review,414,465,,high,/review-pr,/review-pr 465 1,/review-pr 465 1,claude-opus-5-5,471991
+fc71fd4b-8302-4f6b-9c3c-e1f482ee5fd4,2026-10-26T07:08:18.897Z,2026-10-26T07:31:58.741Z,build,414,,,high,/build-issue,/build-issue 414,/build-issue 414,claude-opus-5-5,719235
+4871a10d-99cc-404f-8005-4cce8deb6342,2026-10-26T07:29:05.010Z,2026-10-26T07:46:43.214Z,review,466,468,,high,/review-pr,/review-pr 468 1,/review-pr 468 1,claude-opus-5-5,388569
+74b69399-dfc4-4f04-81c3-013d9cbc3351,2026-10-26T07:33:11.646Z,2026-10-26T07:51:09.452Z,build,466,,,high,/build-issue,/build-issue 466,/build-issue 466,claude-sonnet-5-5,198162
+c0dc761e-3dd9-4865-a649-121f4befcfa4,2026-10-26T07:47:42.547Z,2026-10-26T20:05:05.449Z,review,472,474,,high,/review-pr,/review-pr 474 1,/review-pr 474 1,claude-opus-5-5,550725
+d0b6b125-336e-4084-a5d7-11db917e99d0,2026-10-26T07:51:58.534Z,2026-10-26T13:37:51.408Z,review,114,442,,high,/review-pr,/review-pr 442 8,/review-pr 442 8,claude-opus-5-5,2654635
+9ed19ae3-12dc-4df4-b296-bc31dc6bd14d,2026-10-26T07:54:27.658Z,2026-10-26T13:15:40.373Z,build,447,,,low,build/fix/decision in prompt,,"<pasted_content id=""3c51""> Write ONE decision PR, and only that. Build nothing (",claude-sonnet-5-5,359966
+30b640c4-fc89-47b8-9a00-63f92eea7429,2026-10-26T13:18:28.763Z,2026-10-26T21:32:03.160Z,build,472,,,high,/build-issue,/build-issue 472,/build-issue 472,claude-sonnet-5-5,749125
+7245d761-c81b-4c16-b588-02714bfb26cc,2026-10-26T19:58:56.545Z,2026-10-26T20:45:23.922Z,review,114,442,,high,/review-pr,/review-pr 442 9,/review-pr 442 9,claude-opus-5-5,2756416
+a30eb13e-c61e-4eac-a354-7ef179e40e85,2026-10-26T20:09:54.386Z,2026-10-26T21:02:12.968Z,review,472,474,,high,/review-pr,/review-pr 474 2,/review-pr 474 2,claude-opus-5-5,608532
+a1de1614-f85a-4f67-a908-b55d471e9ee6,2026-10-26T20:55:06.156Z,2026-10-26T22:24:32.493Z,review,114,442,,high,/review-pr,/review-pr 442 10,/review-pr 442 10,claude-opus-5-5,2545888
+dcfad4b9-8183-401b-86a0-444b76eed649,2026-10-26T21:29:06.269Z,2026-10-26T22:09:29.645Z,review,447,481,,high,/review-pr,/review-pr 481 1,/review-pr 481 1,claude-opus-5-5,567370
+9f1c2add-10cc-4d62-9f24-c511812ff570,2026-10-26T21:33:43.334Z,2026-10-27T01:41:02.296Z,build,447,,,high,/build-issue,/build-issue 447,/build-issue 447,claude-opus-5,3401192
+34e570e1-1049-49cd-8e5c-677fe3177b06,2026-10-26T23:45:42.620Z,2026-10-27T00:03:38.637Z,review,447,481,,high,/review-pr,/review-pr 481 2,/review-pr 481 2,claude-opus-5,1632638
+e53c6b9c-ce44-4368-9c9e-d70b3286abd6,2026-10-27T00:12:33.107Z,2026-10-27T00:36:44.471Z,review,114,442,,high,/review-pr,/review-pr 442 11,/review-pr 442 11,claude-opus-5,3621427
+801e3e0a-c4e6-41e7-932e-6b37757aa3b1,2026-10-27T00:15:16.453Z,2026-10-27T00:59:28.153Z,review,447,481,,high,/review-pr,/review-pr 481 3,/review-pr 481 3,claude-opus-5,1491890
+53b6dca0-1a57-4475-a0cd-cbd139e8e463,2026-10-27T01:23:52.347Z,2026-10-27T02:21:48.597Z,build,491,,,low,build/fix/decision in prompt,,"<pasted_content id=""93b3""> ❯ Write ONE decision PR, and only that. Build nothing",claude-sonnet-5,1511741
+33680e99-22ad-446e-87e0-fd277080903a,2026-10-27T01:33:44.055Z,2026-10-27T03:10:10.098Z,review,491,496,,high,/review-pr,,/review-pr https://github.com/yamimaio/gravity/pull/496 1,claude-opus-5,2786933
+f4b61b8d-8c8c-485d-8d54-04d2da36a2b6,2026-10-27T02:21:46.396Z,2026-10-27T17:51:30.420Z,build,491,,,high,/build-issue,/build-issue 491,/build-issue 491,claude-opus-5,11498839
+c8c535fa-2a91-4bf0-a072-d19fafc25bcc,2026-10-27T03:15:00.190Z,2026-10-27T03:57:51.951Z,review,491,496,,high,/review-pr,/review-pr 496 2,/review-pr 496 2,claude-opus-5,3230158
+5a3f223b-50c7-4de7-8a09-611c2a435a28,2026-10-27T13:04:48.845Z,2026-10-27T13:47:35.122Z,review,491,496,,high,/review-pr,/review-pr 496 3,/review-pr 496 3,claude-opus-5,2972274
+7ab4c94c-d421-4c64-91fb-7fb064b12b3d,2026-10-27T13:49:51.156Z,2026-10-27T14:48:47.061Z,review,491,496,,high,/review-pr,/review-pr 496 4,/review-pr 496 4,claude-opus-5,2936028
+45da463f-3624-40b0-8933-bb4a04181fff,2026-10-27T15:09:49.703Z,2026-10-27T15:52:25.589Z,review,491,496,,high,/review-pr,/review-pr 496 5,/review-pr 496 5,claude-opus-5,2751534
+12eb1d9c-6d04-421f-918f-2713ebfb8f3f,2026-10-27T17:57:10.937Z,2026-10-28T19:51:06.941Z,build,228,,,high,/build-issue,/build-issue 228,/build-issue 228,claude-opus-5,21275373
+cabaf123-a065-481c-b585-3ca4745faca8,2026-10-28T16:35:32.875Z,2026-10-28T17:44:02.627Z,review,228,507,,high,/review-pr,/review-pr 507 1 | /feedback,effort,claude-opus-5,3284685
+599c79b3-6e46-42d5-9a94-fd3b76eaed49,2026-10-28T17:44:38.578Z,2026-10-28T18:41:58.960Z,review,228,507,,high,/review-pr,/review-pr 507 2,/review-pr 507 2,claude-opus-5,3764671
+ae32ef32-340c-4736-a003-0af50eedb7a1,2026-10-28T19:49:51.542Z,2026-10-31T20:20:04.225Z,build,494,,,high,/build-issue,/build-issue 494,/build-issue 494,claude-opus-5,68870093
+b267b464-7492-4b2e-9533-d47e7ac59b68,2026-10-29T14:57:23.545Z,2026-10-29T15:26:26.112Z,review,494,517,,high,/review-pr,/review-pr 517 1,/review-pr 517 1,claude-opus-5,4587347
+7455803b-6385-4549-bdc4-a9174180c398,2026-10-29T15:27:58.443Z,2026-10-29T16:42:39.540Z,review,494,517,,high,/review-pr,/review-pr 517 2,/review-pr 517 2,claude-opus-5,3535734
+ccf35520-844b-4b9b-b175-66f9624b77ef,2026-10-30T16:34:20.759Z,2026-10-30T17:11:43.558Z,review,494,517,,high,/review-pr,/review-pr 517 3,/review-pr 517 3,claude-opus-5,5599137
+101fb624-6db3-443c-bb19-56d3a44abefd,2026-10-30T17:16:35.870Z,2026-10-30T22:38:55.122Z,review,494,517,,high,/review-pr,/review-pr 517 4,/review-pr 517 4,claude-opus-5,5154987
+3c560b41-073b-48aa-b14f-1104e62162f0,2026-10-30T22:42:48.655Z,2026-10-31T05:35:03.630Z,review,494,517,,high,/review-pr,/review-pr 517 5,/review-pr 517 5,claude-opus-5,3779537
+09d2207f-eefa-41f7-9124-5810b5c61a09,2026-10-31T05:36:15.499Z,2026-10-31T17:38:34.816Z,review,494,517,,high,/review-pr,/review-pr 517 6,/review-pr 517 6,claude-opus-5,4464797
+3f415741-c7b2-43fd-bdad-f88936163e63,2026-10-31T17:59:06.791Z,2026-10-31T18:47:20.932Z,review,494,517,,high,/review-pr,/review-pr 517 7,/review-pr 517 7,claude-opus-5,4683437
+85e0119b-ccbe-4138-855b-7fea6e551a13,2026-10-31T19:40:11.116Z,2026-10-31T20:26:01.083Z,other,,,,low,test/housekeeping/tiny,,,claude-opus-5,431855
+eef79016-b04b-4dad-a15f-30bc0ce26a5e,2026-10-31T20:25:17.548Z,2026-11-01T04:02:23.998Z,build,187,,,high,/build-issue,/build-issue 187,/build-issue 187,claude-opus-5,8954225
+acb5a5d4-b88c-4406-bdb3-7d2fff671d1d,2026-10-31T20:26:28.129Z,2026-10-31T23:35:10.629Z,review,187,537,,high,/review-pr,/review-pr 537 1,/review-pr 537 1,claude-opus-5,3327295
+5670a79b-7f8a-4f06-833c-59c130788da4,2026-11-01T01:24:27.257Z,2026-11-01T05:31:29.941Z,review,187,537,,high,/review-pr,/review-pr 537 2,/review-pr 537 2,claude-opus-5,4489512
+b98b880b-f5f3-4ad7-8823-8449bae5af6b,2026-11-01T04:02:24.043Z,2026-11-03T01:07:20.899Z,build,117,,,high,/build-issue,/build-issue 117,/build-issue 117,claude-haiku-5-5 claude-opus-5,23831412
+5673537e-b7ae-452d-a3e2-1cb73e61b4bb,2026-11-01T05:31:29.999Z,2026-11-02T17:16:45.240Z,review,117,541,,high,/review-pr,/review-pr 541 1,/review-pr 541 1,claude-opus-5,4734613
+bb7493d4-7eb7-4dc5-9abe-cc95b172c3f0,2026-11-02T17:52:56.419Z,2026-11-02T20:57:06.504Z,review,187,537,,high,/review-pr,/review-pr 537 2,/review-pr 537 2,claude-opus-5,5401225
+ca59ff0a-2ffd-45df-a00d-ec500866dd71,2026-11-02T20:57:15.806Z,2026-11-02T22:10:29.197Z,review,187,537,,high,/review-pr,"/review-pr 537 3
+
+In addition to the new code, check the ins","/review-pr 537 3
+
+In addition to the new code, check the instructions for deploy",claude-opus-5,3828376
+277f8124-a6a2-4e2a-878c-fc0708185b41,2026-11-03T01:20:54.380Z,2026-11-04T23:32:26.618Z,build,118,,,high,/build-issue,/build-issue 118,/build-issue 118,claude-opus-5,30157439
+01b36fa7-5bca-44cb-b815-06f172deed16,2026-11-03T16:59:11.090Z,2026-11-03T17:18:29.491Z,review,118,556,yes,high,/review-pr,/review-pr 556 1,/review-pr 556 1,claude-opus-5,2227765
+e7e431e7-700c-4bdd-a1d4-8cd69efb356b,2026-11-03T17:20:15.913Z,2026-11-03T18:21:50.855Z,review,118,556,yes,high,/review-pr,/review-pr 556 2,/review-pr 556 2,claude-opus-5,2845921
+ff467f46-7f79-4924-a7a8-8c466f2c0982,2026-11-03T18:39:55.504Z,2026-11-03T19:22:12.836Z,review,118,556,yes,high,/review-pr,/review-pr 556 3,/review-pr 556 3,claude-haiku-5-5 claude-opus-5,3806482
+29813e11-8c63-4777-a8d4-a6feff18b40a,2026-11-03T22:54:04.225Z,2026-11-07T01:23:09.677Z,build,495,,,high,/build-issue,/build-issue 495,/build-issue 495,claude-opus-5,115472639
+ff7e6840-3e82-45c4-95fd-3a131ecb600f,2026-11-04T04:53:33.743Z,2026-11-04T05:15:39.657Z,review,495,569,yes,low,review in prompt,,I forgot and I merged 569 when I should have reviwed it REview it anyway  /revie,claude-haiku-5-5 claude-opus-5,2323556
+b3bcd1e3-a320-4a2e-a58f-a0c7f3f48eb2,2026-11-04T14:58:40.213Z,2026-11-04T15:36:57.520Z,review,495,571,yes,low,review in prompt,,I forgot and I merged 569 when I should have reviwed it REview it anyway  /revie,claude-opus-5,2280512
+b150e26e-6894-4b9e-bf1a-50e0d71dd8ef,2026-11-04T15:37:07.064Z,2026-11-11T16:44:07.575Z,build,119,,,high,/build-issue,,"/build-issue 119    Override for step 5, Yami's ruling quoted in #119 ""Branch"": ",claude-opus-5,44798202
+1dea70dc-17b4-412a-a14c-4122c816c3d8,2026-11-04T16:08:19.804Z,2026-11-04T17:23:50.839Z,review,495,571,yes,high,/review-pr,/review-pr 571 3,/review-pr 571 3,claude-opus-5,2697889
+cc4fbfe6-5d4b-42ad-b884-d82b3a4c9724,2026-11-04T17:25:13.245Z,2026-11-04T18:26:10.632Z,review,495,570,yes,low,review in prompt,,We are reviewing 570 - /security-review on scripts/backup/restore.sh — a script ,claude-opus-5,3628054
+f22d599e-3259-47ed-aabd-b2e69a698d54,2026-11-04T18:18:50.212Z,2026-11-04T18:39:05.713Z,review,119,575,,high,/review-pr,/review-pr 575 1,/review-pr 575 1,claude-haiku-5-5 claude-opus-5,2087605
+b5b07526-bc10-4542-8728-3009cfcb88e0,2026-11-04T18:33:39.061Z,2026-11-04T21:19:51.869Z,review,495,570,yes,high,/review-pr,/review-pr 570 2,/review-pr 570 2,claude-opus-5,4171789
+1d0edd31-46cd-44e8-8a4a-f1647ff01b4b,2026-11-04T18:43:02.088Z,2026-11-04T20:45:42.145Z,review,119,575,,high,/review-pr,/review-pr 575 2,/review-pr 575 2,claude-opus-5,2395022
+fd182552-58d5-4c9a-95df-8ae91ddb0620,2026-11-04T20:51:59.654Z,2026-11-07T21:25:50.389Z,review,119,575,,high,/review-pr,/review-pr 575 1,/review-pr 575 1,claude-haiku-5-5 claude-opus-5,2724943
+614d84d4-6d6e-45d6-94f4-78a30c31f21b,2026-11-04T21:22:26.775Z,2026-11-04T21:59:36.829Z,review,495,587,yes,high,/review-pr,/review-pr 587 1,/review-pr 587 1,claude-opus-5,2248755
+47ef4620-5db3-4633-87f9-e4a561f0198c,2026-11-04T22:03:36.547Z,2026-11-04T23:38:02.519Z,review,495,587,yes,high,/review-pr,/review-pr 587 2,/review-pr 587 2,claude-opus-5,1761165
+e4c6cbe0-afc6-443c-8bd1-7d10f3687d80,2026-11-04T23:33:04.616Z,2026-11-11T21:47:59.966Z,build,504,,,high,/build-issue,/build-issue 504,/build-issue 504,claude-opus-5,4015844
+f06c9ef5-0b59-4706-abcb-47e3204c9102,2026-11-04T23:39:37.897Z,2026-11-05T01:02:17.521Z,review,495,587,yes,high,/review-pr,/review-pr 587 3,/review-pr 587 3,claude-opus-5,2565242
+a7af31ad-1d2e-4110-9906-ef1ccb903262,2026-11-05T03:12:47.103Z,2026-11-05T07:28:48.080Z,review,495,570,yes,high,/review-pr,/review-pr 570 3,/review-pr 570 3,claude-opus-5,3070779
+765306b0-a129-4a11-973f-4b3e52dcc91a,2026-11-05T14:17:15.599Z,2026-11-05T17:40:16.115Z,review,495,570,yes,high,/review-pr,/review-pr 570 4 | /review-pr 570 5,/review-pr 570 4,claude-haiku-5-5 claude-opus-5,7020429
+5d00ab10-ccd5-4f66-9f96-96b0eeeace9a,2026-11-05T18:47:54.053Z,2026-11-05T19:12:27.638Z,review,495,570,yes,high,/review-pr,/review-pr 570 6,/review-pr 570 6,claude-haiku-5-5 claude-opus-5,3772889
+c91f1b84-f502-4a31-a314-c0b250cf328f,2026-11-05T19:20:44.110Z,2026-11-05T20:05:35.844Z,review,495,600,yes,high,/review-pr,/review-pr 600 1,/review-pr 600 1,claude-haiku-5-5 claude-opus-5,1993561
+4ef0f554-801e-4cec-9d5b-9b4aaec2d19e,2026-11-05T20:16:51.449Z,2026-11-06T00:41:31.707Z,review,495,600,yes,high,/review-pr,/review-pr 600 2,/review-pr 600 2,claude-opus-5,2808801
+8fd4f5a7-1cfb-4f44-9b9a-c9ec71cded6c,2026-11-06T01:47:02.642Z,2026-11-06T05:27:12.035Z,review,495,570,yes,high,/review-pr,/review-pr 570 7,/review-pr 570 7,claude-haiku-5-5 claude-opus-5,12964361
+04c0ae4f-241b-4b9f-bfa8-fe9c1807e97e,2026-11-06T18:33:13.029Z,2026-11-06T19:58:01.796Z,review,495,608,,high,/review-pr,/review-pr 608 1,/review-pr 608 1,claude-opus-5,3127953
+6dfb1373-ac88-49a8-96ef-d073c6a4994b,2026-11-06T20:04:02.211Z,2026-11-06T20:43:10.241Z,review,495,608,,high,/review-pr,/review-pr 608 2,/review-pr 608 2,claude-opus-5,2845396
+aff111ad-1a14-4117-a14c-6338b3f5ebea,2026-11-06T20:44:39.771Z,2026-11-06T21:39:47.921Z,review,495,608,,high,/review-pr,/review-pr 608 3,/review-pr 608 3,claude-opus-5,3141036
+9668ba40-3d22-4842-be6c-c35375d7cb30,2026-11-06T22:14:46.235Z,2026-11-06T22:36:15.162Z,review,495,608,,high,/review-pr,/review-pr 608 4,/review-pr 608 4,claude-opus-5,1861978
+a1290443-10b5-47e9-a186-c767a281863d,2026-11-06T23:20:17.833Z,2026-11-07T00:19:18.534Z,review,495,608,,high,/review-pr,/review-pr 608 5,/review-pr 608 5,claude-opus-5,3048005
+069a732b-aa7b-45fe-b869-2a54a19e0980,2026-11-07T01:25:03.520Z,2026-11-12T14:45:35.622Z,build,636,,,high,/build-issue,/build-issue 636,/build-issue 636,claude-opus-5,20713674
+1cb8b2d5-4b78-4cd5-902b-1e81feb55052,2026-11-07T01:25:10.612Z,2026-11-11T23:49:58.846Z,review,636,639,,high,/review-pr,/review-pr 639 1,/review-pr 639 1,claude-opus-5,2224520
+8a24d6eb-3438-4a70-857e-f1698aa7d1c8,2026-11-10T03:44:31.466Z,2026-11-10T04:16:04.975Z,review,119,575,,high,/review-pr,/review-pr 575 2,/review-pr 575 2,claude-haiku-5-5 claude-opus-5,3355998
+d4d8f65e-0c4e-4abc-b82e-62bb4eeb506f,2026-11-10T15:37:06.218Z,2026-11-10T16:42:33.698Z,review,119,575,,high,/review-pr,/review-pr 575 3,/review-pr 575 3,claude-haiku-5-5 claude-opus-5,4442304
+c051d442-3154-462c-a5ca-b406fa9a018f,2026-11-11T21:52:44.464Z,2026-11-13T21:50:14.412Z,build,637,,,high,/build-issue,/build-issue 637,/build-issue 637,claude-opus-5,39486595
+30e9617d-381f-4ef2-b233-1591a23d4fea,2026-11-11T23:55:45.133Z,2026-11-12T01:00:50.462Z,review,636,639,,high,/review-pr,/review-pr 639 2,/review-pr 639 2,claude-opus-5,3675014
+7499ab40-656e-4c46-b305-065a6d477597,2026-11-12T01:09:41.217Z,2026-11-12T05:14:57.526Z,review,636,639,,high,/review-pr,/review-pr 639 3,/review-pr 639 3,claude-haiku-5-5 claude-opus-5,4555100
+2411c041-e052-41a5-b3f9-90d94ebdafe4,2026-11-12T14:47:31.607Z,2026-11-12T16:57:51.008Z,review,637,651,,high,/review-pr,/review-pr 651 1,/review-pr 651 1,claude-haiku-5-5 claude-opus-5,3270471
+51f54d0a-19c2-44fe-af9a-2b92dc880814,2026-11-12T17:47:02.687Z,2026-11-12T18:19:44.932Z,review,637,651,,high,/review-pr,/review-pr 651 2,/review-pr 651 2,claude-opus-5,5695910
+17e70b36-7463-4020-a834-e572a4e32bfa,2026-11-12T18:55:21.559Z,2026-11-13T00:02:11.257Z,review,637,651,,high,/review-pr,/review-pr 651 3,/review-pr 651 3,claude-opus-5,8665988
