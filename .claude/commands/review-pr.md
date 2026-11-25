@@ -9,6 +9,8 @@ Review this pull request: $ARGUMENTS (the PR URL, then the review round number).
    - **A Low that only corrects the PR's own body.** (REV-2).
    - **Bookkeeping, and a stale label over a correct value.** (REV-12).
    - **A round 3 or later that still has a High or Medium.** (REV-13).
+   - **REV-25 read-the-rulings-the-build-was-made-from.** Before raising a finding, a review session reads the dated lines under the plan comment's "Updated" header, and does not raise as a finding what a ruling there has already settled — unless the finding is that the ruled text contradicts another record, or is wider than what authorized it (GEN-3, BLD-15).
+   - **Reading every page of a GitHub list.** (BLD-65).
 2. **SES-14 review-worktree-at-the-head.** Review the PR head on GitHub, not a local branch (REV-3). Make a worktree at the PR head, `<dir>` below: the reviewer's path that CLAUDE.md's THIS PROJECT gives, N being the PR number, since step 3 reads the head's files from it. Make it with no branch, so the review leaves none behind: `git fetch origin pull/<N>/head`, then `git worktree add --detach <dir> FETCH_HEAD`. Any fetch run in between rewrites `FETCH_HEAD`, so then check that `git -C <dir> rev-parse HEAD` prints the PR's head, `gh pr view <N> --json headRefOid -q .headRefOid`. If it does not, remove the worktree and make it again. A review makes no local merge, so this is its only worktree and it stays at the head: step 3's `<head>` and `<dir>` are always its `HEAD` and its path. Run checks and scripts only where CLAUDE.md's THIS PROJECT says.
 3. **REV-14 run-code-review-on-the-head.** Run /code-review on the PR head at high effort, without pushing changes. The fork does not start in the worktree, and its arguments are the one part of this session it is sure to see, so they carry the target, where to read the head's files, and where the git rule is. `<head>` is always `git -C <dir> rev-parse HEAD`, and `<dir>` is always step 2's one worktree.
    - First, save `git branch --list --format='%(refname:short)'` from the main checkout. The format leaves out the `*` and `+` marks, which change when another session adds or removes a worktree.
@@ -25,6 +27,8 @@ Review this pull request: $ARGUMENTS (the PR URL, then the review round number).
      - **One home per fact.** (BLD-16), and the id standard it rests on (GEN-24).
      - **Outside tools, the PR's and yours.** (GEN-20).
      - **A process ruling the PR body quotes but the rule text does not carry.** (BLD-15).
+     - **The body's line for every ruling under the plan comment's "Updated" header.** (BLD-66).
+   - **A PR that adds or changes steps the owner runs.** (REV-24).
 5. **A later round.** (REV-8).
    - **Repeated findings.** (GEN-22).
 6. **REV-18 security-review-on-the-head.** A PR that (REV-11) names also runs `/security-review`. It takes no target and reads the checkout this session's shell is in, so: `git switch --detach <head>`, invoke `/security-review`, `git switch main` once it has echoed the diff, then check `git rev-parse --abbrev-ref HEAD` prints `main`. Paste the run's own `GIT STATUS` and `FILES MODIFIED` blocks in the review — `HEAD detached at <head>` with the PR's files is the run that happened, and `On branch main` with empty blocks is one whose "no findings" means nothing. That proof covers the diff it read and nothing else, so confirm every claim its report makes about a file's contents against `<dir>` before repeating it in the review.

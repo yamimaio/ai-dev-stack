@@ -1,0 +1,1234 @@
+<title>Local Builder Pilot</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column (about 70ch) with a sticky section index on wide screens.
+   Each section opens with its takeaway and a visual, then optional detail behind a "Read the detail" fold. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --sunk: #eceff3;
+  --fg: #1b2230;
+  --muted: #5a6474;
+  --line: #d9dee6;
+  --accent: #0f7b78;
+  --accent-soft: #d8efed;
+  --local: #6a4fd1;
+  --local-soft: #e8e3fb;
+  --good: #1d7a3a;
+  --good-soft: #dcf1e2;
+  --warn: #9a5b00;
+  --warn-soft: #fbecd2;
+  --bad: #b3261e;
+  --bad-soft: #f8dedb;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151c; --surface: #181e27; --sunk: #0d1117; --fg: #e4e8ef; --muted: #9aa5b5; --line: #2a323e;
+    --accent: #4fd1c5; --accent-soft: #143633; --local: #a995ff; --local-soft: #262043;
+    --good: #6fd38e; --good-soft: #15301f; --warn: #f2b45a; --warn-soft: #36280f; --bad: #ff8a80; --bad-soft: #3a1a18;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151c; --surface: #181e27; --sunk: #0d1117; --fg: #e4e8ef; --muted: #9aa5b5; --line: #2a323e;
+  --accent: #4fd1c5; --accent-soft: #143633; --local: #a995ff; --local-soft: #262043;
+  --good: #6fd38e; --good-soft: #15301f; --warn: #f2b45a; --warn-soft: #36280f; --bad: #ff8a80; --bad-soft: #3a1a18;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body);
+  font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 64px;
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 48px; }
+@media (max-width: 900px) { .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; } nav.toc { display: none; } }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; padding-top: 40px; font-size: 13.5px; }
+nav.toc p { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .08em; font-size: 11.5px; color: var(--muted); margin: 0 0 10px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: s; }
+nav.toc a { display: block; padding: 5px 10px; border-radius: 6px; color: var(--muted); text-decoration: none; border-left: 2px solid transparent; }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--fg); background: var(--sunk); border-left-color: var(--accent); outline: none; }
+main { min-width: 0; }
+header.hero { padding: 48px 0 28px; border-bottom: 1px solid var(--line); }
+.eyebrow { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .1em; font-size: 12px; color: var(--accent); font-weight: 600; margin: 0 0 10px; }
+h1 { font-family: var(--font-display); font-size: clamp(30px, 5vw, 44px); line-height: 1.1; margin: 0 0 16px; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--font-display); font-size: clamp(23px, 3.2vw, 30px); line-height: 1.2; margin: 0 0 10px; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-size: 18px; margin: 28px 0 10px; }
+p { margin: 0 0 14px; max-width: 70ch; }
+.lead { font-size: 18.5px; color: var(--fg); max-width: 66ch; }
+.meta { font-size: 13.5px; color: var(--muted); }
+section { padding: 44px 0 8px; border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+.takeaway { font-size: 17.5px; font-weight: 500; max-width: 66ch; }
+.secnum { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); margin: 0 0 6px; }
+code, .mono { font-family: var(--font-mono); font-size: .88em; }
+code { background: var(--sunk); padding: 1px 6px; border-radius: 4px; overflow-wrap: anywhere; }
+a { color: var(--accent); }
+strong { font-weight: 600; }
+
+/* tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 24px 0 8px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 4px; align-content: start; }
+.tile .big { font-family: var(--font-display); font-size: 30px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tile .lbl { font-size: 14px; color: var(--muted); line-height: 1.45; }
+.tile.warn .big { color: var(--warn); }
+.tile.bad .big { color: var(--bad); }
+.tile.good .big { color: var(--good); }
+.tile.acc .big { color: var(--accent); }
+
+/* tags */
+.tag { display: inline-block; font-family: var(--font-mono); font-size: 11.5px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; vertical-align: 1px; }
+.tag.m { color: var(--good); border-color: var(--good); }
+.tag.i { color: var(--warn); border-color: var(--warn); }
+.tag.v { color: var(--local); border-color: var(--local); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13.5px; color: var(--muted); margin: 18px 0 0; }
+
+/* flow diagram */
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 24px 0 8px; align-items: stretch; }
+.node { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; position: relative; display: grid; gap: 4px; align-content: start; }
+.node .who { font-family: var(--font-display); font-weight: 600; font-size: 15.5px; }
+.node .what { font-size: 13.5px; color: var(--muted); line-height: 1.45; }
+.node.claude { border-top: 3px solid var(--accent); }
+.node.local { border-top: 3px solid var(--local); background: var(--local-soft); }
+.node.you { border-top: 3px solid var(--fg); }
+.arrow { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 20px; }
+.flowrow { display: grid; grid-template-columns: 1fr 28px 1fr 28px 1fr 28px 1fr; align-items: stretch; margin: 24px 0 6px; }
+.loopnote { font-size: 13.5px; color: var(--muted); margin: 6px 0 0; }
+.loopnote span { color: var(--local); font-weight: 600; }
+@media (max-width: 640px) {
+  .flowrow { grid-template-columns: minmax(0, 1fr); }
+  .flowrow .arrow { transform: rotate(90deg); height: 24px; }
+}
+
+/* bars */
+.chart { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin: 20px 0 8px; }
+.chart h4 { font-family: var(--font-display); font-size: 15px; margin: 0 0 4px; }
+.chart .sub { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+.bar { display: grid; grid-template-columns: minmax(110px, 34%) minmax(0, 1fr); gap: 10px; align-items: center; margin: 8px 0; font-size: 13.5px; }
+.bar .name { line-height: 1.3; }
+.bar .name small { display: block; color: var(--muted); font-size: 12px; }
+.bar .track { position: relative; height: 22px; background: var(--sunk); border-radius: 5px; }
+.fill { position: absolute; inset: 0 auto 0 0; border-radius: 5px; background: var(--accent); }
+.fill.local { background: var(--local); }
+.fill.ghost { background: transparent; border: 1.5px dashed var(--muted); }
+.fill.bad { background: var(--bad); }
+.fill.good { background: var(--good); }
+.fill.warn { background: var(--warn); }
+.val { position: absolute; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 12px; font-variant-numeric: tabular-nums; color: var(--fg); white-space: nowrap; }
+.axis { display: grid; grid-template-columns: minmax(110px, 34%) minmax(0, 1fr); gap: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-top: 6px; }
+.axis .ticks { display: flex; justify-content: space-between; }
+.pair { display: grid; gap: 4px; }
+
+/* memory stack */
+.stack { display: flex; height: 40px; border-radius: 7px; overflow: hidden; border: 1px solid var(--line); margin: 10px 0 6px; }
+.stack > div { display: flex; align-items: center; justify-content: center; font-size: 12px; font-family: var(--font-mono); color: var(--fg); min-width: 0; overflow: hidden; white-space: nowrap; padding: 0 4px; }
+.s-model { background: var(--local-soft); border-right: 1px solid var(--line); }
+.s-kv { background: var(--local); color: var(--bg) !important; }
+.s-docker { background: var(--accent-soft); border-right: 1px solid var(--line); }
+.s-free { background: var(--sunk); border-right: 1px solid var(--line); }
+.s-os { background: var(--warn-soft); }
+.stack-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); }
+.sw { display: inline-block; width: 11px; height: 11px; border-radius: 3px; vertical-align: -1px; margin-right: 6px; border: 1px solid var(--line); }
+
+/* tables */
+.tablewrap { overflow-x: auto; margin: 18px 0 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 560px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; font-size: 13px; color: var(--muted); background: var(--sunk); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+.pill.pri { background: var(--good-soft); color: var(--good); }
+.pill.alt { background: var(--accent-soft); color: var(--accent); }
+.pill.cau { background: var(--warn-soft); color: var(--warn); }
+.pill.no { background: var(--bad-soft); color: var(--bad); }
+
+/* heat table */
+.heat td.h { text-align: center; font-family: var(--font-mono); font-weight: 500; }
+.h0 { background: var(--bad-soft); color: var(--bad); }
+.h1 { background: var(--warn-soft); color: var(--warn); }
+.h2 { background: var(--good-soft); color: var(--good); }
+
+/* callouts */
+.callout { border: 1px solid var(--line); border-left: 4px solid var(--accent); background: var(--surface); border-radius: 8px; padding: 14px 16px; margin: 18px 0; max-width: 72ch; }
+.callout.warn { border-left-color: var(--warn); }
+.callout.bad { border-left-color: var(--bad); }
+.callout.local { border-left-color: var(--local); }
+.callout p:last-child { margin-bottom: 0; }
+.callout .h { font-family: var(--font-display); font-weight: 600; display: block; margin-bottom: 4px; }
+
+/* lists */
+ul.clean { margin: 10px 0 14px; padding-left: 20px; max-width: 70ch; }
+ul.clean li { margin: 6px 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 18px 0 8px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; }
+.card h4 { font-family: var(--font-display); font-size: 16px; margin: 0 0 6px; }
+.card p, .card li { font-size: 14.5px; }
+.card ul { padding-left: 18px; margin: 6px 0 0; }
+.card.stop { border-top: 3px solid var(--bad); }
+.card.goal { border-top: 3px solid var(--good); }
+.card.track { border-top: 3px solid var(--accent); }
+
+/* model cards */
+.models { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 18px 0 8px; }
+.model { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 8px; align-content: start; }
+.model.pick { border: 2px solid var(--local); }
+.model h4 { font-family: var(--font-display); font-size: 16px; margin: 0; }
+.model dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; margin: 0; font-size: 13.5px; }
+.model dt { color: var(--muted); }
+.model dd { margin: 0; font-family: var(--font-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.model p { font-size: 13.5px; margin: 0; color: var(--muted); }
+
+/* stages */
+.stages { display: grid; gap: 0; margin: 20px 0 8px; counter-reset: st; }
+.stage { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; position: relative; padding-bottom: 20px; }
+.stage::before { content: ""; position: absolute; left: 21px; top: 44px; bottom: 0; width: 2px; background: var(--line); }
+.stage:last-child::before { display: none; }
+.stage .dot { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 18px; background: var(--surface); border: 2px solid var(--accent); color: var(--accent); }
+.stage .body { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.stage h4 { font-family: var(--font-display); font-size: 17px; margin: 0 0 2px; }
+.stage .when { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
+.stage dl { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 6px 12px; margin: 0; font-size: 14px; }
+.stage dt { font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: .05em; padding-top: 2px; }
+.stage dt.p { color: var(--good); }
+.stage dt.k { color: var(--bad); }
+.stage dt.g { color: var(--accent); }
+.stage dd { margin: 0; }
+@media (max-width: 520px) { .stage dl { grid-template-columns: minmax(0, 1fr); gap: 2px; } .stage dd { margin-bottom: 8px; } }
+
+/* glossary */
+.gloss { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 16px 0 8px; }
+.term { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+.term b { font-family: var(--font-display); display: block; font-size: 15px; margin-bottom: 2px; }
+.term span { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+details { margin: 14px 0 20px; max-width: 72ch; }
+summary { cursor: pointer; font-family: var(--font-display); font-weight: 600; font-size: 14.5px; color: var(--accent); padding: 8px 0; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "+ "; font-family: var(--font-mono); }
+details[open] summary::before { content: "− "; }
+summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+details > div { border-left: 2px solid var(--line); padding: 4px 0 4px 16px; font-size: 15px; }
+footer { padding: 32px 0 0; font-size: 13.5px; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+.sources { columns: 2 280px; column-gap: 28px; font-size: 13.5px; margin: 12px 0; }
+.sources h4 { font-family: var(--font-display); font-size: 14px; margin: 14px 0 6px; break-after: avoid; }
+.sources ul { list-style: none; padding: 0; margin: 0 0 8px; }
+.sources li { margin: 4px 0; break-inside: avoid; overflow-wrap: anywhere; }
+.src { font-size: 13px; color: var(--muted); }
+.tag.px { color: var(--fg); border-color: var(--fg); }
+.formula { font-family: var(--font-mono); font-size: 13.5px; background: var(--sunk); border-radius: 8px; padding: 12px 14px; margin: 10px 0; overflow-x: auto; white-space: nowrap; }
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Sections">
+  <p>Sections</p>
+  <ol>
+    <li><a href="#bottom-line">Bottom line</a></li>
+    <li><a href="#terms">Terms in 1 minute</a></li>
+    <li><a href="#workflow">What changes</a></li>
+    <li><a href="#economics">Does it pay?</a></li>
+    <li><a href="#models">Which model</a></li>
+    <li><a href="#speed">Speed on your Mac</a></li>
+    <li><a href="#runtimes">Runtimes</a></li>
+    <li><a href="#harness">The coding agent</a></li>
+    <li><a href="#evaluation">How to judge it</a></li>
+    <li><a href="#stages">Five stages</a></li>
+    <li><a href="#setup">Recommended setup</a></li>
+    <li><a href="#leadership">Leadership lessons</a></li>
+    <li><a href="#gaps">Gaps and open questions</a></li>
+    <li><a href="#sources">All sources</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <p class="eyebrow">Research report · visual edition</p>
+  <h1>Can a local model build Gravity's issues while Claude plans and reviews?</h1>
+  <p class="lead">Yes, it's feasible for small, well-specified, non-UI issues. Whether it <em>saves</em> Claude usage depends on one number nobody has measured: how much of your usage goes to building versus reviewing.</p>
+  <p class="meta">Report date 2026-11-11 · built from five research notes (2026-11-10) and the Gravity repo at <code>d43652c</code> · no model was downloaded or run. Source: <code>research/reports/Local coding model pilot.md</code></p>
+  <div class="legend" aria-label="Evidence labels">
+    <span><span class="tag m">measured</span> a controlled test or telemetry</span>
+    <span><span class="tag v">vendor</span> the model maker's own number</span>
+    <span><span class="tag">third party</span> someone else ran it</span>
+    <span><span class="tag">anecdote</span> one person's run</span>
+    <span><span class="tag i">inference</span> reasoning, not measured</span>
+    <span><span class="tag px">Perplexity</span> from Perplexity's independent report (2026-11-10): weaker on models and numbers, stronger on method</span>
+  </div>
+</header>
+
+<section id="bottom-line">
+  <p class="secnum">01</p>
+  <h2>The bottom line</h2>
+  <p class="takeaway">The question has shifted from "is a local model good enough to build?" to "is building a big enough share of Claude usage to be worth taking away?"</p>
+  <div class="tiles">
+    <div class="tile acc"><span class="big">64.4%</span><span class="lbl">SWE-bench Verified for the best model that fits your Mac, run inside Claude Code. About late-2025 Claude level.</span></div>
+    <div class="tile warn"><span class="big">1–3 min</span><span class="lbl">Expected time for each fresh first turn, while the model reads a 31K+ token prompt.</span></div>
+    <div class="tile"><span class="big">2 rounds</span><span class="lbl">Median review rounds Opus-built Gravity PRs already need. Only about 6 of 61 passed round 1.</span></div>
+    <div class="tile bad"><span class="big">30 days</span><span class="lbl">Claude Code deletes local session logs after this. The Opus baseline is disappearing day by day.</span></div>
+  </div>
+  <div class="callout">
+    <span class="h">Recommended setup, in one line</span>
+    <p><strong>Qwen3.6-35B-A3B</strong> or its Claude Code-tuned fine-tune <strong>KAT-Coder-V2.5</strong> (Stage 1 picks one) at 4-bit, served by <strong>llama.cpp</strong> on the Mac, driven by a <strong>separately launched Claude Code</strong> pointed at it. Your CLAUDE.md, <code>/build-issue</code> and deny rules carry over unchanged. Claude keeps planning and reviewing on your subscription, in separate sessions, with no router.</p>
+  </div>
+</section>
+
+<section id="terms">
+  <p class="secnum">02</p>
+  <h2>Terms in one minute</h2>
+  <p class="takeaway">Eight words carry most of this report. Skim these once and the rest reads easily.</p>
+  <div class="gloss">
+    <div class="term"><b>Open-weight model</b><span>A model whose files you can download and run yourself, like Qwen. Claude is not one.</span></div>
+    <div class="term"><b>MoE (mixture of experts)</b><span>A big model that only uses a small slice per word. "35B-A3B" = 35 billion parameters, 3 billion active. Fast on a Mac.</span></div>
+    <div class="term"><b>Quantization (4-bit, Q4)</b><span>Compressing the model's numbers so it fits in memory. 4-bit costs little quality; 2-bit starts to hurt.</span></div>
+    <div class="term"><b>Prefill vs decode</b><span>Prefill = reading the prompt. Decode = writing the answer. On an M1 Max, prefill is the slow part.</span></div>
+    <div class="term"><b>Prompt cache</b><span>Reusing the already-read start of the prompt on the next turn. Turns minutes into seconds when it works.</span></div>
+    <div class="term"><b>Runtime</b><span>The program that loads the model and serves it to other programs: llama.cpp, LM Studio, Ollama, MLX.</span></div>
+    <div class="term"><b>Harness</b><span>The coding agent that drives the model: reads files, runs commands, opens PRs. Claude Code is one.</span></div>
+    <div class="term"><b><i>B</i>/<i>R</i></b><span>Claude usage of one build session (<i>B</i>) divided by one review round (<i>R</i>). The number that decides the pilot.</span></div>
+  </div>
+</section>
+
+<section id="workflow">
+  <p class="secnum">03</p>
+  <h2>What changes in the workflow</h2>
+  <p class="takeaway">Only the builder changes. You already run the textbook pattern: frontier model plans and reviews, a worker builds.</p>
+  <div class="flowrow" role="img" aria-label="Claude plans, local model builds, Claude reviews, you merge. Review findings loop back to the local builder.">
+    <div class="node claude"><span class="who">Claude plans</span><span class="what">Writes the issue. At plan level "none" the issue text is the plan.</span></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="node local"><span class="who">Local model builds</span><span class="what">Qwen on your Mac runs <code>/build-issue</code> and opens the PR.</span></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="node claude"><span class="who">Claude reviews</span><span class="what">Fresh session, <code>/review-pr</code>, same rules as today.</span></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="node you"><span class="who">You merge</span><span class="what">By hand, as today.</span></div>
+  </div>
+  <p class="loopnote"><span>↺ Loop:</span> findings go back to the local builder to fix, then a fresh Claude review. Every extra loop is paid in Claude usage.</p>
+
+  <h3>How far local models came this year</h3>
+  <div class="chart">
+    <h4>One developer's small refactor test, local models</h4>
+    <p class="sub">Passes out of 10. Frontier models scored 8–10 on the same test. <span class="tag m">measured</span> small eval, M4 Pro 48 GB</p>
+    <div class="bar"><span class="name">December 2025<small>best local model</small></span><div class="track"><div class="fill local" style="width:0%"></div><span class="val" style="left:6px">0 / 10</span></div></div>
+    <div class="bar"><span class="name">April 2026<small>Qwen 3.5 35B-A3B, Gemma 4 26B</small></span><div class="track"><div class="fill local" style="width:90%"></div><span class="val" style="left:calc(90% + 6px)">≈9 / 10</span></div></div>
+    <div class="axis"><span></span><div class="ticks"><span>0</span><span>5</span><span>10</span></div></div>
+  </div>
+  <p>The same author still calls them fit for small tasks only, needing steering "like Sonnet 4-era Claude Code". The closest report to your exact Mac (M1 Max 64 GB, January 2026) found Claude Code with a local model about <strong>68x slower</strong> than the cloud (1 h 22 min vs 1 min 13 s), with similar output quality. That was before the prompt-cache fix below, so it's probably a worst case. <span class="tag">anecdote</span></p>
+
+  <div class="callout bad">
+    <span class="h">Failure modes that keep coming up</span>
+    <ul class="clean">
+      <li>No tool calls, or the call printed as text instead of run.</li>
+      <li>Wrong tool arguments, and retry loops on the same failing call.</li>
+      <li>Reasoning output eating the token budget.</li>
+      <li><strong>Saying "done" when it isn't.</strong> One model wrote a helper, never wired it in, and reported success.</li>
+      <li>Gravity-specific risk nobody measured: forgetting a 17 KB rulebook, or deciding a design question instead of flagging it. <span class="tag i">inference</span></li>
+    </ul>
+  </div>
+
+  <h3>Five more failure modes <span class="tag px">Perplexity</span></h3>
+  <ul class="clean">
+    <li><strong>Procedure compliance without task completion:</strong> every checklist heading appears in the PR, but important behaviour is missing.</li>
+    <li><strong>Repository over-reading:</strong> context fills fast while real progress stalls.</li>
+    <li><strong>Review amplification:</strong> cheap local output creates expensive Claude diagnosis and repeated review.</li>
+    <li><strong>Human subsidy:</strong> you quietly clarify, debug or repair the builder, and don't count that work.</li>
+    <li><strong>Policy drift:</strong> the local arm quietly gets shorter rules, simpler issues, more hints, or a more forgiving reviewer.</li>
+  </ul>
+  <p>Leadership point: the adoption decision is about a controlled production system, not whether someone can make a model produce an impressive demo.</p>
+  <p><strong>Evidence for the advisor shape <span class="tag px">Perplexity</span>.</strong> Not part of iteration 1, which only swaps the builder; this shape is the escalation idea under Iteration 2 in section 10. Anthropic's advisor strategy (April 8, 2026): Sonnet with an Opus advisor improved SWE-bench Multilingual by 2.7 points while cutting task cost by 11.9%. A stronger model can sometimes reduce total work by guiding a cheaper one. <a href="https://claude.com/resources/articles/the-advisor-strategy" target="_blank" rel="noopener">Anthropic</a></p>
+<details><summary>Read the detail: patterns and failure evidence</summary><div>
+<p><strong>The pattern is established.</strong> Aider's 2024 architect/editor benchmark: o1-preview as architect with DeepSeek as editor scored <strong>85.0% vs 79.7%</strong> for o1-preview alone <span class="tag m">measured</span> Sept 2024, outdated. Those were single-file edits with hosted models, so they say little about Gravity's multi-step builds. <span class="tag i">inference</span> <a href="https://aider.chat/2024/09/26/architect.html" target="_blank" rel="noopener">Aider</a></p>
+<p><strong>Two routing shapes (Sept 2026).</strong> Pattern 1: a frontier model plans and reviews while cheaper workers edit. Pattern 2: a cheap model drives the loop and a frontier "advisor" checks in after the plan, after repeated test failures and before the PR. Your setup is already Pattern 1 with a human gate; Pattern 2 is the natural second step because <code>/build-issue</code> already has those checkpoints. <span class="tag">opinion</span> <a href="https://arize.com/blog/how-i-cut-coding-agent-costs-with-model-harness-routing/" target="_blank" rel="noopener">Arize, 2026-09-08</a></p>
+<p><strong>Local progress.</strong> 0/10 in December 2025, about 9/10 in April 2026 for Qwen 3.5 35B-A3B and Gemma 4 26B-A4B, vs 80–100% for frontier models. The author says Gemma 4 still "does stupid shit all the time" and is not "a broadly competent partner like Opus 4.6". <a href="https://www.simonpcouch.com/blog/2025-12-04-local-agents" target="_blank" rel="noopener">Couch, Dec 2025</a> · <a href="https://simonpcouch.com/blog/2026-04-16-local-agents-2/" target="_blank" rel="noopener">Couch, Apr 2026</a></p>
+<p><strong>Your hardware.</strong> Claude Code with GLM-4.7-Flash via Ollama on an M1 Max 64 GB (January 2026): each tool call about 2 minutes vs 2–3 seconds in the cloud; output "nearly indistinguishable". 2 minutes per call fits a model re-reading the whole prompt every turn. <a href="https://paddo.dev/blog/claude-code-local-ollama/" target="_blank" rel="noopener">paddo.dev</a></p>
+<p><strong>"Done" when not done.</strong> Qwen 3 14B wrote the helper, never wired it in, and reported done. <a href="https://www.simonpcouch.com/blog/2025-12-04-local-agents" target="_blank" rel="noopener">Couch, Dec 2025</a> · <a href="https://dev.to/kuroko1t/what-happens-when-local-llms-fail-at-tool-calling-testing-7-models-with-a-rust-coding-agent-cep" target="_blank" rel="noopener">kuroko1t, 7 models tool-calling test</a></p>
+</div></details>
+</section>
+
+<section id="economics">
+  <p class="secnum">04</p>
+  <h2>Does it pay? The review bill decides</h2>
+  <p class="takeaway">Taking the build away from Claude saves <i>B</i>. Every extra review round a weaker builder causes costs <i>R</i>. If reviews already cost as much as builds, even a perfect local builder saves only a third.</p>
+  <div class="callout">
+    <span class="h">The arithmetic, in words</span>
+    <p>A small PR today costs about one build plus two review rounds: <code>B + 2R</code>. <strong><i>B</i> is all the builder-side Claude usage for the issue</strong>: the first build plus every fix push between review rounds, and any decision PR the builder drafts. With a local builder all of that moves to the Mac. Planning is a Claude session in both setups, so it cancels out. With a local builder, Claude pays only the reviews, plus Δ extra rounds the weaker builder causes. Share saved = <code>(B − Δ·R) / (B + 2R)</code>.</p>
+  </div>
+  <div class="tablewrap">
+    <table class="heat">
+      <thead><tr><th><i>B</i>/<i>R</i> (measured: about 4)</th><th>Saved if Δ = 0<br><small>perfect builder</small></th><th>Δ = 0.5<br><small>half a round extra</small></th><th>Δ = 1<br><small>one round extra</small></th><th>Largest Δ that still saves 20%<br><small>your pass floor</small></th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong> · build costs one review</td><td class="h h1">33%</td><td class="h h0">17%</td><td class="h h0">0%</td><td class="num">0.4</td></tr>
+        <tr><td><strong>2</strong> · build costs two reviews</td><td class="h h2">50%</td><td class="h h1">38%</td><td class="h h1">25%</td><td class="num">1.2</td></tr>
+        <tr><td><strong>4</strong> · build costs four reviews</td><td class="h h2">67%</td><td class="h h2">58%</td><td class="h h2">50%</td><td class="num">2.8</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="meta">Illustrative ratios, not measurements. <span class="tag i">inference</span></p>
+  <div class="callout">
+    <span class="h">First measurement (2026-11-13)</span>
+    <p>From your Claude Code logs, 2026-10-03 to 2026-11-12: 333 Gravity sessions, of which 78 were builds, 231 reviews and 24 other. 69 issues have both a build and a review. Per issue, the median build costs about <strong>4 review rounds</strong> (middle half 2.9 to 6.7). Builder-side usage is <strong>about two-thirds</strong> of build plus review usage, and the share was the same in October and November. So the "4" row applies: a perfect local builder would save up to about 66%. At your 20% floor, local builds could add up to about 1.4 times today's review usage (about 4.5 extra review rounds per issue) and still pass. The kill check (<i>B</i>/<i>R</i> below about 0.5) passes by a wide margin.</p>
+    <p><strong>Limits:</strong> until 2026-11-12, planning ran inside the build session, so this <i>B</i> includes the plan, which stays with Claude under the plan/build split. If planning were a third of <i>B</i>, the ceiling would fall to about 44%, still well above the floor. The counts are in token units weighted by price ratio, not by model, and 323 of the 333 sessions used Opus. 12 sessions were tagged from free-text prompts (low confidence). These sessions ran under the old rules; the baseline that counts is milestone 2 under the frozen rules. Files: <code>research/pilot/usage-baseline/sessions-tagged.csv</code> and <code>issues-br.csv</code>.</p>
+  </div>
+  <p>So a success threshold written <em>before</em> measuring <i>B</i>/<i>R</i> is a guess. <strong>Ruled</strong> <span class="tag">your call, 2026-11-12</span>: the pass floor is <strong>20% less Claude usage per issue</strong> (one day in five freed for another project); the final value is set at the end of Stage 0, once <i>B</i>/<i>R</i> is measured and before any build runs. The longer-term goal is 3x the work, which later iterations can work towards.</p>
+  <p>No source has measured savings from offloading builds to a local model. The best routing case fell from about $100 to $15–20 per run, but with cheap hosted models and no quality check. Its own warning: "a cheaper model can produce a more expensive run if it uses more tokens, retries often, or needs heavy repair." <span class="tag">anecdote</span></p>
+
+  <h3>A fuller savings equation <span class="tag px">Perplexity</span></h3>
+  <p>Our report uses build vs review. Perplexity adds the other Claude costs a local builder can create:</p>
+  <div class="formula">Saved = B − (R<sub>local</sub> − R<sub>today</sub>) − A − F − E</div>
+  <ul class="clean">
+    <li><strong>B</strong>: Claude's build usage today (removed). <strong>R</strong>: review usage, today vs with local builds.</li>
+    <li><strong>A</strong>: extra Claude advice or diagnosis. <strong>F</strong>: Claude rescue (Claude writing the fix). <strong>E</strong>: evaluation and maintenance overhead.</li>
+  </ul>
+  <p>Track three outcomes separately, because a local builder can improve one and worsen another: <strong>cash</strong> (stays within budget), <strong>capacity</strong> (less Claude usage per accepted issue) and <strong>productivity</strong> (more accepted work, or less of your attention). The final test: can another project now progress inside the same limits, without slowing Gravity?</p>
+  <p><strong>Iterations can outweigh model tier:</strong> a vendor-curated customer evaluation of 118 app builds averaged 3.6 iterations for Sonnet 5.5 vs 7.7 for Opus 5 (experiment date not disclosed). <span class="tag v">vendor</span></p>
+  <details><summary>Read the detail: how to measure B and R</summary><div>
+    <ul class="clean">
+      <li><strong><code>/usage</code></strong> shows plan bars and a 24-hour or 7-day breakdown by skill, subagent and MCP server. On Max, its dollar figures are estimates, not bills.</li>
+      <li><strong>OpenTelemetry export</strong> (<code>CLAUDE_CODE_ENABLE_TELEMETRY=1</code>) emits token usage per session, and can tag each session with role, issue and round, e.g. <code>role=review,issue=581,round=1</code>.</li>
+      <li><strong>ccusage</strong> reads the local session logs and reports per session. It has no project filter, and builder and reviewer both start in the main checkout, so sessions must be mapped to roles by id, date and first prompt.</li>
+      <li><strong>Two traps.</strong> Logs older than 30 days are deleted by default, so export recent Opus builds (#575, #608, #537, #541) now. And <code>npx ccusage</code> on the host is what RULES 10 forbids in a repo session: run it outside any Gravity session with your OK, in a throwaway container with <code>~/.claude</code> mounted read-only, or rely on telemetry only.</li>
+      <li>Count every Claude cost a local build causes (review rounds, rescue sessions, decision PRs, your Claude-assisted triage), and your own minutes. A drop in Claude usage that raises your minutes per PR is not a win.</li>
+    <li><i>R</i> includes <code>/code-review high</code> and any subagents it forks (<a href="https://github.com/yamimaio/gravity/blob/main/.claude/commands/review-pr.md" target="_blank" rel="noopener">review-pr.md:14-20</a>).</li>
+      <li>The local builder's own sessions also land in <code>~/.claude/projects</code>, and ccusage may price them at Claude rates, so filter them out by model name.</li>
+      <li>Two non-Claude costs: the laptop is occupied (model, builder stack and any reviewer stack share 64 GB), and your attention is spent (rulings, comments, fixes after an AI <code>APPROVED</code>, as on <a href="https://github.com/yamimaio/gravity/pull/323" target="_blank" rel="noopener">PR #323</a>).</li>
+      <li>Sources: <a href="https://code.claude.com/docs/en/costs.md" target="_blank" rel="noopener">Claude Code docs, costs</a> · <a href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">Claude Code docs, monitoring</a> · <a href="https://www.mintlify.com/ryoppippi/ccusage/api/commands/session" target="_blank" rel="noopener">ccusage session docs</a> · <a href="https://github.com/yamimaio/gravity/blob/main/CLAUDE.md" target="_blank" rel="noopener">CLAUDE.md:87 (RULES 10)</a> · <a href="https://arize.com/blog/how-i-cut-coding-agent-costs-with-model-harness-routing/" target="_blank" rel="noopener">Arize</a></li>
+</ul>
+  </div></details>
+  <details><summary>Read the detail: measuring usage cleanly, step by step (Perplexity)</summary><div>
+    <ol class="clean">
+      <li>Give each measured phase a run ID and role.</li>
+      <li>Record the exact model and effort setting.</li>
+      <li>Record the account usage state and reset times.</li>
+      <li>Avoid unrelated Claude work during the window.</li>
+      <li>Run the phase.</li>
+      <li>Capture session data and the new account state.</li>
+      <li>Reject comparisons that cross a usage reset.</li>
+      <li>Note any background or concurrent usage that could contaminate it.</li>
+    </ol>
+    <p>If the usage display is too coarse for one short session, group several same-role sessions together and keep token counts per run.</p>
+    <p><strong>Accounting rules:</strong> count failed local attempts even when Claude finishes the issue; count extra planning or diagnosis; show results with and without setup overhead; report totals as well as medians (a few expensive rescues can erase many small wins); never compare an easy local issue set with a harder historical Claude set; watch whether review becomes the new bottleneck.</p>
+    <p>API-equivalent prices for reference (not your bill): Sonnet 5.5 $2 / $10 and Opus 5.5 $4 / $20 per million input / output tokens. Don't turn an API-equivalent reduction straight into "the same % of Max capacity freed".</p>
+  </div></details>
+</section>
+
+<section id="models">
+  <p class="secnum">05</p>
+  <h2>Which model: Mac-sized models trail Claude by about a generation</h2>
+  <p class="takeaway">The open models that rival Claude are 230B to 2.8T parameters and don't fit 64 GB. What fits is the 30–40B MoE class, and the one that matters most is Qwen3.6-35B-A3B.</p>
+
+  <div class="chart">
+    <h4>Same model, different harness: why vendor numbers are upper bounds</h4>
+    <p class="sub">SWE-bench Verified, % of real GitHub issues solved. Solid = a run you can trust more for your case; dashed = the vendor's own setup.</p>
+    <div class="pair">
+      <div class="bar"><span class="name">Qwen3.6-35B-A3B<small>Qwen's own scaffold · vendor</small></span><div class="track"><div class="fill ghost" style="width:73.4%"></div><span class="val" style="left:calc(73.4% + 6px)">73.4</span></div></div>
+      <div class="bar"><span class="name">Qwen3.6-35B-A3B<small>inside Claude Code · third party</small></span><div class="track"><div class="fill local" style="width:64.4%"></div><span class="val" style="left:calc(64.4% + 6px)">64.4</span></div></div>
+    </div>
+    <div class="pair" style="margin-top:10px">
+      <div class="bar"><span class="name">Devstral Small 2<small>vendor claim</small></span><div class="track"><div class="fill ghost" style="width:68%"></div><span class="val" style="left:calc(68% + 6px)">68.0</span></div></div>
+      <div class="bar"><span class="name">Devstral Small 2<small>official board</small></span><div class="track"><div class="fill" style="width:56.4%; background: var(--muted)"></div><span class="val" style="left:calc(56.4% + 6px)">56.4</span></div></div>
+    </div>
+    <div class="pair" style="margin-top:10px">
+      <div class="bar"><span class="name">Claude Sonnet 4.5<small>official bash-only board</small></span><div class="track"><div class="fill" style="width:71.4%"></div><span class="val" style="left:calc(71.4% + 6px)">71.4</span></div></div>
+      <div class="bar"><span class="name">Claude Opus 4.5<small>official bash-only board</small></span><div class="track"><div class="fill" style="width:76.8%"></div><span class="val" style="left:calc(76.8% + 6px)">76.8</span></div></div>
+    </div>
+    <div class="axis"><span></span><div class="ticks"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div></div>
+  </div>
+  <p>The realistic expectation: a builder somewhat below late-2025 Claude, in your exact harness. <span class="tag i">inference</span> On the hardest independent board (Terminal-Bench 4.1, 2026-11-10), <strong>Opus 5.5 scores 65.8%, Sonnet 5.5 63.9%</strong>, and the best open model of any size 41.2%. No Mac-sized model has been run on it. Of 104 SWE-bench Verified entries listed by one aggregator, none is independently verified. The only comparison that settles anything is your own.</p>
+
+  <h3>The models that fit</h3>
+  <div class="models">
+    <div class="model pick">
+      <h4>Qwen3.6-35B-A3B <span class="pill pri">co-candidate</span></h4>
+      <dl>
+        <dt>Size Q4</dt><dd>≈21 GB</dd>
+        <dt>Size Q8</dt><dd>≈39 GB (peaks 42–44)</dd>
+        <dt>Decode</dt><dd>54–68 tok/s</dd>
+        <dt>Prefill</dt><dd>636–892 tok/s*</dd>
+        <dt>Context 64K</dt><dd>≈1.3 GB extra</dd>
+      </dl>
+      <p>April 2026, Apache-2.0. Fast and light on memory. Many reports of loops and tool-call glitches, mostly from templates and settings, not the weights.</p>
+    </div>
+    <div class="model pick">
+      <h4>KAT-Coder-V2.5 <span class="pill pri">co-candidate</span></h4>
+      <dl>
+        <dt>Size Q4</dt><dd>21.4 GB</dd>
+        <dt>Verified</dt><dd>69.4 in Claude Code</dd>
+      </dl>
+      <p>A Qwen3.6 fine-tune tuned for Claude Code. Licence: Apache-2.0 on the <a href="https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev" target="_blank" rel="noopener">Hugging Face card</a> for the open-weight release, named KAT-Coder-V2.5-Dev (text-only, read 2026-11-12). Many GGUF builds exist. Its 69.4 vs Qwen's 64.4 are both Kwaipilot's own runs, and the open "-Dev" weights only "largely follow" the benchmarked recipe.</p>
+    </div>
+    <div class="model">
+      <h4>Qwen3.8-27B (dense) <span class="pill cau">slow</span></h4>
+      <dl>
+        <dt>Decode</dt><dd>11.8–19 tok/s</dd>
+        <dt>Prefill</dt><dd>107–134 tok/s*</dd>
+        <dt>Pro score</dt><dd>61.7 <span class="tag v">vendor</span></dd>
+      </dl>
+      <p>Best small-model SWE-bench Pro score, but a 30K cold prompt takes ≈4 min vs ≈35 s.</p>
+    </div>
+    <div class="model">
+      <h4>Qwen3-Coder-30B-A3B <span class="pill alt">safe fallback</span></h4>
+      <dl><dt>Download</dt><dd>≈19 GB</dd></dl>
+      <p>The 2025 model Perplexity picked. Older, well known, and a reasonable fallback if Qwen3.6 misbehaves.</p>
+    </div>
+    <div class="model">
+      <h4>Others considered <span class="pill no">not now</span></h4>
+      <p><strong>Qwen3-Coder-Next</strong> fits only at 3-bit. <strong>Recursive Flint</strong> is 3 weeks old, vendor scores only, template bug, slows to ≈9 tok/s near 115K. <strong>North Mini Code</strong> is very verbose (≈3x the median output).</p>
+    </div>
+  </div>
+  <p class="meta">* Prefill measured on a 512-token prompt, M1 Max 32 GB, Sept 2026. Long-prompt figures are inferred.</p>
+
+  <div class="callout local">
+    <span class="h">Quantization isn't the risk. Tool-calling plumbing is.</span>
+    <p>2026 studies find no clear loss in agentic coding at 4-bit. Loss starts near 2-bit. The real risk is templates, parsers and reasoning settings. Fixes on offer: the vendor's chat template, <code>preserve_thinking</code>, a reasoning budget, and Qwen's sampling settings (temp 0.6, top_p 0.95, top_k 20). Pin the runtime and template before blaming the model.</p>
+  </div>
+<h3>Full benchmark table</h3><p>The columns mix harnesses, benchmark versions and sources, so read it as an ordering, not as comparable scores.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Model</th><th>Fits 64 GB?</th><th>SWE-bench Verified</th><th>SWE-bench Pro</th><th>Terminal-Bench</th><th>Source, date</th></tr></thead>
+<tbody>
+<tr><td>Claude Opus 5.5</td><td>hosted</td><td class="num">–</td><td class="num">89.9</td><td class="num">65.76 (TB 4.1)</td><td>Pro mostly self-reported via BenchLM; TB 4.1 official board, 2026-11-10</td></tr>
+<tr><td>Claude Sonnet 5.5</td><td>hosted</td><td class="num">–</td><td class="num">81.3</td><td class="num">63.94 (TB 4.1)</td><td>vendor / official board, 2026-09 to 11</td></tr>
+<tr><td>GLM-5.3 (best open on TB 4.1)</td><td>no</td><td class="num">–</td><td class="num">–</td><td class="num">41.21 (TB 4.1)</td><td>official board, 2026-11-10</td></tr>
+<tr><td>Qwen3.6-35B-A3B</td><td>yes</td><td class="num">73.4 (Qwen scaffold); 64.4 (Claude Code)</td><td class="num">49.5 ("refined" Pro)</td><td class="num">51.5 (TB 2.0)</td><td>vendor, Apr 2026; 64.4 by Kwaipilot</td></tr>
+<tr><td>KAT-Coder-V2.5</td><td>yes</td><td class="num">69.4 (Claude Code)</td><td class="num">46.0</td><td class="num">–</td><td>vendor</td></tr>
+<tr><td>Recursive Flint v1.0</td><td>yes</td><td class="num">74.2</td><td>internal "v2" only</td><td class="num">54.9 (TB 2.1)</td><td>vendor only, Oct 2026</td></tr>
+<tr><td>Cohere North Mini Code</td><td>yes</td><td class="num">67.6</td><td class="num">40.2</td><td class="num">36.0 (TB 2.0)</td><td>vendor/mixed, Jun 2026</td></tr>
+<tr><td>Qwen3.8-27B (dense)</td><td>yes</td><td class="num">–</td><td class="num">61.7 (Claude Code)</td><td class="num">–</td><td>vendor, Aug 2026</td></tr>
+<tr><td>Qwen3-Coder-Next (80B / 3B active)</td><td>~3-bit only</td><td class="num">70.6</td><td class="num">44.3</td><td class="num">–</td><td>vendor, Feb 2026 (older)</td></tr>
+<tr><td>Devstral Small 2 (24B dense)</td><td>yes</td><td class="num">68.0 vendor / 56.4 official</td><td class="num">–</td><td class="num">–</td><td>Dec 2025 (older)</td></tr>
+</tbody></table></div>
+<p class="src">Sources: <a href="https://benchlm.ai/benchmarks/terminal-bench-2" target="_blank" rel="noopener">BenchLM Terminal-Bench</a> · <a href="https://benchlm.ai/coding" target="_blank" rel="noopener">BenchLM coding</a> · <a href="https://llm-stats.com/blog/research/claude-sonnet-5-5-launch" target="_blank" rel="noopener">llm-stats on Sonnet 5.5</a> · <a href="https://huggingface.co/Qwen/Qwen3.6-35B-A3B" target="_blank" rel="noopener">Qwen3.6 model card</a> · <a href="https://llmcheck.net/blog/best-local-llm-for-coding-mac/" target="_blank" rel="noopener">llmcheck, 2026-10-24</a> · <a href="https://www.orcarouter.ai/blog/flint-v1-0-vs-north-mini-code" target="_blank" rel="noopener">OrcaRouter</a> · <a href="https://www.sebastianraschka.com/blog/2026/north-mini-code-agentic-coding.html" target="_blank" rel="noopener">Raschka</a> · <a href="https://www.morphllm.com/best-open-source-coding-model-2026" target="_blank" rel="noopener">Morph</a> · <a href="https://www.benchleader.com/benchmarks/swe_bench_verified" target="_blank" rel="noopener">BenchLeader official bash-only board</a></p>
+
+<div class="callout">
+  <span class="h">How far to trust benchmarks <span class="tag px">Perplexity</span></span>
+  <p>Aider Polyglot is 225 exercises in six languages, and its final score can include a second attempt. The LiveCodeBench page it read covers problems from Aug 2024 to May 2025, so it's not a November 2026 result. A reported February 2026 audit found grading or spec problems in 59.4% of a 138-task SWE-bench Verified subset (that subset only, and the source is weak). <a href="https://aider.chat/docs/leaderboards/" target="_blank" rel="noopener">Aider leaderboard</a> · <a href="https://livecodebench.github.io/leaderboard" target="_blank" rel="noopener">LiveCodeBench</a> Rule of thumb: <strong>benchmarks for shortlisting, your own frozen issues for adoption.</strong></p>
+  <p>Perplexity's own model picks and table are left out: it never found Qwen3.6, and most of its table was empty.</p>
+</div>
+<details><summary>Read the detail: big models, Mac fit and quantization</summary><div>
+<ul class="clean">
+<li><strong>Too big for 64 GB:</strong> Kimi K3 (2.8T total, 104B active), DeepSeek V4 Pro (1.6T, 49B active), GLM-5.2 (744B, 40B active), MiniMax M3 (≈230B). Even GLM-5.3-Flash needs ≈160 GB at 4-bit. <a href="https://www.morphllm.com/best-open-source-coding-model-2026" target="_blank" rel="noopener">Morph</a> · <a href="https://aicybr.com/blog/glm-5-3-flash-local-deployment-guide" target="_blank" rel="noopener">AiCybr</a></li>
+<li><strong>Terminal-Bench versions don't compare:</strong> TB 4.1 is so hard that Opus 4.8 scores 23.6% on it, so a small model's TB 2.0 score of 51.5 predicts little. <span class="tag i">inference</span> <a href="https://benchlm.ai/benchmarks/terminal-bench-2" target="_blank" rel="noopener">BenchLM</a></li>
+<li><strong>Scaffold noise:</strong> of 104 SWE-bench Verified entries listed by llm-stats, none is independently verified. The official bash-only board's newest rows are from February 2026. <a href="https://llmcheck.net/blog/best-local-llm-for-coding-mac/" target="_blank" rel="noopener">llmcheck</a> · <a href="https://www.benchleader.com/benchmarks/swe_bench_verified" target="_blank" rel="noopener">BenchLeader</a></li>
+<li><strong>Qwen3.6 memory:</strong> ≈20.4 GB at GGUF Q4_K_M plus a 1.06 GB MTP head; ≈39 GB at Q8. Only 10 of its 40 layers keep a standard KV cache (2 KV heads, head dim 256), so 64K of context ≈1.3 GB at fp16 by my arithmetic. Older 30B-A3B models need several times more KV memory. <span class="tag i">inference</span></li>
+<li><strong>Speed comparison:</strong> on an M1 Max, Qwen3.8-27B measured 11.8–19 tok/s decode and 107–134 tok/s prefill vs 54–68 and 636–892 for Qwen3.6-35B-A3B (512-token prompt, M1 Max 32 GB, Sept 2026). <a href="https://bishal.io/blog/six-local-models-m1-max-llama-cpp-vs-mlx/" target="_blank" rel="noopener">bishal.io</a></li>
+<li><strong>Qwen3-Coder-Next</strong> fits only at ≈3-bit (UD-Q3_K_XL 36.3 GB), where quality loss begins; no measured Mac run. <a href="https://huggingface.co/unsloth/Qwen3-Coder-Next-GGUF" target="_blank" rel="noopener">Unsloth GGUF</a></li>
+<li><strong>Recursive Flint</strong> fell from ≈110 tok/s on short prompts to ≈9 tok/s near 115K tokens. <a href="https://www.orcarouter.ai/blog/flint-v1-0-vs-north-mini-code" target="_blank" rel="noopener">OrcaRouter</a> <strong>North Mini Code</strong> used ≈75M output tokens on Artificial Analysis's run vs a class median of ≈25M. <a href="https://artificialanalysis.ai/articles/north-mini-code-cohere-s-small-coding-focused-moe-model" target="_blank" rel="noopener">Artificial Analysis</a></li>
+<li><strong>Quantization:</strong> no clear loss in agentic SWE at 4-bit vs BF16 or FP8; loss at ≈2-bit; 1-bit collapses. <a href="https://aistack.imec-int.com/blog/quantization" target="_blank" rel="noopener">imec aistack, 2026-10-08</a> · <a href="https://quesma.com/blog/qwen38-27b-quantizations-benchmarked/" target="_blank" rel="noopener">Quesma, 2026-08-26</a> A November 2026 paper: final accuracy held at 4-bit, but one model's one-shot solves fell from 17 to 0 while loop-based solves rose from 10 to 25. Judge tool use and transcripts, not only pass rates (older base models). <a href="https://arxiv.org/abs/2611.02368" target="_blank" rel="noopener">arXiv 2611.02368</a></li>
+<li><strong>Tool-call loops</strong> on Qwen3.6 reported at Q6, Q8 and even BF16, in LM Studio, Ollama and OpenCode. One user said <code>--swa-full</code> largely fixed looping; another workaround didn't help. <a href="https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF/discussions/5" target="_blank" rel="noopener">HF discussion #5</a> · <a href="https://huggingface.co/Qwen/Qwen3.6-35B-A3B/discussions/20" target="_blank" rel="noopener">HF discussion #20</a></li>
+</ul></div></details>
+</section>
+
+<section id="speed">
+  <p class="secnum">06</p>
+  <h2>Speed on your Mac: reading the prompt sets the pace</h2>
+  <p class="takeaway">An M1 Max writes answers fast but reads long prompts slowly. At 8.5K tokens, reading was about 94% of total response time. A working prompt cache is what makes agent loops usable.</p>
+
+  <div class="chart">
+    <h4>What the first prompt holds</h4>
+    <p class="sub">Approximate tokens before the model does any work.</p>
+    <div class="bar"><span class="name">Claude Code itself<small>system prompt + 23 tool schemas</small></span><div class="track"><div class="fill warn" style="width:74%"></div><span class="val" style="left:calc(74% + 6px)">≈23K</span></div></div>
+    <div class="bar"><span class="name">CLAUDE.md + build-issue.md<small>17 KB + 15 KB</small></span><div class="track"><div class="fill" style="width:26%"></div><span class="val" style="left:calc(26% + 6px)">≈8K</span></div></div>
+    <div class="bar"><span class="name">The issue and its cited docs</span><div class="track"><div class="fill ghost" style="width:16%"></div><span class="val" style="left:calc(16% + 6px)">varies, on top</span></div></div>
+    <div class="axis"><span></span><div class="ticks"><span>0</span><span>10K</span><span>20K</span><span>31K</span></div></div>
+  </div>
+  <p>That's why the first turn of each session should take about <strong>1–3 minutes</strong>. <span class="tag i">inference</span> Nobody has published 16–64K prefill numbers for this model class on an M1 Max, and published rates disagree a lot (173 vs 465 tok/s), probably because M1 Max chips come with a 24-core or 32-core GPU. <strong>Yours is the 32-core GPU</strong> (checked 2026-11-12), so the faster figures, like 465 tok/s, are the closer guide.</p>
+
+  <div class="chart">
+    <h4>The prompt cache, before and after the fix</h4>
+    <p class="sub">Seconds per later turn. Shorter is better.</p>
+    <div class="pair">
+      <div class="bar"><span class="name">Mac Studio, 32B dense<small>cache broken</small></span><div class="track"><div class="fill bad" style="width:100%"></div><span class="val" style="right:6px; color: var(--bg)">≈100 s</span></div></div>
+      <div class="bar"><span class="name">Same, after fix<small><span class="tag m">measured</span></small></span><div class="track"><div class="fill good" style="width:7.5%"></div><span class="val" style="left:calc(7.5% + 6px)">7–8 s</span></div></div>
+    </div>
+    <div class="pair" style="margin-top:10px">
+      <div class="bar"><span class="name">M1 Max 64 GB, 8K turn<small>LM Studio, no cache reuse</small></span><div class="track"><div class="fill bad" style="width:49%"></div><span class="val" style="left:calc(49% + 6px)">≈49 s</span></div></div>
+      <div class="bar"><span class="name">M1 Max 64 GB, 8K turn<small>oMLX, cache reused <span class="tag">anecdote</span></small></span><div class="track"><div class="fill good" style="width:1.7%"></div><span class="val" style="left:calc(1.7% + 6px)">≈1.7 s</span></div></div>
+    </div>
+    <div class="axis"><span></span><div class="ticks"><span>0</span><span>25</span><span>50</span><span>75</span><span>100 s</span></div></div>
+  </div>
+  <div class="callout warn">
+    <span class="h">Claude Code breaks the cache by default</span>
+    <p>It puts a header at the start of the prompt that changes on every request, so the cache never matches ("90% slower" per Unsloth). The fix: <code>"CLAUDE_CODE_ATTRIBUTION_HEADER": "0"</code> in the <code>env</code> block of Claude Code's settings, then confirm cache hits in the server log on turn 2.</p>
+  </div>
+
+  <h3>Memory budget on 64 GB</h3>
+  <p>macOS lets the GPU use about 75% of memory, about 48 GB. Keep the model plus its cache at or below about 32 GB, so the Gravity Docker stack and a browser still fit. Leave the sysctl override alone. <span class="tag i">inference</span></p>
+  <div class="stack" role="img" aria-label="64 GB: Qwen Q4 about 21 GB, context about 1.3 GB, about 10 GB more headroom inside the 32 GB model budget, the rest for Docker, browser and macOS">
+    <div class="s-model" style="flex: 21">Qwen Q4 ≈21</div>
+    <div class="s-kv" style="flex: 1.3"></div>
+    <div class="s-free" style="flex: 9.7">headroom</div>
+    <div class="s-docker" style="flex: 16">Docker + browser</div>
+    <div class="s-os" style="flex: 16">macOS + rest</div>
+  </div>
+  <div class="stack-legend">
+    <span><i class="sw s-model"></i>model weights</span>
+    <span><i class="sw s-kv"></i>context cache (≈1.3 GB at 64K)</span>
+    <span><i class="sw s-free"></i>spare inside the 32 GB model budget</span>
+    <span><i class="sw s-docker"></i>Docker stacks and browser</span>
+    <span><i class="sw s-os"></i>macOS and everything else</span>
+  </div>
+  <p class="meta">Docker and macOS shares are illustrative; Docker Desktop's VM size wasn't researched. The 8-bit model (42–44 GB peak) doesn't leave enough room.</p>
+  <details><summary>Read the detail: memory formula and context pitfalls (Perplexity)</summary><div>
+    <p>Memory needed = weights + context cache (KV) + runtime + temporary buffers + concurrent requests, not just the file size. For a standard attention layer:</p>
+    <div class="formula">KV memory = 2 × layers × KV heads × head size × tokens × bytes per value</div>
+    <p>Example: Qwen3.8-27B has 16 full-attention layers with 4 KV heads of size 256, so ≈2 GiB at 32K tokens and ≈4 GiB at 64K, before anything else. <span class="tag i">inference</span> Parameter count and context length alone aren't enough to estimate memory.</p>
+    <p><strong>Context pitfalls to test:</strong> early instructions silently dropped; a runtime using a different context limit than you asked for; compaction that loses execution rules or the done-when; big test logs eating the remaining context; reasoning output crowding out the work; an advertised maximum that loads but is too slow to use. A "64K" setting is not 64K of repository: rules, plan, tool schemas, tool results, history and the answer all share it.</p>
+  </div></details>
+
+  <h3>How to measure speed on your Mac <span class="tag px">Perplexity</span></h3>
+  <p class="meta">When: in Stage 1 (bench bring-up), on both candidate models, and again after any change of runtime, model or template.</p>
+  <p>Random text is a poor stand-in for <code>/build-issue</code> plus CLAUDE.md. And never report "tokens per second" without saying prefill or generation, context size, cache state, quantization and hardware.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Test</th><th>What it shows</th></tr></thead>
+    <tbody>
+      <tr><td>Load the model from scratch</td><td>Cold start time</td></tr>
+      <tr><td>Uncached prompt at ≈8K, 32K and 64K tokens (for llama.cpp: <code>llama-bench -d 32768</code> for the 32K point)</td><td>Prefill speed and time to first token</td></tr>
+      <tr><td>Same prompt repeated</td><td>Whether the cache really works</td></tr>
+      <tr><td>Same prefix plus a small tool result</td><td>A realistic agent turn</td></tr>
+      <tr><td>Same context with an early instruction changed</td><td>What breaks the cache</td></tr>
+      <tr><td>Generation after each size</td><td>How writing slows as context grows</td></tr>
+      <tr><td>Tool schemas plus long repo context</td><td>Whether tool calls survive realistic size</td></tr>
+      <tr><td>All of the above while Docker builds and tests run</td><td>Contention with your real workload</td></tr>
+    </tbody>
+  </table></div>
+<details><summary>Read the detail: speed measurements and memory settings</summary><div>
+<ul class="clean">
+<li><strong>Prefill ≈94% of response time</strong> at 8.5K tokens on an M1 Max. <span class="tag">anecdote</span> <a href="https://reddit.sentinel-team.org/posts/1rs059a/snapshots/2026-03-13T23%3A00%3A09.503181Z" target="_blank" rel="noopener">r/LocalLLaMA snapshot</a></li>
+<li><strong>32-core M1 Max, oMLX:</strong> Qwen3-30B-A3B at 465 tok/s prefill, 46–59 tok/s decode, 17.1 GB peak (March 2026). <a href="https://omlx.ai/benchmarks/ov249nz9" target="_blank" rel="noopener">oMLX benchmark</a></li>
+<li><strong>24-core M1 Max, GGUF:</strong> 8.5K tokens prefilled in 49.1 s (≈173 tok/s). Same test: Ollama 37% slower than raw llama.cpp (before its MLX backend); converting MLX bf16 weights to fp16 sped prefill ≈1.7x on M1, which has no native bf16. <a href="https://famstack.dev/guides/mlx-vs-gguf-part-2-isolating-variables/" target="_blank" rel="noopener">famstack.dev</a></li>
+<li><strong>Prefill barely drops with length:</strong> a dense 9B model fell only ≈11% between 8.5K and 27K tokens on llama.cpp (452 → 403 tok/s, October 2026). <a href="https://lilting.ch/en/articles/m1-max-llm-engine-benchmark" target="_blank" rel="noopener">lilting.ch</a></li>
+<li><strong>Cache fix sources:</strong> "90% slower" <a href="https://unsloth.ai/docs/basics/claude-code" target="_blank" rel="noopener">Unsloth</a>; 100 s → 7–8 s on a Mac Studio 96 GB, dense 32B, after stripping the header and patching the server's prefix cache <a href="https://dev.to/vinayiitkgp/why-self-hosted-claude-code-was-15-slower-than-it-should-be-3pb4" target="_blank" rel="noopener">dev.to</a>. Older Claude Code builds ignored the shell variable, so set it in the settings <code>env</code> block. An unread tracker item, "Claude Code ≥ 2.1.36 forcing full prompt re-processing on llama-server", suggests it can regress between releases (<a href="https://claudeissues.com/issue/32636-bug-claude-code-2-1-36-forcing-full-prompt-re-processing-on-llama-server" target="_blank" rel="noopener">claudeissues #32636</a>, title only).</li>
+<li><strong>Memory:</strong> <code>sudo sysctl iogpu.wired_limit_mb</code> raises the GPU cap until reboot; Apple doesn't support it. <a href="https://github.com/ivanopcode/devnote-override-macos-metal-vram-cap" target="_blank" rel="noopener">devnote</a> Qwen3.6 at 8-bit peaked at 42–44 GB on an M1 Max 64 GB. <a href="https://dev.to/sleepyquant/mlx-vs-llamacpp-on-m1-max-with-35b-q8-the-honest-benchmark-3496" target="_blank" rel="noopener">sleepyquant</a></li>
+<li><strong>A dense 32B on your class of Mac:</strong> <span class="tag px">Perplexity</span> Qwen3-32B generated at 7.0 tok/s on an M1 Max 32-core, 64 GB, macOS 26.6.1 (Aug 2026), and other ≈30B dense models at 6.4–6.6 tok/s. Short test, no agent workload. <a href="https://github.com/rajeeja/local-llm-bench-m1max" target="_blank" rel="noopener">local-llm-bench-m1max</a></li>
+<li><strong>Context defaults:</strong> one source says Ollama's old 4,096 default "silently truncates from the beginning"; current docs tier by VRAM (32K at 24–48 GB, 256K at 48 GB or more). <a href="https://runaihome.com/blog/claude-code-ollama-local-models-setup-2026/" target="_blank" rel="noopener">RunAIHome</a> · <a href="https://docs.ollama.com/context-length" target="_blank" rel="noopener">Ollama docs</a></li>
+</ul></div></details>
+</section>
+
+<section id="runtimes">
+  <p class="secnum">07</p>
+  <h2>Runtimes: the program that serves the model</h2>
+  <p class="takeaway">All major runtimes now speak Claude's API (since January 2026), so Claude Code can talk to them with no proxy. The choice comes down to reliable caching and tool calls.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Runtime</th><th>Verdict</th><th>Strength</th><th>Main risk</th></tr></thead>
+      <tbody>
+        <tr><td><strong>llama.cpp</strong> <code>llama-server</code></td><td><span class="pill pri">primary</span></td><td>Claude-compatible API with tools; RAM prompt cache; config as code; new models arrive within hours</td><td>Command line only; you manage templates and flags</td></tr>
+        <tr><td><strong>oMLX</strong></td><td><span class="pill alt">speed fallback</span></td><td>Best measured cache on M1 Max; cache survives restarts; Apache 2.0</td><td>Slower cold start; very young ("four releases in four days")</td></tr>
+        <tr><td><strong>LM Studio</strong></td><td><span class="pill alt">for learning</span></td><td>Easiest GUI; shows all the knobs</td><td>4,096-token default context; a Qwen template bug; MLX path skipped caching for some Qwen models</td></tr>
+        <tr><td><strong>Ollama</strong></td><td><span class="pill cau">easy start</span></td><td><code>ollama launch</code> sets up Claude Code for you; MLX backend since 0.19</td><td>Was 37% slower than raw llama.cpp; Qwen tool-call parser bugs; context default depends on memory tier</td></tr>
+        <tr><td><strong>mlx-lm server</strong></td><td><span class="pill no">avoid</span></td><td>Simple</td><td>Locks ≈75% of RAM; kernel panics reported in long agent sessions</td></tr>
+        <tr><td><strong>Docker Model Runner</strong></td><td><span class="pill no">no gain</span></td><td>You already have Docker</td><td>Runs natively on the host anyway; cache behaviour undocumented</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>For your learning, LM Studio is still the best place to see what each setting does. The pilot uses whichever runtime passes the turn-2 cache test. <strong>Always set the context size explicitly:</strong> LM Studio defaults to 4,096 tokens, and on a 64 GB Mac Ollama's default sits right on the boundary between its 32K and 256K tiers.</p>
+  <p><strong>Moving between runtimes <span class="tag px">Perplexity</span>:</strong> a GGUF file isn't an MLX file; templates and server settings must be translated and re-checked. Keep a small conformance suite to re-run whenever you move between runtimes.</p>
+<p class="src">Sources: <a href="https://huggingface.co/blog/ggml-org/anthropic-messages-api-in-llamacpp" target="_blank" rel="noopener">HF blog (llama.cpp Messages API)</a> · <a href="https://github.com/ggml-org/llama.cpp/pull/16391" target="_blank" rel="noopener">llama.cpp PR #16391</a> · <a href="https://runaihome.com/blog/omlx-apple-silicon-llm-inference-review-2026/" target="_blank" rel="noopener">RunAIHome oMLX review</a> · <a href="https://ianlpaterson.com/blog/lm-studio-fix-cannot-truncate-prompt-n-keep-n-ctx/" target="_blank" rel="noopener">Ian Paterson (LM Studio)</a> · <a href="https://github.com/ollama/ollama/issues/14493" target="_blank" rel="noopener">ollama #14493 (tool calls 2/5 → 4/5 with workaround)</a> · <a href="https://docs.ollama.com/context-length" target="_blank" rel="noopener">Ollama docs</a> · <a href="https://github.com/ml-explore/mlx-lm/issues/883" target="_blank" rel="noopener">mlx-lm #883</a> · <a href="https://www.docker.com/blog/docker-model-runner-vllm-metal-macos/" target="_blank" rel="noopener">Docker blog</a></p>
+</section>
+
+<section id="harness">
+  <p class="secnum">08</p>
+  <h2>The coding agent: keep Claude Code, skip the router</h2>
+  <p class="takeaway">Only Claude Code enforces Gravity's rules without rewriting them. Every other agent needs your CLAUDE.md, commands and deny rules re-taught in its own format.</p>
+
+  <div class="chart">
+    <h4>Fixed prompt size per agent, before your rules</h4>
+    <p class="sub">Tokens the model reads on every fresh session. Bigger = slower first turn on an M1 Max.</p>
+    <div class="bar"><span class="name">Claude Code</span><div class="track"><div class="fill warn" style="width:100%"></div><span class="val" style="right:6px; color: var(--bg)">≈23,000</span></div></div>
+    <div class="bar"><span class="name">Codex CLI <code>--oss</code></span><div class="track"><div class="fill" style="width:37%"></div><span class="val" style="left:calc(37% + 6px)">≈8,500</span></div></div>
+    <div class="bar"><span class="name">Pi</span><div class="track"><div class="fill" style="width:2.6%"></div><span class="val" style="left:calc(2.6% + 6px)">≈600</span></div></div>
+    <div class="axis"><span></span><div class="ticks"><span>0</span><span>11.5K</span><span>23K</span></div></div>
+  </div>
+  <p>Smaller prompts help dense models a lot (Pi halved wall time on a dense 31B) but made "negligible difference" on MoE models like Qwen3.6. And Qwen3.6 failed under Pi by writing files to <code>/tmp</code>, twice. <span class="tag m">measured</span> small test</p>
+
+  <div class="grid2">
+    <div class="card goal">
+      <h4>Claude Code on a local model <span class="pill pri">pick</span></h4>
+      <ul>
+        <li>CLAUDE.md, <code>/build-issue</code>, hooks and deny rules carry over as they are.</li>
+        <li>Anthropic doesn't support non-Claude models through it, and any release can break it. Pin the version.</li>
+        <li>Serve at least 100K context: it won't auto-compact below that.</li>
+        <li>Remote Control stops working: builds run in a terminal on the Mac.</li>
+        <li>One user still saw background requests go to Anthropic. Use a separate launcher and check the network.</li>
+      </ul>
+    </div>
+    <div class="card track">
+      <h4>Alternatives</h4>
+      <ul>
+        <li><strong>OpenCode</strong> <span class="pill alt">fallback</span> reads CLAUDE.md and skills; per-subcommand shell rules. By default edits outside the project without asking.</li>
+        <li><strong>Codex CLI</strong> reads AGENTS.md; permissions in beta.</li>
+        <li><strong>Goose</strong> wants hint files "under a page"; yours are 17 KB.</li>
+        <li><strong>Crush</strong> source-available; config format changed in July.</li>
+        <li><strong>Qwen Code</strong> <span class="pill alt">alternative</span> built for Qwen models; can read CLAUDE.md and our skills; deny rules in Claude Code syntax; commands need <code>{{args}}</code> copies. No local-model benchmark yet. Checked 2026-11-12.</li>
+        <li>Not researched: Aider, Cline, Roo, Kilo, OpenHands, Continue, Droid, Amp.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>"Change only the builder" has two meanings <span class="tag px">Perplexity</span></h3>
+  <div class="grid2">
+    <div class="card track"><h4>Role isolation</h4><p>Only the builder <em>role</em> changes, possibly including its harness. Valid, but the result is a <strong>workflow comparison</strong>.</p></div>
+    <div class="card goal"><h4>Model isolation</h4><p>The builder keeps exactly the same harness and only the model changes. Only this tells you about the model itself. If Claude Code fails against the local model and you switch to OpenCode, say so in the results. <strong>Chosen for the pilot:</strong> only the model changes. <span class="tag">your call, 2026-11-12</span></p></div>
+  </div>
+  <div class="callout warn">
+    <span class="h">Why no router</span>
+    <p>Routers like claude-code-router send the Claude side through an API key billed per token, not your Max login. LiteLLM also shipped two malicious releases in March 2026. Instead, run <strong>two separate processes</strong>: Claude Code on your subscription for planning and review, and a separately launched Claude Code pointed at the local model for the build. The GitHub issue and PR are the hand-off, which is the builder/reviewer split you already have.</p>
+  </div>
+  <p><strong>Perplexity agrees on deferring routing <span class="tag px">Perplexity</span>.</strong> It puts explicit routing last in its roadmap (section 10) and warns that an elaborate router that is hard to audit can cost more leadership attention than it saves.</p>
+  <div class="callout warn">
+    <span class="h">A prompt saying "always use Docker" is not a boundary <span class="tag px">Perplexity</span></span>
+    <p>Gravity enforces it with Claude Code's deny rules today, which is why keeping Claude Code matters. If you ever switch harness, the boundary must be rebuilt, ideally by running the agent's commands inside a container by construction. Shortcuts to avoid: an unrestricted Docker socket in the agent's container, a host shell guarded only by a regex deny list, production database credentials, broad host mounts, a long-lived broad GitHub token, and exposing the model server to your network to fix a connection problem.</p>
+  </div>
+  <details><summary>Read the detail: the launcher settings</summary><div>
+    <p>A dedicated launcher, kept outside the repo, sets:</p>
+    <ul class="clean">
+      <li><code>ANTHROPIC_BASE_URL</code> to the local server, plus a dummy <code>ANTHROPIC_AUTH_TOKEN</code> so your claude.ai login isn't used.</li>
+      <li>All four model aliases and <code>CLAUDE_CODE_SUBAGENT_MODEL</code> pointed at the served model, or background "Haiku" requests fail.</li>
+      <li><code>CLAUDE_CODE_ATTRIBUTION_HEADER=0</code> so the prompt cache works.</li>
+      <li><code>CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1</code> if 400 errors mention <code>context_management</code>.</li>
+    </ul>
+    <p>The Claude Code model-config docs page was cut off during research, so re-check these against the installed version.</p>
+  </div></details>
+<details><summary>Read the detail: harness sources and router specifics</summary><div>
+<ul class="clean">
+<li>Runtimes serving Claude's API: <a href="https://ollama.com/blog/claude" target="_blank" rel="noopener">Ollama blog</a> (v0.14+) · <a href="https://lmstudio.ai/blog/claudecode" target="_blank" rel="noopener">LM Studio blog</a> (0.4.1+). Rules enforced by the harness, not the model: <a href="https://codylindley.github.io/ai-harness-engineering-compatibility-matrix/" target="_blank" rel="noopener">compatibility matrix, 2026-11-05</a>.</li>
+<li>Anthropic "doesn't support routing Claude Code to non-Claude models through any gateway" and warns each release can add features a gateway doesn't forward. Setting <code>ANTHROPIC_BASE_URL</code> without a gateway credential leaves the claude.ai login active; setting a credential replaces it. <a href="https://code.claude.com/docs/en/llm-gateway" target="_blank" rel="noopener">Claude Code docs</a></li>
+<li>Fixed prompt ≈23K = ≈5.6K system prompt + ≈17.6K tool schemas. <span class="tag m">measured</span> <a href="https://dev.to/vinayiitkgp/why-self-hosted-claude-code-was-15-slower-than-it-should-be-3pb4" target="_blank" rel="noopener">dev.to</a> Breakages list (updated 2026-10-12): <a href="https://developertoolkit.ai/en/ecosystem/agent-tools/gateways-local-models/" target="_blank" rel="noopener">developertoolkit.ai</a></li>
+<li><strong>Codex CLI <code>--oss</code></strong> ran Qwen 3.6 35B-A3B cleanly in April 2026 tests; its memory feature uses OpenAI-hosted models by default. <strong>Pi</strong> has 4 tools. <a href="https://codex.danielvaughan.com/2026/04/19/does-pi-outperform-codex-cli-for-local-models/" target="_blank" rel="noopener">Vaughan, Pi vs Codex</a> · <a href="https://codex.danielvaughan.com/2026/04/24/open-weight-models-codex-cli-local-coding-agents-comparison-guide/" target="_blank" rel="noopener">Vaughan, Codex guide</a></li>
+<li><strong>Qwen Code</strong> (checked 2026-11-12 against its docs on GitHub <code>main</code>): an Apache-2.0 fork of Gemini CLI, now at a "1.0 Preview", "optimized for Qwen models". It reads QWEN.md and AGENTS.md, and <code>context.fileName</code> can point it at CLAUDE.md. <code>skills.directories</code> can load <code>.claude/skills</code>. <code>permissions.deny</code> uses Claude Code's syntax, e.g. <code>Bash(rm -rf *)</code>; whether it catches subshells and wrappers like Claude Code is unknown. Commands live in <code>.qwen/commands/*.md</code> with <code>{{args}}</code> instead of <code>$ARGUMENTS</code>. It speaks OpenAI and Anthropic APIs. Sandbox: macOS Seatbelt, or the whole CLI in Docker (clashes with <code>docker compose exec</code>). Its only published benchmark is SWE-bench Verified 76.4–77.8% with hosted Qwen 3.7 Max; Qwen3.6's 73.4 came from Qwen's internal scaffold, not Qwen Code. Next step: run the conformance suite through it after Stage 1. <a href="https://github.com/QwenLM/qwen-code" target="_blank" rel="noopener">QwenLM/qwen-code</a> · <a href="https://github.com/QwenLM/qwen-code/blob/main/docs/evaluation.md" target="_blank" rel="noopener">evaluation</a> · <a href="https://huggingface.co/Qwen/Qwen3.6-35B-A3B" target="_blank" rel="noopener">Qwen3.6 card footnote</a></li>
+<li><strong>OpenCode:</strong> unconfirmed whether it reads project <code>.claude/commands</code> or <code>settings.json</code> deny rules. <a href="https://opencode.ai/docs/rules/" target="_blank" rel="noopener">OpenCode rules</a> · <a href="https://opencode.ai/docs/permissions/" target="_blank" rel="noopener">OpenCode permissions</a></li>
+<li><strong>Goose:</strong> Apache-2.0, Linux Foundation's Agentic AI Foundation, v1.58.0 on 2026-11-09, headless recipes. <a href="https://shattered.io/goose-ai-coding-assistant-local-ollama-12-steps-2026/" target="_blank" rel="noopener">shattered.io</a> <strong>Crush:</strong> FSL-1.1-MIT. <a href="https://localaimaster.com/blog/crush-ollama-setup" target="_blank" rel="noopener">localaimaster</a></li>
+<li><strong>claude-code-router:</strong> MIT, v3.1.x, ≈37K stars; routes <code>default</code>, <code>background</code>, <code>think</code>, <code>longContext</code> and specific subagents; loses the prompt cache on a mid-session model switch; other models produced malformed edit hunks. <a href="https://www.morphllm.com/claude-code-router" target="_blank" rel="noopener">morphllm</a></li>
+<li><strong>LiteLLM</strong> PyPI 1.82.7 and 1.82.8 (2026-03-24) stole credentials: pin and hash-check. <a href="https://developertoolkit.ai/en/ecosystem/agent-tools/gateways-local-models/" target="_blank" rel="noopener">developertoolkit.ai</a></li>
+<li>In every option, "node only inside <code>docker compose exec app</code>" is enforced by deny lists, not a harness feature. A harness that doesn't read <code>settings.json</code> needs the guard rebuilt in its own syntax or at the OS level. <span class="tag i">inference</span> The two-process, no-router setup is also inference; no source describes it exactly.</li>
+</ul></div></details>
+</section>
+
+<section id="evaluation">
+  <p class="secnum">09</p>
+  <h2>How to judge it fairly</h2>
+  <p class="takeaway">Build the next real issues in queue order under a rule written in advance, and use 3–5 replays of past issues only as a shakedown. Judge everything by one frozen snapshot of the rules, taken when milestone 2's process changes have landed.</p>
+  <p class="meta"><strong>"The rules"</strong> = CLAUDE.md, <code>/build-issue</code>, <code>/review-pr</code>, the scripts and the deny rules, all from one commit on <code>main</code>. Every pilot build and review uses that snapshot, the Opus control re-reviews included. Stages 0–1 don't depend on it and can start now; Stages 2–3 wait for the freeze. <span class="tag">your call, 2026-11-12</span></p>
+
+  <div class="tiles">
+    <div class="tile"><span class="big">≈6 / 61</span><span class="lbl">Opus PRs approved in round 1. So "approved in round 1" can't be the bar.</span></div>
+    <div class="tile"><span class="big">2.0</span><span class="lbl">Average rounds for PRs of 50 lines or fewer (max 3). The baseline for small issues.</span></div>
+    <div class="tile"><span class="big">10.8x</span><span class="lbl">Growth of build-issue.md, Oct 16–27. Rules haven't changed since Oct 28, but #505 may change them again.</span></div>
+    <div class="tile acc"><span class="big">62</span><span class="lbl">Open issues at "Plan: none". About 14 are non-UI and fit a first pilot.</span></div>
+  </div>
+  <p class="meta">PR round counts come from an approximate text match over review comments. <span class="tag m">measured, approximate</span></p>
+
+  <div class="grid2">
+    <div class="card goal">
+      <h4>Primary arm: forward queue</h4>
+      <p>Write the eligibility rule first, then take the next issues that match, in order:</p>
+      <ul>
+        <li><code>Plan: none</code>, no UI change, no async-ordering logic</li>
+        <li>low-priority or bug, with a "Done when" a check can run</li>
+      </ul>
+      <p>Examples: #581, #598, #583, #584, #602, #576, #558, #552. Exclude async bugs #519, #521, #524. Every review spent here ships real work.</p>
+    </div>
+    <div class="card track">
+      <h4>Calibration: 3–5 replays</h4>
+      <ul>
+        <li>Branch from the PR's <strong>fork point</strong>, not the merge parent (which already holds the rulings made during the build).</li>
+        <li>Add today's CLAUDE.md, commands and scripts as one marked commit; keep the old decision log.</li>
+        <li>Run in a scratch repo so issue numbers and the D-id check stay clean.</li>
+        <li>Control: re-review Opus's original PR with today's <code>/review-pr</code> the same week. That also measures how much two reviews differ.</li>
+      </ul>
+      <p>Candidates: #464, #458, #395, #323, #163.</p>
+    </div>
+  </div>
+
+
+  <h3>Keep the experiment fair <span class="tag px">Perplexity</span></h3>
+  <div class="grid2">
+    <div class="card track">
+      <h4>Port the rules, don't trim them</h4>
+      <ul>
+        <li>Keep <code>/build-issue</code>'s body; adapt only how it's invoked. Check every mandatory step shows up in the trace.</li>
+        <li>Translate deny rules and <strong>test</strong> that prohibited commands are blocked, not just discouraged.</li>
+        <li>Give both arms the same frozen plan, with no extra hints for the local one. <strong>How (your call, 2026-11-12):</strong> a Claude session writes the plan and posts it on the issue; the build runs in a separate, fresh session that starts from the issue and that plan, for the local builder and for any Opus build it is compared with. For "Plan: none" issues the issue text is the plan.</li>
+        <li>Don't delete hard rules to help the local model. If the full rulebook is impractical, that's a result.</li>
+      </ul>
+      <p>A later redesign could split rules into invariants, task context, reference loaded on demand, and mechanical checks, tested as a new block.</p>
+    </div>
+    <div class="card track">
+      <h4>Keep the review policy identical</h4>
+      <ul>
+        <li>Same reviewer model, effort, scope and severity definitions for both arms.</li>
+        <li>"No <em>new</em> High/Medium" and "no <em>outstanding</em> High/Medium" are different conditions. If the policy is ambiguous, clarify it once before starting, then freeze it.</li>
+        <li>Don't make the local arm easier to approve, or the Claude baseline stricter because a pilot started.</li>
+      </ul>
+    </div>
+    <div class="card track">
+      <h4>Run the full repair loop</h4>
+      <p>The local builder must also fix the review findings. Otherwise you're testing "local first draft plus Claude fixes", not builder replacement. A PR that merges after substantial Claude rescue is a completed issue, but <strong>not a local-builder success</strong>.</p>
+    </div>
+    <div class="card track">
+      <h4>Blind the reviewer, then disclose</h4>
+      <p>Adopted by Yami, 2026-11-12. In both arms, Opus controls included, the reviewer doesn't know who built the PR. The builder session leaves the attribution lines out of the PR body and the commit trailers. The run ledger records the builder from the start. Once the reviewer posts its verdict, a PR comment adds "Built by: &lt;model&gt;", so the record stays complete. Why: LLM judges change their verdicts based on source labels, usually harsher on work labelled as AI-made (arXiv 2510.08831, 2509.26072, 2604.05593). Blinding doesn't remove self-preference, where a model favours unlabelled output that reads like its own (arXiv 2404.13076). That effect would show up as fewer findings per line on the Opus controls, which the ledger can show. No study tests this for code review, so we can't predict which way it goes.</p>
+    </div>
+    <div class="card track">
+      <h4>Stop replay leakage</h4>
+      <p>Applies only to the replay stage, where the local model rebuilds past issues Opus already built. "Leakage" means the builder seeing the old answer (the merged code, its PR or its review) and copying it, which would make the score look better than it is. New issues in the forward pilot have no answer to leak.</p>
+      <ul>
+        <li>A clean export ending at the base commit, with no later history or solution branches.</li>
+        <li>No merged PR, review discussion or final patch visible.</li>
+        <li>Acceptance checks outside the builder's editable workspace; disposable databases.</li>
+        <li>If an old solution shaped your prompts, that task is a development task, not a held-out test.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>The gate</h3>
+  <div class="grid2">
+    <div class="card stop">
+      <h4>Hard stops: any one pauses the pilot</h4>
+      <ul>
+        <li>A push to <code>main</code>, or git changes outside the builder's worktree</li>
+        <li>Host <code>node</code>/<code>npm</code>/<code>npx</code>, or any <code>docker … prune</code></li>
+        <li>A secret or user content in a log, commit or PR</li>
+        <li>A test that calls an external service</li>
+        <li>Scope creep flagged by the reviewer</li>
+      </ul>
+    </div>
+    <div class="card goal">
+      <h4>Pass: per issue</h4>
+      <ul>
+        <li>You merge it</li>
+        <li>Review rounds ≤ the Opus baseline + 1 (≤3 for small PRs)</li>
+        <li><strong>No Claude takeover</strong></li>
+      </ul>
+      <p><strong>Highs, as a rate across the pilot:</strong> the share of local PRs with a High in any round is no worse than Opus's for the same size. Opus had a High in about 1 in 8 small PRs (3 of 23 of 50 lines or fewer: #220, #416, #474) and about 1 in 4 overall (16 of 61 build PRs since #125). These are regex counts over review text, so approximate. The Opus control re-reviews under the frozen rules check the number. Ruled (Yami, 2026-11-12): a High is not a per-issue fail, since Opus doesn't clear that bar either. Fixing one already costs extra rounds.</p>
+      <p>Plus, from the Perplexity cross-check <span class="tag px">Perplexity</span>: at least 20% less Claude use per accepted issue (your floor, 2026-11-12; Perplexity proposed 25%; final value set after Stage 0), at most 10 min <em>more</em> of your attention per issue than an Opus build (median), ≤2x wall-clock, under 1 h/week upkeep.</p>
+    </div>
+    <div class="card track">
+      <h4>Tracked, not gated</h4>
+      <ul>
+        <li>Findings by type (correctness, spec conflict, evidence gap, bookkeeping, scope, security) vs Opus</li>
+        <li>Claude usage per merged issue, your minutes, wall-clock time</li>
+        <li>CI is a precondition, not the gate</li>
+      </ul>
+      <p>#505 recorded a PR where 16 of 21 findings were bookkeeping, so expect that type to dominate.</p>
+    </div>
+  </div>
+
+
+  <h3>What to record for every build <span class="tag px">Perplexity</span></h3>
+  <p><strong>Adopted as the pilot's run ledger</strong> <span class="tag">your call, 2026-11-12</span>: set up in Stage 0, before the first build, with one row per build for both arms, Opus controls included. Most fields come from logs that already exist (Claude Code transcripts, the <code>llama-server</code> log, GitHub, CI). Only your minutes, the finding tags and, for a failure, its provisional layer and confirming test (below) are filled in by hand.</p>
+  <div class="grid2">
+    <div class="card"><h4>Quality is several things</h4><ul>
+      <li><strong>Coding quality:</strong> correct behaviour, edge cases, fit</li>
+      <li><strong>Edit fidelity:</strong> no unrelated rewrites</li>
+      <li><strong>Tool-call validity:</strong> names, JSON, paths</li>
+      <li><strong>Rule adherence:</strong> scope, execution limits, checks</li>
+      <li><strong>Long-context stability:</strong> keeps early rules after big outputs</li>
+      <li><strong>Recovery:</strong> diagnoses a failure instead of repeating it</li>
+    </ul><p>Before switching models, compare two quantizations of the same model on the same tasks. Now a step in Stage 1 and Stage 4 (section 10).</p></div>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Dimension</th><th>Fields</th></tr></thead>
+    <tbody>
+      <tr><td>Completion</td><td>Accepted, abandoned, rescued, or still open</td></tr>
+      <tr><td>Review</td><td>Total rounds; round-1 zero-finding rate; new findings per round</td></tr>
+      <tr><td>Findings</td><td>Severity, type, root cause, true or false positive, recurrence</td></tr>
+      <tr><td>Policy</td><td>Attempted vs actually executed violations</td></tr>
+      <tr><td>CI</td><td>First-run and final outcomes; flaky failures separately</td></tr>
+      <tr><td>Time</td><td>Queue, active inference, tool time, review wait, end to end</td></tr>
+      <tr><td>Claude use</td><td>Planning, review, diagnosis, repair, rescue, evaluation overhead</td></tr>
+      <tr><td>Your attention</td><td>Active minutes, interventions, manual edits, adjudication</td></tr>
+      <tr><td>Local operation</td><td>Peak memory, swap, crashes, parser errors, context resets</td></tr>
+      <tr><td>Maintenance</td><td>Setup and recurring troubleshooting time</td></tr>
+      <tr><td>Product outcome</td><td>Reopened issues, regressions, escaped defects</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Finding tags:</strong> the 6 categories from the report, so counts stay meaningful with about 10 builds: correctness, domain-spec or D-row conflict, test or evidence gap, process bookkeeping, scope, security. Perplexity's 12 are examples under them: correctness covers functional behaviour, Next.js server/client boundaries, validation and errors, type safety, Prisma schema and migrations, database integrity, accessibility and UI states, and maintainability; security covers authorization and data isolation, and container/process violations; tests and scope creep map one to one. Perplexity's original list: functional behaviour; authorization and data isolation; Next.js server/client boundaries; validation and errors; Prisma schema and migrations; database integrity; type safety; tests; accessibility and UI states; scope creep; container/process violations; maintainability. A repeated observation of the same defect is a recurrence, not a new defect, and the reviewer is an evaluator, not an infallible oracle.</p>
+
+  <h3>Stopping rules, decided in advance</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Rule</th><th>When</th><th>What happens</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill no">Hard stop</span></td><td>Any build</td><td>Stop at once, or pause until a fix is in</td></tr>
+        <tr><td><span class="pill cau">Over the limit</span></td><td>Any build</td><td>A build that needs more rounds than the Opus baseline for its size + 1 counts as a fail, but keeps going until it merges or reaches twice that limit (6 rounds for a small PR). Past the cap, Claude takes over. The ledger records the extra rounds, the extra Claude usage and why each round failed</td></tr>
+        <tr><td><span class="pill cau">Futility</span></td><td>After builds 4–5</td><td><strong>Pause and diagnose</strong> if 3+ builds needed a rescue, carried a High, or went over their round limit: start no new builds, read the failure causes in the ledger (provisional layers, with the confirming test run for any type that repeated), then either end the pilot or name one change to test next as a new iteration</td></tr>
+        <tr><td><span class="pill pri">Success</span></td><td>After build 10</td><td>Adopt for this issue type if 8+ of 10 pass, the Claude saving clears the Stage 0 threshold, and your minutes didn't rise</td></tr>
+        <tr><td><span class="pill alt">Otherwise</span></td><td>After build 10</td><td>Extend to 20, or stop</td></tr>
+        <tr><td><span class="pill alt">Saturation</span></td><td>Any time</td><td>Stop when 3–4 builds show no new failure type and the result is clearly on one side</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <span class="h">What 10 builds can and can't tell you</span>
+    <p>8 of 10 passing means the true pass rate is somewhere around <strong>49–94%</strong>: enough to separate "mostly works" from "mostly fails". Zero hard-stop violations in 10 only shows the true rate is <strong>below about 26%</strong>. So dangerous actions need guards, not a bigger sample. <span class="tag i">inference</span> statistics</p>
+  </div>
+
+  <h3>When something fails, classify it first <span class="tag px">Perplexity</span></h3>
+  <p>Stopping a configuration isn't stopping the idea. Before deciding, name which layer failed:</p>
+  <div class="tiles">
+    <div class="tile"><span class="big" style="font-size:18px">Model</span><span class="lbl">not capable enough</span></div>
+    <div class="tile"><span class="big" style="font-size:18px">Quantization</span><span class="lbl">compressed too far</span></div>
+    <div class="tile"><span class="big" style="font-size:18px">Runtime</span><span class="lbl">cache, parser, template</span></div>
+    <div class="tile"><span class="big" style="font-size:18px">Harness</span><span class="lbl">agent can't drive the model</span></div>
+    <div class="tile"><span class="big" style="font-size:18px">Instructions</span><span class="lbl">rules too long or unclear</span></div>
+    <div class="tile"><span class="big" style="font-size:18px">Task choice</span><span class="lbl">issue too hard for the stratum</span></div>
+    <div class="tile"><span class="big" style="font-size:18px">Enforcement</span><span class="lbl">a guard missing or too loose</span></div>
+  </div>
+  <p><strong>Labels start as guesses</strong> <span class="tag">your call, 2026-11-12</span>. From one transcript the layers often look alike: a wrong edit looks the same whether the model is weak or Q4 compressed it too far. So:</p>
+  <ul>
+    <li>The ledger records, for each failure, a <strong>provisional layer</strong> and <strong>the test that would confirm it</strong>.</li>
+    <li>Only failure types that repeat get the confirming test; a one-off stays provisional.</li>
+    <li>After the first 3–5 failures, review the labels themselves and adjust the categories if they don't fit what you see.</li>
+  </ul>
+  <div class="tablewrap"><table>
+    <thead><tr><th>To tell apart</th><th>Confirming test</th></tr></thead>
+    <tbody>
+      <tr><td>Model vs quantization</td><td>Re-run on a higher quantization. Passes → quantization; fails the same way → model</td></tr>
+      <tr><td>Model vs the local setup</td><td>Hosted diagnostic, same model at full precision. Passes → local (quantization or runtime); fails → model</td></tr>
+      <tr><td>Runtime</td><td><code>llama-server</code> log (malformed calls, cache misses, cut-off context); conformance suite re-run</td></tr>
+      <tr><td>Instructions</td><td>Ask the model to state the rule it broke. States it → instructions too long or buried; can't → lost in long context</td></tr>
+      <tr><td>Task choice</td><td>The Opus control struggled on the same issue</td></tr>
+      <tr><td>Enforcement</td><td>A forbidden action ran: never a guess</td></tr>
+      <tr><td>Harness</td><td>Not testable while only the model changes; stays "suspected" until a later iteration</td></tr>
+    </tbody>
+  </table></div>
+  <p>Its extra stop triggers: two consecutive issues needing substantial Claude rescue; a task at three review rounds without converging; repeated memory overruns; and after six paired issues, review cost already wiping out the gain. Immediate stops also include the builder being able to alter its own evaluator or acceptance checks, and damage to anything outside the disposable environment.</p>
+<details><summary>Read the detail: numbers, method and statistics</summary><div>
+<ul class="clean">
+<li>Review rounds across 61 build PRs from #125 on: median 2, <strong>mean 2.61</strong>, round-1 APPROVED in 6, <strong>about a third needing 3+</strong>. Round-1 approval requires zero findings, a Low included (<a href="https://github.com/yamimaio/gravity/blob/main/CLAUDE.md" target="_blank" rel="noopener">CLAUDE.md:113-116</a>). <a href="https://github.com/yamimaio/gravity/pulls" target="_blank" rel="noopener">PR reviews</a></li>
+<li>Rule drift: <code>build-issue.md</code> 1,405 → 15,221 bytes and CLAUDE.md 8,245 → 17,011 bytes, 2026-10-16 to 10-27; <code>scripts/ci-local.sh</code> and <code>/ui-walk</code> checks kept changing after. <a href="https://github.com/yamimaio/gravity/commits/main/CLAUDE.md" target="_blank" rel="noopener">CLAUDE.md history</a> · <a href="https://github.com/yamimaio/gravity/commits/main/.claude/commands/build-issue.md" target="_blank" rel="noopener">build-issue.md history</a> · <a href="https://github.com/yamimaio/gravity/issues/505" target="_blank" rel="noopener">#505</a></li>
+<li>Hand-picking "easy" issues after reading them reproduces the selection effect METR documents; a stated stratum is fine if conclusions stay within it. <a href="https://metr.org/blog/2026-02-24-uplift-update/" target="_blank" rel="noopener">METR</a> The issue template rates async-ordering bugs as research-level. <a href="https://github.com/yamimaio/gravity/blob/main/.github/ISSUE_TEMPLATE/issue.md" target="_blank" rel="noopener">issue template:58-62</a> · <a href="https://github.com/yamimaio/gravity/issues?q=is%3Aopen+label%3Alow-priority" target="_blank" rel="noopener">open issues</a></li>
+<li>Judging replays by the rules of their time would predict nothing about building today, and restoring old scripts and reviewer behaviour costs more than it teaches. <span class="tag i">inference</span></li>
+<li>The replay unit follows SWE-bench: issue text plus the repo at the base commit, with no tests or fix visible. <a href="https://openai.com/index/introducing-swe-bench-verified/" target="_blank" rel="noopener">OpenAI</a> Don't trust GitHub's <code>base.sha</code>: on #575 it pointed days later. Isolate each trial so it can't <code>git log</code> its way to the answer. <a href="https://anthropic.com/engineering/demystifying-evals-for-ai-agents" target="_blank" rel="noopener">Anthropic</a> The private repo means a model can't have trained on these fixes; the leakage risk lives in the repo's own later docs.</li>
+<li>Label failures by hand from transcripts first ("read traces") until new builds stop revealing new failure types. <a href="https://hamel.dev/blog/posts/evals-faq/how-many-examples-do-i-need-for-an-eval.html" target="_blank" rel="noopener">hamel.dev</a> Grade outcomes, not paths: don't score a build on how closely it matches Opus's diff. <a href="https://anthropic.com/engineering/demystifying-evals-for-ai-agents" target="_blank" rel="noopener">Anthropic</a></li>
+<li>Statistics: 8/10 → 95% Wilson interval ≈49–94%. 0 violations in 10 → true rate below ≈26% (exact binomial; the <a href="https://en.wikipedia.org/wiki/Rule_of_three_%28statistics%29" target="_blank" rel="noopener">rule of three</a> gives 30%). Even 5 of 5 replays in one direction is p≈0.03 one-sided (<a href="https://arxiv.org/html/2411.00640v1" target="_blank" rel="noopener">Miller</a>). Anthropic suggests 20–50 tasks for an eval suite, and <a href="https://arxiv.org/html/2505.20411v2" target="_blank" rel="noopener">SWE-rebench</a> runs each model 5 times; a solo developer can't afford either, hence sequential stopping rules.</li>
+<li>Local builds cost no Claude usage, so building 2–3 issues twice gives a cheap consistency estimate (Anthropic's pass^k); only the second reviews cost Claude usage.</li>
+<li>Freeze CLAUDE.md and the commands for the pilot, or record the build index where they changed and analyse the halves separately. <strong>Decided:</strong> freeze, after milestone 2's process changes land (2026-11-12).</li>
+</ul></div></details>
+</section>
+
+<section id="stages">
+  <p class="secnum">10</p>
+  <h2>Five stages, each with one claim to prove</h2>
+  <p class="takeaway">Each stage has an entry condition, a pass bar and a kill switch. Stage 0 needs no local model and is the urgent one.</p>
+  <p>At plan level "none", no plan is posted and the build doesn't stop for approval (<a href="https://github.com/yamimaio/gravity/blob/main/.claude/commands/build-issue.md" target="_blank" rel="noopener">build-issue.md:11-18</a>), so iteration 1 really does change only the builder. Sources agree on one routing change at a time against a fixed baseline. <span class="tag">opinion</span> <a href="https://arize.com/blog/how-i-cut-coding-agent-costs-with-model-harness-routing/" target="_blank" rel="noopener">Arize</a></p>
+<div class="stages">
+    <div class="stage"><div class="dot">0</div><div class="body">
+      <h4>Baseline and pre-registration</h4><p class="when">This week · no local model</p>
+      <dl>
+        <dt class="g">Prove</dt><dd>The value of <i>B</i>/<i>R</i>, the Opus finding mix, your minutes per Opus PR, and a written threshold</dd>
+        <dt class="p">Pass</dt><dd>Scratch-repo check done: <code>/review-pr</code> runs unchanged in a private copy (steps in <code>research/pilot/scratch-repo-review-check.md</code>); usage baseline run (<code>research/pilot/usage-baseline/</code>); ratio measured on 5+ recent Opus builds; run ledger set up (section 09, adopted 2026-11-12); your minutes logged on 5+ Opus PRs before Stage 2 (added by Yami, 2026-11-12: past minutes can't be recovered, so the log starts now with milestone 2's builds and counts rulings, comments, your own review and fixes; it continues for both arms in Stages 2-3); eligibility rule, gate, stopping rules and threshold written down; rules frozen at a <code>main</code> commit once milestone 2's process changes land (needed before Stage 2 only)</dd>
+        <dt class="k">Kill</dt><dd><i>B</i>/<i>R</i> below about 0.5: even a perfect builder can't save 20%. Reconsider it as learning-only, or rescope</dd>
+      </dl>
+    </div></div>
+    <div class="stage"><div class="dot">1</div><div class="body">
+      <h4>Bench bring-up</h4><p class="when">No repo code</p>
+      <dl>
+        <dt class="g">Prove</dt><dd>Runtime, model and agent complete tool loops fast enough, with zero data leaving the Mac. <strong>Also picks the model:</strong> run the checks on both Qwen3.6 and KAT-Coder, keep the one that passes more cleanly (KAT wins a tie, being tuned for Claude Code), then keep that one model for Stages 2–3 <span class="tag">your call, 2026-11-12</span></dd>
+        <dt class="p">Pass</dt><dd>100K+ context confirmed; cache hit on turn 2; tool-call tests pass repeatedly (Perplexity's 20-case suite, below); the speed tests from section 06 recorded for both models; ≤32 GB with a Gravity stack up and no swap; nothing reaches api.anthropic.com; host <code>npm</code> still blocked; Claude Code env vars and flags (<code>--settings</code>, model aliases, attribution header) re-checked against the installed version before the first run. <strong>Design rule</strong> <span class="tag">your call, 2026-11-12</span>: the launcher, suite and ledger live outside any repo and are project-neutral; Gravity-specific parts (E-case prompts, container commands, fixtures) go in one small per-project file, so another project can reuse the rest. <strong>Re-run rule</strong> <span class="tag">your call, 2026-11-13</span>: the whole suite re-runs after any change of runtime, model, quantization, chat template, launcher settings or Claude Code version, in every stage and in later iterations. Each ledger row records the setup it ran on and the suite run that cleared it, and a build on an uncleared setup doesn't count. A Claude Code bump is the exception: the builder's copy is pinned with auto-update off, bumped only on purpose between stages, and a bump gets a quick re-run (each case once on the chosen model, about 20 runs). The Opus arm keeps updating as normal drift, recorded per ledger row. <strong>Guards</strong> <span class="tag">your call, 2026-11-13</span>: narrow deny rules for <code>docker … prune</code>, pushes to <code>main</code>, force-push and <code>bash -c</code> / <code>sh -c</code>, in both Gravity's own settings (added in milestone 2, so both arms run with the same guards) and the project-neutral launcher, plus GitHub branch protection on <code>main</code> once a repo is public (the free plan doesn't offer it on private repos; your call, 2026-11-16). Not a blanket <code>git push</code> deny, which would block the builder's own branch. <strong>Steering role</strong> <span class="tag">your call, 2026-11-13</span>: your daily-goal sessions (plan review, cross-referencing, learnings after merge) cost the same in both arms, so they stay out of <i>B</i>/<i>R</i>; any help they give a build is flagged in your minutes log and counts as a rescue in the local arm; their token cost can't be split per issue, so total usage is checked at the end with weekly <code>/usage</code></dd>
+        <dt class="k">Kill</dt><dd>Cache keeps missing → switch to oMLX. Malformed calls persist on both models → fix the template before blaming the models. Still failing → try a higher quantization (Q5 or Q6) of the better model, if model plus cache fits 32 GB, before the fallback model <span class="tag">your call, 2026-11-12</span></dd>
+      </dl>
+    </div></div>
+    <div class="stage"><div class="dot">2</div><div class="body">
+      <h4>Replay shakedown</h4><p class="when">3–5 past issues · scratch repo</p>
+      <dl>
+        <dt class="g">Prove</dt><dd>The local builder finishes <code>/build-issue</code> end to end, fix rounds included; reviewer variance is known</dd>
+        <dt class="p">Pass</dt><dd>2+ of 3 complete without a Claude takeover; finding mix readable against the Opus controls</dd>
+        <dt class="k">Kill</dt><dd>Any hard stop; 0 of 3 complete; or <code>/review-pr</code> can't run outside the main repo (then the first 2 forward builds count as shakedown)</dd>
+      </dl>
+    </div></div>
+    <div class="stage"><div class="dot">3</div><div class="body">
+      <h4>Forward pilot</h4><p class="when">10 builds · Plan: none · non-UI · queue order</p>
+      <dl>
+        <dt class="g">Prove</dt><dd>The pass rate and net Claude saving for this kind of issue</dd>
+        <dt class="p">Pass</dt><dd>8+ of 10 pass; saving above the Stage 0 threshold; your minutes flat</dd>
+        <dt class="k">Kill</dt><dd>Hard stop; or pause and diagnose at builds 4–5 (futility). Round limits by PR size; a build over its limit finishes up to a cap <span class="tag">your call, 2026-11-12</span></dd>
+      </dl>
+    </div></div>
+    <div class="stage"><div class="dot">4</div><div class="body">
+      <h4>Decide and diagnose</h4><p class="when">After stage 3</p>
+      <dl>
+        <dt class="g">Prove</dt><dd>Adopt, extend to 20, or stop; and whether failures come from the Mac or the model</dd>
+        <dt class="p">Pass</dt><dd>Decision written up</dd>
+        <dt class="k">Kill</dt><dd>If failures look like runtime problems, re-run 2–3 on the same model through a hosted API, as a diagnostic only. If they look like code quality rather than tool use, first re-run 2–3 on a higher quantization of the same model, before concluding the model can't do it <span class="tag">your call, 2026-11-12</span></dd>
+      </dl>
+    </div></div>
+  </div>
+
+  <h3>Stage 1's tool and safety checks <span class="tag px">Perplexity</span></h3>
+  <p class="meta">Now drafted as 20 runnable cases with exact prompts and pass rules: <code>research/pilot/conformance-suite.md</code> (2026-11-12). Only host <code>node</code>/<code>npm</code>/<code>npx</code> are actually blocked today; the other safety rules rely on the model obeying CLAUDE.md, and the suite says which is which. It re-runs after any setup change (your call, 2026-11-13; Stage 1 above).</p>
+  <p>Perplexity proposes about <strong>20 tool and safety test cases</strong> before spending any Claude review on real builds. Gate: no escapes from the execution boundary, and no recurring tool-call failures.</p>
+  <div class="grid2">
+    <div class="card"><h4>Examples of cases</h4><ul>
+      <li>Read a file with spaces in its path; edit a small exact region</li>
+      <li>Handle a missing file; respond sensibly to a failed command</li>
+      <li>Run an allowed container command; <strong>block</strong> host node/npm and destructive commands</li>
+      <li>Quoted and multiline arguments; keep tool-call IDs straight</li>
+      <li>Resume after a large tool result; stop when done; fail clearly at context or output limits</li>
+    </ul></div>
+    <div class="card"><h4>One more check</h4><p>Before switching models, compare two quantizations of the same model on the same tasks: in Stage 1 before the fallback model, and in Stage 4 before concluding the model can't do it (Yami, 2026-11-12). The fuller list of quality dimensions is in section 09.</p></div>
+  </div>
+  <h3>After the pilot</h3>
+  <ul class="clean">
+    <li><strong>Iteration 2:</strong> escalation. The local builder hands off to Claude on repeated test failures or a design decision, which matches your flag-and-leave-undone rule. Maybe a trimmed builder rulebook, if bookkeeping findings dominate.</li>
+    <li><strong>Iteration 3:</strong> widen to precedent-level and UI issues, or add local mechanical pre-review checks.</li>
+    <li><strong>Later iteration: restructure the rulebook.</strong> Split the rules into invariants (always loaded), task context (from the issue), reference loaded on demand, and mechanical checks (scripts, lint, deny rules). Tested as its own change after the pilot, one change at a time, and as a Gravity issue since it changes the repo. Agreed by Yami, 2026-11-12.</li>
+    <li><strong>Another project: a transfer check, not a second pilot</strong> <span class="tag">your call, 2026-11-12</span>. Run the conformance suite with that project's rules, measure its <i>B</i>/<i>R</i>, and do 3 builds. If the results look like Gravity's, adopt there too; if not, run a fuller pilot for that project. The setup, method and failure lessons carry over; the pass rate, the saving and the safety cases need this check.</li>
+    <li><strong>Local planning</strong> has little payoff: it uses few tokens and carries a lot of weight.</li>
+    <li><strong>Local review comes last or never:</strong> it's the quality gate, and evidence for small models on judgment tasks is weakest.</li>
+  </ul>
+
+  <h3>Perplexity's longer roadmap: six stages <span class="tag px">Perplexity</span></h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Stage</th><th>What it adds</th><th>Gate</th></tr></thead>
+    <tbody>
+      <tr><td>1. Instrumentation</td><td>Frozen rules, run ledger, baseline, issue-selection rubric, declared usage budget</td><td>You can attribute usage and attention to each phase</td></tr>
+      <tr><td>2. Local execution</td><td>One runtime, model, harness; conformance results; 3 unscored builds</td><td>Correct tools and boundaries, usable memory, no hidden hosted fallback</td></tr>
+      <tr><td>3. Builder replacement</td><td>Paired replays, then new issues, with full repair loops</td><td>Adoption thresholds met for the tested issue types</td></tr>
+      <tr><td>4. Local pre-review</td><td>Deterministic checks (types, lint, tests, build, migrations, policy), then an optional local critic</td><td>Fewer Claude findings or less of your attention, without false confidence</td></tr>
+      <tr><td>5. Bounded planning</td><td>Local plan draft → Claude approves or corrects → local build → Claude review</td><td>Total Claude use drops after counting corrections</td></tr>
+      <tr><td>6. Explicit routing</td><td>Local by default for proven task types; Claude for risky or failing ones; you for destructive or unclear ones</td><td>More accepted work overall, counting misroutes</td></tr>
+    </tbody>
+  </table></div>
+  <p>Its warning on stage 6: an elaborate router that is hard to audit can cost more leadership attention than it saves.</p>
+</section>
+
+<section id="setup">
+  <p class="secnum">11</p>
+  <h2>Recommended setup, and when to switch</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Layer</th><th>Recommended</th><th>First alternative</th><th>Switch when</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Model</strong></td><td>Qwen3.6-35B-A3B or KAT-Coder-V2.5, GGUF Q4_K_M (≈21 GB each), vendor template; Stage 1 picks one</td><td>Qwen3-Coder-30B-A3B</td><td>Both fail tool-call tests after template fixes</td></tr>
+        <tr><td><strong>Runtime</strong></td><td>llama.cpp <code>llama-server</code>, pinned, context ≥100K, RAM cache on</td><td>oMLX</td><td>Turn-2 cache hits fail</td></tr>
+        <tr><td><strong>Agent</strong></td><td>Claude Code, pinned, separate launcher</td><td>OpenCode with rebuilt deny rules</td><td>Claude Code breaks after an upgrade, or prefill stays impractical</td></tr>
+        <tr><td><strong>Topology</strong></td><td>Two processes, no router</td><td>claude-code-router</td><td>Only later, if per-token billing becomes acceptable</td></tr>
+        <tr><td><strong>Measurement</strong></td><td>Telemetry tags per session + a hand log (role, issue, round, minutes)</td><td><code>/usage</code> 7-day bars</td><td>n/a</td></tr>
+        <tr><td><strong>Guards</strong></td><td>Deny rules in the project's settings and in the launcher (docker prune, push to <code>main</code>, force-push, <code>bash -c</code>/<code>sh -c</code>; your call, 2026-11-13); branch protection on <code>main</code> once public; an outbound-connection monitor; pinned versions</td><td>Container or OS-level guards</td><td>Any agent that doesn't read <code>settings.json</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Keep the launcher outside the repo for the pilot. A builder profile, a trimmed rulebook or a settings change committed to Gravity is a repo change, and needs its own issue.</p>
+
+  <h3>Several projects at once <span class="tag px">Perplexity</span></h3>
+  <p>Running several projects doesn't need several models generating at once. Start with <strong>one local build at a time, as a shared queue</strong>: plan and review projects in parallel, but build one at a time. Add concurrency only after measuring throughput and memory, because two builds at once can make both slower. Keep Compose project names, databases, ports, branches and worktrees separate per project.</p>
+</section>
+
+<section id="leadership">
+  <p class="secnum">12</p>
+  <h2>Leadership lessons</h2>
+  <p class="takeaway">The story worth telling isn't "local models are ready". It's a measured pilot that set its stopping rule before the results, counted review and owner time as costs, and found the binding constraint was the review process, not the model.</p>
+  <div class="tiles">
+    <div class="tile bad"><span class="big">19% slower</span><span class="lbl">Experienced developers with AI in METR's 2025 trial, while believing they were faster. Perception ≠ measurement.</span></div>
+    <div class="tile warn"><span class="big">+441%</span><span class="lbl">Median review time on high-AI teams (Faros, 22,000 developers), with 54% more bugs per PR. Review is the hidden cost.</span></div>
+    <div class="tile acc"><span class="big">2.7x</span><span class="lbl">Spread in cost per success for one model across four harnesses. The harness is as big a lever as the model.</span></div>
+    <div class="tile"><span class="big">Amplifier</span><span class="lbl">DORA 2025: AI amplifies whatever an organization already is. Gravity's written review policy is the "strong organization" case.</span></div>
+  </div>
+  <ul class="clean">
+    <li><strong>Pre-register</strong> before you look at results.</li>
+    <li><strong>Measure per merged PR</strong>, not per token. Count review load and owner minutes as costs.</li>
+    <li><strong>Verify data locality</strong> with a network check instead of assuming it.</li>
+    <li><strong>Be honest about lock-in:</strong> open weights reduce model-vendor dependence, but your harness, commands and review process stay Anthropic-shaped.</li>
+    <li><strong>The next lever after the builder is cheaper verification:</strong> escalation checkpoints, mechanical pre-review, and a rulebook a smaller model can follow.</li>
+  </ul>
+
+  <h3>The leadership portfolio <span class="tag px">Perplexity</span></h3>
+  <p class="takeaway">The career artifact isn't "a local model installed on a Mac". It's a documented adoption decision.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Leadership concern</th><th>Evidence to produce</th></tr></thead>
+    <tbody>
+      <tr><td>Economics</td><td>Capacity per accepted issue, including failures and rescues</td></tr>
+      <tr><td>Quality</td><td>Stable acceptance criteria and adjudicated findings</td></tr>
+      <tr><td>Governance</td><td>Execution boundaries, credential scope, auditability</td></tr>
+      <tr><td>Evaluation</td><td>Frozen tasks, held-out work, leakage controls</td></tr>
+      <tr><td>Operations</td><td>Reproducible configuration, observability, rollback</td></tr>
+      <tr><td>Change management</td><td>Which workflows improved and which stay frontier-backed</td></tr>
+      <tr><td>Vendor strategy</td><td>Portable instructions; explicit runtime and harness dependencies</td></tr>
+      <tr><td>Organizational leverage</td><td>Less human supervision, not just fewer model dollars</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="clean">
+    <li><strong>Keep the learning budget separate from the efficiency claim.</strong> The setup can be worth it for your AI-adoption expertise even if it doesn't free capacity. Those are different returns.</li>
+    <li><strong>Call it hybrid, not private.</strong> Claude still receives planning and review context.</li>
+  </ul>
+<details><summary>Read the detail: the four pieces of evidence</summary><div>
+<ul class="clean">
+<li><strong>Perception ≠ measurement.</strong> METR 2025: experienced developers 19% slower with AI (95% CI +2% to +39%) while believing they were faster. The February 2026 follow-up calls its own newer data "an unreliable signal", because 30–50% of developers withheld tasks they didn't want to do without AI. <a href="https://metr.org/blog/2026-02-24-uplift-update/" target="_blank" rel="noopener">METR, 2026-02-24</a></li>
+<li><strong>Review is the hidden cost.</strong> Faros, 22,000 developers (May 2026): high-AI teams have 54% more bugs per PR and 441.5% longer median review time. <a href="https://www.faros.ai/blog/ai-code-quality-senior-engineer-review-burden" target="_blank" rel="noopener">Faros</a> DORA 2025: AI raises throughput but also instability. <a href="https://www.infoq.com/news/2025/09/dora-state-of-ai-in-dev-2025" target="_blank" rel="noopener">InfoQ on DORA 2025</a></li>
+<li><strong>The harness is a big lever.</strong> One model across four harnesses passed 14 to 17 of 30 tasks, with cost per success varying ≈2.7x (cited second-hand, "directional"). The accepted measurement unit is cost per accepted outcome, not per token. <a href="https://arize.com/blog/how-i-cut-coding-agent-costs-with-model-harness-routing/" target="_blank" rel="noopener">Arize</a></li>
+<li><strong>Measure in stages.</strong> DX's framework goes utilization → impact → cost, and warns against using these metrics for individual performance. <a href="https://getdx.com/ai-measurement-framework/" target="_blank" rel="noopener">DX</a></li>
+</ul>
+<p><strong>Conclusion from the report.</strong> On capability, the answer for small, well-specified, non-UI issues is now plausibly yes. On economics, it's unknown, and Gravity's strict review loop is the reason: a quality gate few organisations have, which charges every weaker build in frontier review rounds. The pilot's most valuable outputs are the <i>B</i>/<i>R</i> ratio and the measured extra rounds Δ. The win from AI builders is capped by what it costs to verify their work.</p>
+</div></details>
+</section>
+
+<section id="gaps">
+  <p class="secnum">13</p>
+  <h2>Gaps and open questions</h2>
+  <p class="takeaway">Nobody has measured a local model completing a full issue-to-PR loop on a real web app. Stages 0–2 close the gaps that are specific to Gravity. For another project, a short transfer check closes them again (section 10).</p>
+  <div class="grid2">
+    <div class="card">
+      <h4>Not measured anywhere</h4>
+      <ul>
+        <li>16–64K prefill for this model class on an M1 Max</li>
+        <li>Tool-call error rates per model</li>
+        <li>Extra review rounds caused by local builders</li>
+        <li>How Max plan limits map to tokens</li>
+        <li>Docker Desktop VM memory; reviewer-to-reviewer variance</li>
+        <li>Gravity's <i>B</i>/<i>R</i></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Where sources disagree</h4>
+      <ul>
+        <li>M1 Max prefill: 173 vs 465 vs 892 tok/s (GPU cores and prompt length likely explain it)</li>
+        <li>Same model scored 73.4 vs 64.4 depending on harness</li>
+        <li>Terminal-Bench boards differ by several points for the same model</li>
+        <li>ccusage's npm page and docs describe different versions</li>
+      </ul>
+    </div>
+  </div>
+  <h3>Questions for you before Stage 1</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Question</th><th>Why it matters</th></tr></thead>
+      <tbody>
+        <tr><td>What net saving per merged issue makes it worth adopting, once <i>B</i>/<i>R</i> is known?</td><td><strong>Answered</strong> (2026-11-12): floor of 20% less Claude usage per issue; final value set at the end of Stage 0 (section 04)</td></tr>
+        <tr><td>Does the pilot need a D row or ADR?</td><td><strong>Settled: no.</strong> The pilot is not part of Gravity; Gravity issues are only its test material. Its decisions live in the AI setup learning log.</td></tr>
+        <tr><td>Freeze the rules now, or land #505 first?</td><td><strong>Settled 2026-11-12:</strong> freeze after milestone 2's process changes land. Stages 0–1 start now; Stages 2–3 wait. The Opus control re-reviews show whether the new rules moved the baseline</td></tr>
+        <tr><td>How should ccusage run, given RULES 10?</td><td><strong>Settled</strong> (2026-11-12): neither ccusage nor the host. A small script of ours runs in a Python container with no network and the logs mounted read-only (<code>research/pilot/usage-baseline/</code>). Run it before you next open Claude Code (the cleanup sweep runs right after a session starts), then set <code>cleanupPeriodDays</code> to 90 so the logs last through the pilot (Yami, 2026-11-12)</td></tr>
+        <tr><td>Can <code>/review-pr</code> run against a fork or scratch repo unchanged?</td><td>If not, replays become forward shakedown builds. <strong>Answered by a Stage 0 check</strong>: steps in <code>research/pilot/scratch-repo-review-check.md</code></td></tr>
+        <tr><td>Should the reviewer be blind to which builder made the PR?</td><td>Knowing could bias severity. <strong>Settled</strong> (Yami, 2026-11-12): yes, option A. Both arms are blind during review, and the builder is disclosed in a PR comment right after the verdict. Sources and the residual self-preference risk are in "Blind the reviewer, then disclose".</td></tr>
+        <tr><td>Does the local builder fix its own findings, and when does help count as a rescue?</td><td>Defines "no Claude takeover". <strong>Settled</strong> (2026-11-12): the local builder fixes its own findings, up to twice its round limit; past that Claude takes over, which is a rescue. No other Claude help for now: the reviewer's suggested fixes in its review are the only Claude input, and any other Claude help (a hint, a line of code) counts as a rescue</td></tr>
+        <tr><td>Is your M1 Max GPU 24-core or 32-core?</td><td><strong>Settled: 32-core</strong> (2026-11-12). Prefill can differ by up to ≈2.7x between the two</td></tr>
+        <tr><td>If the hosted diagnostic triggers, which provider is OK for private code?</td><td><strong>Deferred</strong> (2026-11-12): only if the hosted diagnostic is ever needed, and then as full research, not a quick pick</td></tr>
+      </tbody>
+    </table>
+  </div>
+<h3>All conflicts and limits from the report</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Conflict or gap</th><th>Detail</th><th>Handling</th></tr></thead>
+<tbody>
+<tr><td>Prefill rate on M1 Max</td><td>465 tok/s (oMLX, 32-core, 4K) vs ≈173 (GGUF, 24-core, 8.5K) vs 892 (llama.cpp, 512-token prompt)</td><td>Measure with <code>llama-bench -d 32768</code>. <strong>In Stage 1</strong>: part of the speed tests (section 06, 32K row)</td></tr>
+<tr><td>Ollama default context</td><td>Old 4,096 that "silently truncates" vs current VRAM tiers</td><td>Only if you use Ollama. The pilot runs llama-server, and Stage 1 confirms its 100K+ context. With Ollama, set it explicitly and verify with <code>ollama ps</code></td></tr>
+<tr><td>Same model, different scores</td><td>Qwen3.6 73.4 vs 64.4; Devstral Small 2 68.0 vs 56.4</td><td>Treat vendor numbers as upper bounds. No action: reading guidance</td></tr>
+<tr><td>Terminal-Bench 4.0 boards disagree</td><td>Opus 5.5: 64.85% (official), 59.6% (Artificial Analysis), 65.15% (Vals); Kimi K3.1 Pro tops Artificial Analysis</td><td>Rough order only. No action</td></tr>
+<tr><td>North Mini Code 67.6</td><td>Credited to Cohere's SWE-agent run by one source, to Artificial Analysis pass@1 by another</td><td>Unresolved. No action: not a candidate model</td></tr>
+<tr><td>ccusage features</td><td>npm page says v0.5.0 with two reports; docs site documents more</td><td>Moot: ccusage replaced by our own script (your call, 2026-11-12)</td></tr>
+<tr><td>Not researched</td><td>Aider, Cline, Roo Code, Kilo Code, OpenHands, Continue, Factory Droid, Amp; most runtime licences (KAT-Coder-V2.5 licence since confirmed: Apache-2.0)</td><td>Verify before relying on any. No pilot action; only if you switch tools later (see Later questions)</td></tr>
+<tr><td>Read limits</td><td>The Claude Code model-config page was TRUNCATED during research (its env-var tail wasn't read); several sources were aggregators or snapshots</td><td>Re-check env vars against the installed version. <strong>In Stage 1</strong>: before the first conformance run (pass list below, and <code>conformance-suite.md</code>)</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="sources">
+  <p class="secnum">14</p>
+  <h2>All sources</h2>
+  <p class="takeaway">Every link cited in the report, grouped by topic.</p>
+  <div class="sources">
+    <h4>Approach and leadership</h4><ul>
+      <li><a href="https://aider.chat/2024/09/26/architect.html" target="_blank" rel="noopener">Aider architect/editor (2024)</a></li>
+      <li><a href="https://arize.com/blog/how-i-cut-coding-agent-costs-with-model-harness-routing/" target="_blank" rel="noopener">Arize: model + harness routing (2026-09-08)</a></li>
+      <li><a href="https://www.simonpcouch.com/blog/2025-12-04-local-agents" target="_blank" rel="noopener">Couch: local agents (Dec 2025)</a></li>
+      <li><a href="https://simonpcouch.com/blog/2026-04-16-local-agents-2/" target="_blank" rel="noopener">Couch: local agents 2 (Apr 2026)</a></li>
+      <li><a href="https://paddo.dev/blog/claude-code-local-ollama/" target="_blank" rel="noopener">paddo.dev: Claude Code + Ollama on M1 Max</a></li>
+      <li><a href="https://dev.to/kuroko1t/what-happens-when-local-llms-fail-at-tool-calling-testing-7-models-with-a-rust-coding-agent-cep" target="_blank" rel="noopener">kuroko1t: 7 local models tool-calling</a></li>
+      <li><a href="https://metr.org/blog/2026-02-24-uplift-update/" target="_blank" rel="noopener">METR uplift update (2026-02-24)</a></li>
+      <li><a href="https://www.faros.ai/blog/ai-code-quality-senior-engineer-review-burden" target="_blank" rel="noopener">Faros: review burden</a></li>
+      <li><a href="https://www.infoq.com/news/2025/09/dora-state-of-ai-in-dev-2025" target="_blank" rel="noopener">InfoQ on DORA 2025</a></li>
+      <li><a href="https://getdx.com/ai-measurement-framework/" target="_blank" rel="noopener">DX AI measurement framework</a></li>
+    </ul>
+    <h4>Models and benchmarks</h4><ul>
+      <li><a href="https://www.morphllm.com/best-open-source-coding-model-2026" target="_blank" rel="noopener">Morph: best open coding models 2026</a></li>
+      <li><a href="https://aicybr.com/blog/glm-5-3-flash-local-deployment-guide" target="_blank" rel="noopener">AiCybr: GLM-5.3-Flash local</a></li>
+      <li><a href="https://benchlm.ai/benchmarks/terminal-bench-2" target="_blank" rel="noopener">BenchLM Terminal-Bench</a></li>
+      <li><a href="https://benchlm.ai/coding" target="_blank" rel="noopener">BenchLM coding</a></li>
+      <li><a href="https://llm-stats.com/blog/research/claude-sonnet-5-5-launch" target="_blank" rel="noopener">llm-stats: Sonnet 5.5</a></li>
+      <li><a href="https://huggingface.co/Qwen/Qwen3.6-35B-A3B" target="_blank" rel="noopener">Qwen3.6-35B-A3B model card</a></li>
+      <li><a href="https://llmcheck.net/blog/best-local-llm-for-coding-mac/" target="_blank" rel="noopener">llmcheck: best local LLM for Mac (2026-10-24)</a></li>
+      <li><a href="https://www.orcarouter.ai/blog/flint-v1-0-vs-north-mini-code" target="_blank" rel="noopener">OrcaRouter: Flint vs North Mini Code</a></li>
+      <li><a href="https://www.sebastianraschka.com/blog/2026/north-mini-code-agentic-coding.html" target="_blank" rel="noopener">Raschka: North Mini Code</a></li>
+      <li><a href="https://www.benchleader.com/benchmarks/swe_bench_verified" target="_blank" rel="noopener">BenchLeader: SWE-bench bash-only</a></li>
+      <li><a href="https://bishal.io/blog/six-local-models-m1-max-llama-cpp-vs-mlx/" target="_blank" rel="noopener">bishal.io: six models on M1 Max</a></li>
+      <li><a href="https://huggingface.co/unsloth/Qwen3-Coder-Next-GGUF" target="_blank" rel="noopener">Unsloth: Qwen3-Coder-Next GGUF</a></li>
+      <li><a href="https://artificialanalysis.ai/articles/north-mini-code-cohere-s-small-coding-focused-moe-model" target="_blank" rel="noopener">Artificial Analysis: North Mini Code</a></li>
+      <li><a href="https://aistack.imec-int.com/blog/quantization" target="_blank" rel="noopener">imec: quantization (2026-10-08)</a></li>
+      <li><a href="https://quesma.com/blog/qwen38-27b-quantizations-benchmarked/" target="_blank" rel="noopener">Quesma: Qwen3.8-27B quantizations</a></li>
+      <li><a href="https://arxiv.org/abs/2611.02368" target="_blank" rel="noopener">arXiv 2611.02368</a></li>
+      <li><a href="https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF/discussions/5" target="_blank" rel="noopener">HF discussion #5 (Unsloth GGUF)</a></li>
+      <li><a href="https://huggingface.co/Qwen/Qwen3.6-35B-A3B/discussions/20" target="_blank" rel="noopener">HF discussion #20 (Qwen)</a></li>
+    </ul>
+    <h4>Mac speed and runtimes</h4><ul>
+      <li><a href="https://reddit.sentinel-team.org/posts/1rs059a/snapshots/2026-03-13T23%3A00%3A09.503181Z" target="_blank" rel="noopener">r/LocalLLaMA snapshot (M1 Max)</a></li>
+      <li><a href="https://omlx.ai/benchmarks/ov249nz9" target="_blank" rel="noopener">oMLX benchmark</a></li>
+      <li><a href="https://famstack.dev/guides/mlx-vs-gguf-part-2-isolating-variables/" target="_blank" rel="noopener">famstack: MLX vs GGUF part 2</a></li>
+      <li><a href="https://lilting.ch/en/articles/m1-max-llm-engine-benchmark" target="_blank" rel="noopener">lilting.ch: M1 Max engine benchmark</a></li>
+      <li><a href="https://unsloth.ai/docs/basics/claude-code" target="_blank" rel="noopener">Unsloth: Claude Code docs</a></li>
+      <li><a href="https://dev.to/vinayiitkgp/why-self-hosted-claude-code-was-15-slower-than-it-should-be-3pb4" target="_blank" rel="noopener">dev.to: self-hosted Claude Code 15x slower</a></li>
+      <li><a href="https://claudeissues.com/issue/32636-bug-claude-code-2-1-36-forcing-full-prompt-re-processing-on-llama-server" target="_blank" rel="noopener">claudeissues #32636 (title only)</a></li>
+      <li><a href="https://huggingface.co/blog/ggml-org/anthropic-messages-api-in-llamacpp" target="_blank" rel="noopener">HF blog: Messages API in llama.cpp</a></li>
+      <li><a href="https://github.com/ggml-org/llama.cpp/pull/16391" target="_blank" rel="noopener">llama.cpp PR #16391</a></li>
+      <li><a href="https://runaihome.com/blog/omlx-apple-silicon-llm-inference-review-2026/" target="_blank" rel="noopener">RunAIHome: oMLX review</a></li>
+      <li><a href="https://ianlpaterson.com/blog/lm-studio-fix-cannot-truncate-prompt-n-keep-n-ctx/" target="_blank" rel="noopener">Ian Paterson: LM Studio context</a></li>
+      <li><a href="https://github.com/ollama/ollama/issues/14493" target="_blank" rel="noopener">ollama #14493</a></li>
+      <li><a href="https://docs.ollama.com/context-length" target="_blank" rel="noopener">Ollama docs: context length</a></li>
+      <li><a href="https://github.com/ml-explore/mlx-lm/issues/883" target="_blank" rel="noopener">mlx-lm #883</a></li>
+      <li><a href="https://www.docker.com/blog/docker-model-runner-vllm-metal-macos/" target="_blank" rel="noopener">Docker blog: Model Runner on macOS</a></li>
+      <li><a href="https://github.com/ivanopcode/devnote-override-macos-metal-vram-cap" target="_blank" rel="noopener">devnote: macOS Metal VRAM cap</a></li>
+      <li><a href="https://dev.to/sleepyquant/mlx-vs-llamacpp-on-m1-max-with-35b-q8-the-honest-benchmark-3496" target="_blank" rel="noopener">sleepyquant: 35B Q8 on M1 Max</a></li>
+      <li><a href="https://runaihome.com/blog/claude-code-ollama-local-models-setup-2026/" target="_blank" rel="noopener">RunAIHome: Claude Code + Ollama setup</a></li>
+    </ul>
+    <h4>Harnesses and routers</h4><ul>
+      <li><a href="https://github.com/QwenLM/qwen-code" target="_blank" rel="noopener">Qwen Code repo and docs (checked 2026-11-12)</a> · <a href="https://github.com/QwenLM/qwen-code/blob/main/docs/evaluation.md" target="_blank" rel="noopener">its evaluation</a></li>
+      <li><a href="https://ollama.com/blog/claude" target="_blank" rel="noopener">Ollama blog: Claude Code</a></li>
+      <li><a href="https://lmstudio.ai/blog/claudecode" target="_blank" rel="noopener">LM Studio blog: Claude Code</a></li>
+      <li><a href="https://codylindley.github.io/ai-harness-engineering-compatibility-matrix/" target="_blank" rel="noopener">Harness compatibility matrix (2026-11-05)</a></li>
+      <li><a href="https://code.claude.com/docs/en/llm-gateway" target="_blank" rel="noopener">Claude Code docs: LLM gateway</a></li>
+      <li><a href="https://developertoolkit.ai/en/ecosystem/agent-tools/gateways-local-models/" target="_blank" rel="noopener">developertoolkit.ai: gateways and local models</a></li>
+      <li><a href="https://codex.danielvaughan.com/2026/04/19/does-pi-outperform-codex-cli-for-local-models/" target="_blank" rel="noopener">Vaughan: Pi vs Codex</a></li>
+      <li><a href="https://codex.danielvaughan.com/2026/04/24/open-weight-models-codex-cli-local-coding-agents-comparison-guide/" target="_blank" rel="noopener">Vaughan: Codex CLI open-weight guide</a></li>
+      <li><a href="https://opencode.ai/docs/rules/" target="_blank" rel="noopener">OpenCode rules</a></li>
+      <li><a href="https://opencode.ai/docs/permissions/" target="_blank" rel="noopener">OpenCode permissions</a></li>
+      <li><a href="https://shattered.io/goose-ai-coding-assistant-local-ollama-12-steps-2026/" target="_blank" rel="noopener">shattered.io: Goose + Ollama</a></li>
+      <li><a href="https://localaimaster.com/blog/crush-ollama-setup" target="_blank" rel="noopener">localaimaster: Crush + Ollama</a></li>
+      <li><a href="https://www.morphllm.com/claude-code-router" target="_blank" rel="noopener">morphllm: claude-code-router</a></li>
+    </ul>
+    <h4>Evaluation and usage</h4><ul>
+      <li><a href="https://openai.com/index/introducing-swe-bench-verified/" target="_blank" rel="noopener">OpenAI: SWE-bench Verified</a></li>
+      <li><a href="https://anthropic.com/engineering/demystifying-evals-for-ai-agents" target="_blank" rel="noopener">Anthropic: demystifying evals for agents</a></li>
+      <li><a href="https://hamel.dev/blog/posts/evals-faq/how-many-examples-do-i-need-for-an-eval.html" target="_blank" rel="noopener">Hamel: how many examples</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Rule_of_three_%28statistics%29" target="_blank" rel="noopener">Rule of three (statistics)</a></li>
+      <li><a href="https://arxiv.org/html/2411.00640v1" target="_blank" rel="noopener">Miller: adding error bars to evals</a></li>
+      <li><a href="https://arxiv.org/html/2505.20411v2" target="_blank" rel="noopener">SWE-rebench</a></li>
+      <li><a href="https://code.claude.com/docs/en/costs.md" target="_blank" rel="noopener">Claude Code docs: costs</a></li>
+      <li><a href="https://code.claude.com/docs/en/monitoring-usage" target="_blank" rel="noopener">Claude Code docs: monitoring usage</a></li>
+      <li><a href="https://www.mintlify.com/ryoppippi/ccusage/api/commands/session" target="_blank" rel="noopener">ccusage session command</a></li>
+    </ul>
+    <h4>Added from Perplexity's report</h4><ul>
+      <li><a href="https://claude.com/resources/articles/the-advisor-strategy" target="_blank" rel="noopener">Anthropic: the advisor strategy (2026-04-08)</a></li>
+      <li><a href="https://aider.chat/docs/leaderboards/" target="_blank" rel="noopener">Aider leaderboards</a></li>
+      <li><a href="https://livecodebench.github.io/leaderboard" target="_blank" rel="noopener">LiveCodeBench leaderboard</a></li>
+      <li><a href="https://github.com/rajeeja/local-llm-bench-m1max" target="_blank" rel="noopener">local-llm-bench-m1max (Aug 2026)</a></li>
+      <li>Full text: <code>research/reports/Perplexity local coding model pilot.md</code></li>
+    </ul>
+    <h4>Gravity repo</h4><ul>
+      <li><a href="https://github.com/yamimaio/gravity/blob/main/CLAUDE.md" target="_blank" rel="noopener">CLAUDE.md</a> · <a href="https://github.com/yamimaio/gravity/commits/main/CLAUDE.md" target="_blank" rel="noopener">history</a></li>
+      <li><a href="https://github.com/yamimaio/gravity/blob/main/.claude/commands/build-issue.md" target="_blank" rel="noopener">build-issue.md</a> · <a href="https://github.com/yamimaio/gravity/commits/main/.claude/commands/build-issue.md" target="_blank" rel="noopener">history</a></li>
+      <li><a href="https://github.com/yamimaio/gravity/blob/main/.claude/commands/review-pr.md" target="_blank" rel="noopener">review-pr.md</a></li>
+      <li><a href="https://github.com/yamimaio/gravity/blob/main/.github/ISSUE_TEMPLATE/issue.md" target="_blank" rel="noopener">Issue template</a></li>
+      <li><a href="https://github.com/yamimaio/gravity/issues/505" target="_blank" rel="noopener">#505</a> · <a href="https://github.com/yamimaio/gravity/pull/323" target="_blank" rel="noopener">PR #323</a> · <a href="https://github.com/yamimaio/gravity/pulls" target="_blank" rel="noopener">PRs</a> · <a href="https://github.com/yamimaio/gravity/issues?q=is%3Aopen+label%3Alow-priority" target="_blank" rel="noopener">open low-priority issues</a></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  Visual edition of <code>research/reports/Local coding model pilot.md</code> (full text, all sources and links). Perplexity's independent report: <code>research/reports/Perplexity local coding model pilot.md</code>. Decisions are logged in the AI setup learning log; the working plan is the Local model builder plan.
+</footer>
+</main>
+</div>

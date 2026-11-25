@@ -44,8 +44,8 @@ the issue: the issue body starts at the "**Priority:" line below it.
      it came from.
    - Plan: one of research, precedent and none, by item 5's criteria, with one line
      saying why that level.
-   - Precedent: the implementations the work follows (path:line), only when the plan
-     level is "precedent". Drop the line at the other two levels.
+   - Precedent: the implementations the work follows (path:line), by item 5's rule.
+     Drop the line unless the plan level is "precedent".
    - Problem: the concrete failure scenario (a specific input or state, and the wrong
      result), or for a design finding the named future cost (REV-4), with path:line.
    - To build: what to change. For a question the owner must rule on, replace the whole
