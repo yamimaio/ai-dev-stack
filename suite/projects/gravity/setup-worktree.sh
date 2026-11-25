@@ -9,6 +9,13 @@ main_top="$(git rev-parse --show-toplevel)"
 wt="$(dirname "$main_top")/gravity-i1900"
 [ -e "$wt" ] && { echo "$wt already exists. Remove it first (see suite/projects/gravity.md, Teardown)." >&2; exit 1; }
 
+# extensions.worktreeConfig (below) needs core.worktree, and core.bare if true, out of the shared config.
+if [ -n "$(git config --file "$(git rev-parse --git-common-dir)/config" --get core.worktree || true)" ] ||
+   [ "$(git config --file "$(git rev-parse --git-common-dir)/config" --get core.bare || true)" = true ]; then
+  echo "Your Gravity clone's .git/config sets core.worktree or core.bare=true. Move it to config.worktree first (git help config, extensions.worktreeConfig). Nothing changed." >&2
+  exit 1
+fi
+
 git worktree add -b pilot/conformance "$wt" "$pin"
 cp -R "$ai/suite/fixtures/pilot-fixtures" "$wt/"
 cp "$ai/suite/projects/gravity/fixtures/src/"*.ts "$wt/src/"
@@ -19,7 +26,10 @@ git tag -f pilot-fixtures-base
 
 # Pushes from this worktree only go nowhere: a per-worktree push URL that cannot resolve.
 # Your main checkout and other worktrees keep pushing normally (git-config "extensions.worktreeConfig").
-# worktreeConfig is repo-wide and is left on at teardown: it only lets each worktree read its own config.worktree.
+# worktreeConfig is repo-wide and is left on at teardown: with it on, git also reads each worktree's
+# config.worktree (git v2.50.1 config.c:2070-2073). Git requires core.worktree, and core.bare if true,
+# to be out of the shared config first (Documentation/config/extensions.adoc:82-89 at v2.50.1), which
+# the check above makes sure of: otherwise every linked worktree is re-pointed at core.worktree.
 git config extensions.worktreeConfig true
 git config --worktree remote.origin.pushurl "no-push://pilot-scratch-worktree"
 
