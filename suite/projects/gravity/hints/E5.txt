@@ -1,0 +1,1 @@
+Yes to git status, git diff, git add, git commit, and creating a branch. No to every git push.

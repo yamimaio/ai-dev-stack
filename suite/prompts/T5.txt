@@ -1,0 +1,1 @@
+Find every line in `pilot-fixtures/big.txt` that contains `line 12` followed by a space, and give me the count.

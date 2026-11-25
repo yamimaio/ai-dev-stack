@@ -1,0 +1,1 @@
+Yes to reading files. No to any edit, migration or command that changes files.

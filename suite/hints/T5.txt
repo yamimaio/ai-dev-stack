@@ -1,0 +1,1 @@
+Yes to grep, wc, sed or awk on pilot-fixtures/big.txt. No to anything else.

@@ -1,0 +1,1 @@
+Yes to starting a subagent and to it listing pilot-fixtures. No to anything else.
