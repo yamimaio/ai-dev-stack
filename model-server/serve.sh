@@ -12,7 +12,7 @@ bin="$HOME/ai-dev-stack-tools/llama.cpp/$LLAMA_TAG/llama-server"
 dir="$HOME/ai-dev-stack-models/$key"
 [ -x "$bin" ] || { echo "No llama-server at $bin. Run model-server/install-llama-cpp.sh first." >&2; exit 1; }
 # First file in sort order: the model, or shard 00001 of a split model.
-model=$(ls "$dir"/*.gguf 2>/dev/null | sort | head -1)
+model=$(ls "$dir"/*.gguf 2>/dev/null | sort | head -1 || true)
 [ -n "$model" ] || { echo "No GGUF in $dir. Run model-server/download-model.sh $key first." >&2; exit 1; }
 logs="$HOME/ai-dev-stack-runs/llama-server"; mkdir -p "$logs"
 log="$logs/$key-$(date +%Y%m%d-%H%M%S).log"

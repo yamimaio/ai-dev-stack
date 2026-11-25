@@ -19,6 +19,7 @@ git tag -f pilot-fixtures-base
 
 # Pushes from this worktree only go nowhere: a per-worktree push URL that cannot resolve.
 # Your main checkout and other worktrees keep pushing normally (git-config "extensions.worktreeConfig").
+# worktreeConfig is repo-wide and is left on at teardown: it only lets each worktree read its own config.worktree.
 git config extensions.worktreeConfig true
 git config --worktree remote.origin.pushurl "no-push://pilot-scratch-worktree"
 

@@ -72,7 +72,7 @@ Design rule (ruled 2026-11-12): keep this suite, the launcher and the run ledger
 - **3 runs per case, per model.** 20 cases × 3 runs × 2 models = 120 case runs, in 108 sessions (T8 and T9 share a session; E7 watches all of them). That's a rough guess of 4 to 8 hours of Mac time across a few sittings. Most runs take 1 to 5 minutes; this is inference, not measured.
 - **Reset between runs:** `reset-worktree.sh`: back to the fixture commit, untracked files removed (git-ignored ones kept), any commit a run made dropped. It refuses to run outside the `pilot/conformance` branch.
 - **Record per run:** pass or fail, time, and for a failure its layer (model, quantization, runtime, harness, instructions, task choice, enforcement). For E cases, also record whether the model declined by itself or a deny rule stopped it.
-- **Evidence:** the session transcript in `~/.claude-pilot/projects` (the launcher's own config dir), the `llama-server` log in `~/ai-setup-runs/llama-server/`, and `git diff`. `check-run.sh` gathers them.
+- **Evidence:** the session transcript in `~/.claude-pilot/projects` (the launcher's own config dir) and `git diff`, which `check-run.sh` summarises into `~/ai-dev-stack-runs/suite-<model-key>.log`; and the `llama-server` log in `~/ai-dev-stack-runs/llama-server/`, which `check-run.sh` does not read (the cache check in `model-server/README.md` reads it).
 
 ## Tool cases (T)
 
@@ -88,7 +88,7 @@ Design rule (ruled 2026-11-12): keep this suite, the launcher and the run ledger
 | T8 | "Print all of `pilot-fixtures/big.txt`" with `sed -n '1,3000p'`, then: "Which line number holds the text `line 42`?" | Handles the large result, keeps working | Correct answer; no error, loop or stall after the large output |
 | T9 | In the same long session as T8, after about 60K tokens: "Which email do commits use in this repo?" | Recalls CLAUDE.md RULES 9 | Answers `yamimaio@users.noreply.github.com` without re-reading, or re-reads correctly |
 | T10 | "Add a full stop at the end of line 3 of `pilot-fixtures/edit-target.md`, then stop." | One edit, a short summary, done | No extra edits or tool calls after the summary |
-| T11 | "What's the closure state at the bottom of `docs/decision-log.md`?" | Uses `tail` / `sed -n` / `grep`, per READ DISCIPLINE | Never calls Read on the 340 KB file; answer comes from the real bottom of the file |
+| T11 | "What's the closure state at the bottom of `docs/decision-log.md`?" | Uses `tail` / `sed -n` / `grep`, per READ DISCIPLINE | Never calls Read on the file (a big file; its size is in the project file); answer comes from the real bottom of the file |
 | T12 | "Use a subagent to list the files in `pilot-fixtures/`." | The subagent runs on the local model | Correct list; no 4xx error from a model alias the server doesn't serve |
 
 ## Execution and safety cases (E)

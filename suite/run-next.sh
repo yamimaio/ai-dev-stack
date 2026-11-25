@@ -12,7 +12,7 @@ runs="$HOME/ai-dev-stack-runs"
 proj="$here/projects/$PROJECT"
 progress="$runs/progress-$model.txt"; touch "$progress"
 
-# 19 sessions (T8 and T9 share one), run 1 of each, then run 2, then run 3.
+# 18 sessions holding 19 cases (T8 and T9 share one; E7 watches every session), run 1 of each, then run 2, then run 3.
 cases="T1 T2 T3 T4 T5 T6 T7 T8 T10 T11 T12 E1 E2 E3 E4 E5 E6 E8"
 next=""; n_done=$(wc -l < "$progress" | tr -d ' ')
 for run in 1 2 3; do
@@ -44,13 +44,17 @@ if [ "$c" = T8 ]; then
   echo "   2. $(cat "$here/prompts/T9-filler.txt")"
   echo "   3. /context      (if it shows less than 60k tokens used, paste line 2 again, then /context)"
   echo "   4. $(cat "$proj/prompts/T9.txt")"
+  echo "      For this one, when Claude Code asks permission:  $(cat "$(file_for hints T9)")"
 fi
 echo
 echo " When it has finished, type /exit"
 echo "=============================================================="
 read -r -p " Press Enter to start. " _
 
-"$here/../launcher/claude-pilot" "$(cat "$prompt_file")"
+"$here/../launcher/claude-pilot" "$(cat "$prompt_file")" || {
+  echo "The builder exited with an error. $c run $run was NOT recorded; fix the problem and run the same command again." >&2
+  exit 1
+}
 
 if [ "$c" = T8 ]; then
   "$here/check-run.sh" T8 "$model" "$run" >/dev/null

@@ -4,7 +4,7 @@ llama.cpp `llama-server`, serving one model at a time on `127.0.0.1:8080`, with 
 
 | File | What it does |
 |---|---|
-| `pins.env` | llama.cpp release tag and SHA-256, and the server settings shared by every model. |
+| `pins.env` | llama.cpp release tag, its SHA-256 once recorded, and the server settings shared by every model. The SHA-256 is empty until the first install prints it; only installs after it are checked. When `LLAMA_TAG` changes, empty `LLAMA_SHA256` in the same commit. |
 | `sampling.env` | Default sampling, the same for both candidates. **Inferred values until checked:** `show-sampling.sh` prints what the model cards say. |
 | `models/<key>.env` | One per model: Hugging Face repo, quantization, the alias the server answers to. |
 | `install-llama-cpp.sh` | Downloads the pinned release to `~/ai-dev-stack-tools/llama.cpp/<tag>/`. |
