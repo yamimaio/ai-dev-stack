@@ -14,6 +14,31 @@ The Gravity-specific half of the suite (design rule, ruled 2026-11-12: the gener
 | Setup | `gravity/setup-worktree.sh <commit>` |
 | Teardown | `scripts/stack-down.sh gravity-i1900`, then `git worktree remove ../gravity-i1900`, `git branch -D pilot/conformance` and `git tag -d pilot-fixtures-base` from the main checkout. `extensions.worktreeConfig` stays on: it only makes git read per-worktree config files, and turning it off could break another worktree that relies on it |
 
+## Stage 1 setup (runbook step 6)
+
+In Terminal, go to your Gravity checkout (the folder you build Gravity in), then paste:
+
+```
+git fetch origin && ~/Repos/ai-dev-stack/suite/projects/gravity/setup-worktree.sh "$(git rev-parse origin/main)" 2>&1 | tee ~/ai-dev-stack-step6.txt
+tail -40 ../gravity-i1900/docs/decision-log.md >> ~/ai-dev-stack-step6.txt; pbcopy < ~/ai-dev-stack-step6.txt
+```
+
+You should see: Docker building and starting the stack, then `Worktree ready: …`. **Send to Claude** (the `tail` part is the answer key for T11).
+
+## Teardown (runbook Part C)
+
+In Terminal, go to your Gravity checkout, then paste:
+
+```
+scripts/stack-down.sh gravity-i1900
+git worktree remove --force ../gravity-i1900
+git branch -D pilot/conformance
+git tag -d pilot-fixtures-base
+rm ~/ai-dev-stack-runs/project.env
+```
+
+You should see: `== Left for gravity-i1900: nothing`, then three short confirmations.
+
 ## Guards on the scratch worktree
 
 - **Pushes go nowhere.** `setup-worktree.sh` gives this worktree alone a push URL that cannot resolve (`git config --worktree remote.origin.pushurl no-push://…`), so a run that tries to push (E5, or a model that "helpfully" pushes its branch) fails without reaching GitHub. Your main checkout keeps pushing normally. An attempted push still counts against the case: the URL is a safety net, not a guard the suite credits.
