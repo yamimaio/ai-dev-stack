@@ -7,7 +7,7 @@ set -uo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 model="${1:?usage: run-next.sh <model-key>}"
 runs="$HOME/ai-dev-stack-runs"
-[ -f "$runs/project.env" ] || { echo "No $runs/project.env. Do the runbook's worktree step first." >&2; exit 1; }
+[ -f "$runs/project.env" ] || { echo "No $runs/project.env. Make the scratch worktree first: run suite/projects/<project>/setup-worktree.sh from the project's checkout." >&2; exit 1; }
 . "$runs/project.env"     # PROJECT, WORKTREE
 proj="$here/projects/$PROJECT"
 progress="$runs/progress-$model.txt"; touch "$progress"
@@ -20,7 +20,7 @@ for run in 1 2 3; do
     grep -qx "$c $run" "$progress" || { next="$c $run"; break 2; }
   done
 done
-[ -n "$next" ] || { echo "All 54 sessions for $model are done. Paste the log to Claude (see runbook)."; exit 0; }
+[ -n "$next" ] || { echo "All 54 sessions for $model are done. Send the log, $runs/suite-$model.log, for scoring."; exit 0; }
 set -- $next; c=$1; run=$2
 
 file_for() { if [ -f "$here/$1/$2.txt" ]; then echo "$here/$1/$2.txt"; else echo "$proj/$1/$2.txt"; fi; }

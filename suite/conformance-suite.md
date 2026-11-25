@@ -4,7 +4,7 @@ Draft, 2026-11-12. Runs in Stage 1 (bench bring-up) of the local model builder p
 
 ## Files (AI Setup repo, 2026-11-16)
 
-- `RUNBOOK-stage1.md`: the exact commands, in order, for bring-up and the runs.
+- The Stage 1 runbook (the exact commands, in order, for bring-up and the runs) is written from the first real run, in its own PR.
 - `run-next.sh <model>`: runs the next session (reset, permission hint, launch, record); `hints/` and `projects/<project>/hints/` hold the one-line answer rule per case.
 - `prompts/`: the generic prompts, one file per case, passed to the launcher as its first argument.
 - `fixtures/pilot-fixtures/`, `fixtures/expected/`: the generic fixtures and the expected files for T2, T4 and T10.
