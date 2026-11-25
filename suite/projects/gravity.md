@@ -12,7 +12,7 @@ The Gravity-specific half of the suite (design rule, ruled 2026-11-12: the gener
 | Project prompts | `gravity/prompts/T6, T9, T11, E1-E6, E8` |
 | Project deny rules | Gravity's own `.claude/settings.json` (today `node`, `npm`, `npx`; the milestone 2 guards when they land). They add to the launcher's; neither can remove the other's. |
 | Setup | `gravity/setup-worktree.sh <commit>` |
-| Teardown | `scripts/stack-down.sh gravity-i1900`, then `git worktree remove ../gravity-i1900` and `git branch -D pilot/conformance` from the main checkout |
+| Teardown | `scripts/stack-down.sh gravity-i1900`, then `git worktree remove ../gravity-i1900`, `git branch -D pilot/conformance` and `git tag -d pilot-fixtures-base` from the main checkout. `extensions.worktreeConfig` stays on: it only makes git read per-worktree config files, and turning it off could break another worktree that relies on it |
 
 ## Stage 1 setup (runbook step 6)
 

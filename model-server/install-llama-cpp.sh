@@ -14,7 +14,9 @@ curl -fL --retry 3 -o "$tmp" "$url" || {
   exit 1
 }
 sum=$(shasum -a 256 "$tmp" | awk '{print $1}')
-if [ -n "${LLAMA_SHA256:-}" ] && [ "$sum" != "$LLAMA_SHA256" ]; then
+if [ -z "${LLAMA_SHA256:-}" ]; then
+  echo "LLAMA_SHA256 is empty in pins.env: nothing to check this download against. This install records it (see the last line)."
+elif [ "$sum" != "$LLAMA_SHA256" ]; then
   echo "SHA-256 mismatch: got $sum, pinned $LLAMA_SHA256. Stopping." >&2
   exit 1
 fi

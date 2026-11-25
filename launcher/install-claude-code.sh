@@ -9,9 +9,9 @@ here="$(cd "$(dirname "$0")" && pwd)"
 v="$CLAUDE_CODE_VERSION"
 pkg="https://registry.npmjs.org/@anthropic-ai/claude-code-darwin-arm64"
 dest="$HOME/ai-dev-stack-tools/claude-code/$v"
-mkdir -p "$dest"
-want=$(curl -fsSL "$pkg/$v" | grep -oE '"integrity" *: *"sha512-[^"]+"' | head -1 | sed -E 's/.*"sha512-([^"]+)"$/\1/')
+want=$(curl -fsSL "$pkg/$v" | grep -oE '"integrity" *: *"sha512-[^"]+"' | head -1 | sed -E 's/.*"sha512-([^"]+)"$/\1/' || true)
 [ -n "$want" ] || { echo "No version $v of @anthropic-ai/claude-code-darwin-arm64 on the npm registry." >&2; exit 1; }
+mkdir -p "$dest"
 tgz="$dest/pkg.tgz"
 curl -fL --retry 3 -o "$tgz" "$pkg/-/claude-code-darwin-arm64-$v.tgz"
 got=$(openssl dgst -sha512 -binary "$tgz" | base64 | tr -d '\n')
